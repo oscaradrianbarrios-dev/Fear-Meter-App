@@ -225,6 +225,18 @@ frontend:
         agent: "testing"
         comment: "✅ PASSED - All psychological tension adjustments verified: Initial Impact working (BPM/STRESS/SIGNAL show '---' for first 300ms then reveal with staggered animation), Menu Reveal uses FADE IN animation with blur effect (not slide), 'SYSTEM ACCESS' and 'RESTRICTED ACCESS' text confirmed, Visual Tension applied (85% brightness filter for darker UI), Core Functionality intact (session management, BPM fluctuation 60-140, tap interactions, watch mode, history, language switching EN/ES). Minor: Panic mode overlay may not always be visible but BPM threshold detection working correctly."
 
+  - task: "Enhanced Panic Mode Sequence"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/PanicOverlay.jsx, /app/frontend/src/components/CriticalAlert.jsx, /app/frontend/src/hooks/useBiometricSimulation.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing required - Enhanced panic sequence with specific phases: 1) Blackout Phase (400ms) - complete black screen, UI frozen, 2) Red Flash Phase (120ms) - dark red flash #8B0000, 3) Critical Message (NO modal) - centered text, no background, fades in 200ms, auto disappears, 4) During Panic - oscilloscope frequency doubles, ECG micro-jitter, button solid dark red #8B0000 with violent pulsing, 5) Recovery Phase - gradual UI return (300ms), slow BPM decrease, 6) Vibration pattern [200,100,200,100,400] on supported devices. Trigger: BPM >110 AND Stress >75%. Test at mobile viewport 390x844."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
