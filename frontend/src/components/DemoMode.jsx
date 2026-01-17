@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Header from "./Header";
 import Monitor from "./Monitor";
 import WatchMode from "./WatchMode";
@@ -9,6 +9,45 @@ import PanicOverlay from "./PanicOverlay";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 
+// Preloaded demo sessions for investors
+const DEMO_SESSIONS = [
+    {
+        id: 1,
+        name: "Night Terror",
+        date: "Jan 15, 2026, 11:45 PM",
+        maxBpm: 128,
+        maxStress: 85,
+    },
+    {
+        id: 2,
+        name: "Shadow Encounter",
+        date: "Jan 14, 2026, 10:30 PM",
+        maxBpm: 115,
+        maxStress: 69,
+    },
+    {
+        id: 3,
+        name: "Dark Vision",
+        date: "Jan 13, 2026, 9:15 PM",
+        maxBpm: 122,
+        maxStress: 78,
+    },
+    {
+        id: 4,
+        name: "Fear Response",
+        date: "Jan 12, 2026, 11:00 PM",
+        maxBpm: 108,
+        maxStress: 60,
+    },
+    {
+        id: 5,
+        name: "Panic Episode",
+        date: "Jan 11, 2026, 10:00 PM",
+        maxBpm: 135,
+        maxStress: 94,
+    },
+];
+
 export const DemoMode = () => {
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
@@ -16,7 +55,10 @@ export const DemoMode = () => {
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
     const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [demoSessions, setDemoSessions] = useState(DEMO_SESSIONS);
     const panicTimeoutRef = useRef(null);
+    const containerRef = useRef(null);
+    const touchStartRef = useRef({ x: 0, y: 0 });
 
     const {
         bpm,
@@ -29,7 +71,7 @@ export const DemoMode = () => {
         stopSimulation,
         triggerTap,
     } = useBiometricSimulation({
-        isDemo: true,
+        isDemo: true, // More stable BPM (70-110), controlled panic
         onPanicStart: () => {
             setIsBlocked(true);
             setPanicActive(true);
@@ -49,22 +91,28 @@ export const DemoMode = () => {
         }, 300);
     }, []);
 
-    const {
-        sessions,
-        startSession,
-        endSession,
-        clearHistory,
-    } = useSessionManager();
-
     const handleStartStop = useCallback(() => {
         if (isActive) {
             stopSimulation();
-            endSession(bpm, stress);
+            // Add session to demo history
+            const newSession = {
+                id: Date.now(),
+                name: ["Night Terror", "Shadow Encounter", "Dark Vision", "Fear Response"][Math.floor(Math.random() * 4)],
+                date: new Date().toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                }),
+                maxBpm: Math.max(bpm, 95),
+                maxStress: Math.max(stress, 45),
+            };
+            setDemoSessions(prev => [newSession, ...prev].slice(0, 10));
         } else {
             startSimulation();
-            startSession();
         }
-    }, [isActive, stopSimulation, startSimulation, endSession, startSession, bpm, stress]);
+    }, [isActive, stopSimulation, startSimulation, bpm, stress]);
 
     const handleViewChange = useCallback((view) => {
         setCurrentView(view);
@@ -74,6 +122,32 @@ export const DemoMode = () => {
     const handleLanguageChange = useCallback((lang) => {
         setLanguage(lang);
     }, []);
+
+    const handleClearHistory = useCallback(() => {
+        setDemoSessions([]);
+    }, []);
+
+    // Swipe detection for menu
+    const handleTouchStart = useCallback((e) => {
+        touchStartRef.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+        };
+    }, []);
+
+    const handleTouchEnd = useCallback((e) => {
+        const touchEnd = {
+            x: e.changedTouches[0].clientX,
+            y: e.changedTouches[0].clientY,
+        };
+        
+        const deltaX = touchEnd.x - touchStartRef.current.x;
+        const deltaY = Math.abs(touchEnd.y - touchStartRef.current.y);
+        
+        if (touchStartRef.current.x < 30 && deltaX > 50 && deltaY < 50 && !isBlocked) {
+            setMenuOpen(true);
+        }
+    }, [isBlocked]);
 
     const texts = {
         EN: {
@@ -124,29 +198,16 @@ export const DemoMode = () => {
 
     return (
         <div 
+            ref={containerRef}
             className="min-h-screen bg-fear-black font-fear flex flex-col relative overflow-hidden"
             onClick={isActive && !isBlocked ? triggerTap : undefined}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             style={{
                 transition: isRecovering ? "filter 300ms ease-out" : "none",
                 filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
             }}
         >
-            {/* Demo Mode Banner */}
-            <div 
-                className="py-1 text-center"
-                style={{ 
-                    backgroundColor: "rgba(139, 0, 0, 0.15)",
-                    borderBottom: "1px solid rgba(139, 0, 0, 0.3)"
-                }}
-            >
-                <p 
-                    className="text-[9px] tracking-[0.3em] uppercase"
-                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
-                >
-                    DEMO MODE — SIMULATED DATA
-                </p>
-            </div>
-
             <PanicOverlay 
                 active={panicActive} 
                 onSequenceComplete={handlePanicSequenceComplete}
@@ -188,15 +249,15 @@ export const DemoMode = () => {
 
                 {currentView === "history" && (
                     <History
-                        sessions={sessions}
+                        sessions={demoSessions}
                         texts={t}
-                        onClear={clearHistory}
+                        onClear={handleClearHistory}
                     />
                 )}
             </main>
 
             <footer 
-                className="py-4 text-center"
+                className="py-4 text-center relative"
                 style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }}
             >
                 <p 
@@ -211,6 +272,18 @@ export const DemoMode = () => {
                 >
                     {t.footerSub}
                 </p>
+                
+                {/* Discrete Demo Mode indicator - bottom right corner */}
+                <div 
+                    className="absolute bottom-2 right-3"
+                    style={{ 
+                        color: "rgba(139, 0, 0, 0.4)",
+                        fontSize: "8px",
+                        letterSpacing: "0.15em",
+                    }}
+                >
+                    DEMO MODE
+                </div>
             </footer>
 
             <SideMenu
