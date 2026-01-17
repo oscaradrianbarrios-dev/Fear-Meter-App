@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="robots" content="noindex, nofollow">
+    <title>FEAR METER — Investor Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="demo.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100'/><text y='.9em' x='10' font-size='80' fill='%23FF0000'>♥</text></svg>">
+</head>
+<body>
+    <!-- Background Oscilloscope -->
+    <canvas id="oscilloscope"></canvas>
+    
+    <!-- Main Container -->
+    <div id="demo-container">
+        <!-- Screen 1: Impact -->
+        <section class="screen" id="screen-1">
+            <div class="content">
+                <div class="bpm-display">
+                    <span class="bpm-value" id="bpm-1">72</span>
+                    <span class="bpm-label">BPM</span>
+                </div>
+                <h1 class="headline">
+                    <span class="line">WHAT IF HORROR</span>
+                    <span class="line accent">COULD MEASURE REAL FEAR?</span>
+                </h1>
+            </div>
+        </section>
+
+        <!-- Screen 2: The Problem -->
+        <section class="screen" id="screen-2">
+            <div class="content">
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-value" id="bpm-2">78</span>
+                        <span class="metric-label">BPM</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="stress-2">35%</span>
+                        <span class="metric-label">STRESS</span>
+                    </div>
+                </div>
+                <h1 class="headline">
+                    <span class="line">ENTERTAINMENT HAS NEVER</span>
+                    <span class="line">MEASURED EMOTION.</span>
+                    <span class="line accent">UNTIL NOW.</span>
+                </h1>
+            </div>
+        </section>
+
+        <!-- Screen 3: The Solution -->
+        <section class="screen" id="screen-3">
+            <div class="content split">
+                <div class="device smartphone">
+                    <div class="device-screen">
+                        <canvas id="phone-canvas"></canvas>
+                        <div class="phone-bpm" id="phone-bpm">85</div>
+                    </div>
+                    <div class="device-label">SMARTPHONE</div>
+                </div>
+                <div class="device watch">
+                    <div class="watch-face">
+                        <canvas id="watch-canvas"></canvas>
+                        <div class="watch-bpm" id="watch-bpm">85</div>
+                    </div>
+                    <div class="device-label">SMARTWATCH</div>
+                </div>
+            </div>
+            <h1 class="headline brand">
+                <span class="line title">FEAR METER</span>
+                <span class="line subtitle">BIOMETRIC HORROR TECHNOLOGY</span>
+            </h1>
+        </section>
+
+        <!-- Screen 4: Demonstration -->
+        <section class="screen" id="screen-4">
+            <div class="content">
+                <div class="panic-display">
+                    <div class="panic-bpm" id="panic-bpm">115</div>
+                    <div class="panic-label">CRITICAL</div>
+                </div>
+                <h1 class="headline">
+                    <span class="line">REAL-TIME</span>
+                    <span class="line accent">EMOTIONAL DATA</span>
+                </h1>
+            </div>
+            <div class="panic-flash" id="panic-flash"></div>
+        </section>
+
+        <!-- Screen 5: Applications -->
+        <section class="screen" id="screen-5">
+            <div class="content">
+                <div class="applications">
+                    <div class="app-item" id="app-1">HORROR MOVIES</div>
+                    <div class="app-item" id="app-2">GAMES & VR</div>
+                    <div class="app-item" id="app-3">LIVE EXPERIENCES</div>
+                    <div class="app-item" id="app-4">BIOMETRIC CONTENT</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 6: Business Model -->
+        <section class="screen" id="screen-6">
+            <div class="content">
+                <div class="business-model">
+                    <div class="model-item" id="model-1">HARDWARE</div>
+                    <div class="model-plus">+</div>
+                    <div class="model-item" id="model-2">SOFTWARE</div>
+                    <div class="model-plus">+</div>
+                    <div class="model-item" id="model-3">DATA</div>
+                </div>
+                <p class="tagline">Scalable. Licensable. Global.</p>
+            </div>
+        </section>
+
+        <!-- Screen 7: Closing -->
+        <section class="screen" id="screen-7">
+            <div class="content">
+                <div class="final-pulse" id="final-pulse"></div>
+                <h1 class="headline final">
+                    <span class="line">FEAR IS DATA.</span>
+                    <span class="line accent">DATA IS VALUE.</span>
+                </h1>
+                <footer class="footer">
+                    <span>© 2026 FEAR METER</span>
+                </footer>
+            </div>
+        </section>
+    </div>
+
+    <!-- Request Deck Button -->
+    <a href="mailto:investors@fearmeter.io?subject=Investor%20Deck%20Request" class="deck-btn" id="deck-btn">
+        REQUEST DECK
+    </a>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Replay Button (appears at end) -->
+    <button class="replay-btn" id="replay-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 4v6h6"></path>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+        </svg>
+        REPLAY
+    </button>
+
+    <script src="demo.js"></script>
+</body>
+</html>
