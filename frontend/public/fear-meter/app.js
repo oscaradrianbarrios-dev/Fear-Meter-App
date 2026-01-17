@@ -1035,7 +1035,20 @@
         if (!canvas) return;
         
         const ctx = canvas.getContext('2d');
-        const size = parseInt(canvas.style.width) || 320;
+        let size = parseInt(canvas.style.width) || 0;
+        
+        // If size is 0, try to get it from the face
+        if (size === 0 && DOM.watchFace) {
+            size = DOM.watchFace.offsetWidth || 320;
+            canvas.style.width = `${size}px`;
+            canvas.style.height = `${size}px`;
+            canvas.width = size * window.devicePixelRatio;
+            canvas.height = size * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        
+        if (size === 0) return; // Still no size, skip drawing
+        
         const centerX = size / 2;
         const centerY = size / 2;
         const radius = size * 0.42;
