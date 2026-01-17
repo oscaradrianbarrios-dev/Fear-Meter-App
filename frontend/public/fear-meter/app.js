@@ -685,38 +685,52 @@
         STATE.isPanic = true;
         STATE.isBlocked = true;
         
+        // STEP 1: UI FREEZE for 1 second
+        if (DOM.uiFrozen) {
+            DOM.uiFrozen.classList.remove('hidden');
+        }
+        
         // Play panic alarm sound
         AudioEngine.playPanicAlarm();
         
-        // Trigger vibration if available
+        // Strong vibration pattern
         try {
             if (navigator.vibrate) {
-                navigator.vibrate([200, 100, 200]);
+                navigator.vibrate([300, 100, 300, 100, 500]);
             }
         } catch (e) {}
         
-        // Show panic overlay flash (smartphone)
-        DOM.panicOverlay.classList.remove('hidden');
-        DOM.panicOverlay.classList.add('active');
-        
+        // STEP 2: After 1 second freeze, show red flash
         setTimeout(() => {
-            DOM.panicOverlay.classList.remove('active');
-        }, 200);
-        
-        // Trigger watch panic flash (synced with smartphone)
-        triggerWatchPanicFlash();
-        updateWatchMode();
-        
-        // Show critical alert after delay
-        STATE.panicTimeout = setTimeout(() => {
-            DOM.criticalAlert.classList.remove('hidden');
-            DOM.criticalAlert.classList.add('visible');
+            // Remove freeze
+            if (DOM.uiFrozen) {
+                DOM.uiFrozen.classList.add('hidden');
+            }
             
-            // Auto-dismiss after 2 seconds
+            // Full red flash
+            DOM.panicOverlay.classList.remove('hidden');
+            DOM.panicOverlay.classList.add('active');
+            
             setTimeout(() => {
-                handlePanicSequenceComplete();
-            }, 2000);
-        }, 520);
+                DOM.panicOverlay.classList.remove('active');
+            }, 300);
+            
+            // Trigger watch panic flash (synced)
+            triggerWatchPanicFlash();
+            updateWatchMode();
+            
+            // STEP 3: Show "PANIC DETECTED" text
+            STATE.panicTimeout = setTimeout(() => {
+                DOM.criticalAlert.classList.remove('hidden');
+                DOM.criticalAlert.classList.add('visible');
+                
+                // Auto-dismiss after 2 seconds
+                setTimeout(() => {
+                    handlePanicSequenceComplete();
+                }, 2000);
+            }, 200);
+            
+        }, 1000); // 1 second freeze
         
         updatePanicUI(true);
     }
