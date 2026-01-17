@@ -285,20 +285,62 @@
                 break;
                 
             case 'screen-6':
-                // Reveal business model
+                // Layer 1: B2C Pricing
                 setTimeout(() => {
-                    document.querySelectorAll('.model-item, .model-plus').forEach(el => {
+                    const header = document.querySelector('#screen-6 .layer-header');
+                    if (header) header.classList.add('visible');
+                    
+                    document.querySelectorAll('.pricing-card').forEach(el => {
                         el.classList.add('visible');
                     });
-                    document.querySelector('.tagline').classList.add('visible');
                 }, 200);
                 break;
                 
             case 'screen-7':
+                // Layer 2: Hardware
+                setTimeout(() => {
+                    const header = document.querySelector('#screen-7 .layer-header');
+                    if (header) header.classList.add('visible');
+                    
+                    document.querySelectorAll('.hardware-card').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 200);
+                break;
+                
+            case 'screen-8':
+                // Layer 3: B2B (THE JEWEL)
+                setTimeout(() => {
+                    const header = document.querySelector('#screen-8 .layer-header');
+                    if (header) header.classList.add('visible');
+                    
+                    document.querySelectorAll('.b2b-card').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 200);
+                break;
+                
+            case 'screen-9':
+                // Projection
+                setTimeout(() => {
+                    const header = document.querySelector('.projection-header');
+                    if (header) header.classList.add('visible');
+                    
+                    document.querySelectorAll('.projection-item').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                    
+                    const note = document.querySelector('.projection-note');
+                    if (note) note.classList.add('visible');
+                }, 200);
+                break;
+                
+            case 'screen-10':
                 // Final screen
                 setTimeout(() => {
                     DOM.finalPulse.classList.add('visible');
-                    document.querySelector('.footer').classList.add('visible');
+                    const footer = document.querySelector('.footer');
+                    if (footer) footer.classList.add('visible');
                     DOM.replayBtn.classList.add('visible');
                 }, 300);
                 break;
@@ -318,7 +360,7 @@
     // ============================================
     
     function updateBPM(time) {
-        // BPM progression based on timeline
+        // BPM progression based on extended timeline
         if (time < 3000) {
             STATE.bpm = 72;
             STATE.stress = 0;
