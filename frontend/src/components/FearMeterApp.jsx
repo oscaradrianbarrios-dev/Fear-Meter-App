@@ -55,20 +55,29 @@ export const FearMeterApp = () => {
 
     const {
         sessions,
+        isRecording,
         startSession,
         endSession,
+        recordDataPoint,
         clearHistory,
     } = useSessionManager();
+
+    // Record data points during active session
+    useEffect(() => {
+        if (isActive && isRecording) {
+            recordDataPoint(bpm, stress);
+        }
+    }, [bpm, stress, isActive, isRecording, recordDataPoint]);
 
     const handleStartStop = useCallback(() => {
         if (isActive) {
             stopSimulation();
-            endSession(bpm, stress);
+            endSession();
         } else {
             startSimulation();
             startSession();
         }
-    }, [isActive, stopSimulation, startSimulation, endSession, startSession, bpm, stress]);
+    }, [isActive, stopSimulation, startSimulation, endSession, startSession]);
 
     const handleViewChange = useCallback((view) => {
         setCurrentView(view);
