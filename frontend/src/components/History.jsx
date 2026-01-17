@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Clock, Activity, TrendingUp } from "lucide-react";
 
 export const History = ({ sessions, texts, onClear }) => {
-    const [viewMode, setViewMode] = useState("list"); // "list" or "graph"
+    const [viewMode, setViewMode] = useState("list");
 
     if (sessions.length === 0) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center py-8">
-                <div className="w-16 h-16 border border-fear-gray/20 rounded-full flex items-center justify-center mb-4">
-                    <div className="w-8 h-0.5 bg-fear-gray/30" />
+                <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                    style={{ border: "1px solid rgba(255, 0, 0, 0.15)" }}
+                >
+                    <Activity className="w-6 h-6" style={{ color: "rgba(255, 0, 0, 0.2)" }} />
                 </div>
-                <p className="text-fear-gray/50 text-xs tracking-widest uppercase">
+                <p 
+                    className="text-xs tracking-[0.2em] uppercase"
+                    style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                >
                     {texts.noSessions}
                 </p>
             </div>
@@ -24,21 +30,27 @@ export const History = ({ sessions, texts, onClear }) => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => setViewMode("list")}
-                        className={`px-3 py-1.5 text-[10px] tracking-wider uppercase border rounded transition-colors ${
-                            viewMode === "list"
-                                ? "border-fear-red text-fear-red bg-fear-red/10"
-                                : "border-fear-gray/30 text-fear-gray hover:border-fear-red/50"
-                        }`}
+                        className="px-3 py-1.5 text-[10px] tracking-wider uppercase rounded transition-all duration-200"
+                        style={{
+                            border: viewMode === "list" 
+                                ? "1px solid rgba(255, 0, 0, 0.5)" 
+                                : "1px solid rgba(176, 176, 176, 0.15)",
+                            color: viewMode === "list" ? "#FF0000" : "rgba(176, 176, 176, 0.5)",
+                            backgroundColor: viewMode === "list" ? "rgba(255, 0, 0, 0.05)" : "transparent",
+                        }}
                     >
                         LIST
                     </button>
                     <button
                         onClick={() => setViewMode("graph")}
-                        className={`px-3 py-1.5 text-[10px] tracking-wider uppercase border rounded transition-colors ${
-                            viewMode === "graph"
-                                ? "border-fear-red text-fear-red bg-fear-red/10"
-                                : "border-fear-gray/30 text-fear-gray hover:border-fear-red/50"
-                        }`}
+                        className="px-3 py-1.5 text-[10px] tracking-wider uppercase rounded transition-all duration-200"
+                        style={{
+                            border: viewMode === "graph" 
+                                ? "1px solid rgba(255, 0, 0, 0.5)" 
+                                : "1px solid rgba(176, 176, 176, 0.15)",
+                            color: viewMode === "graph" ? "#FF0000" : "rgba(176, 176, 176, 0.5)",
+                            backgroundColor: viewMode === "graph" ? "rgba(255, 0, 0, 0.05)" : "transparent",
+                        }}
                     >
                         GRAPH
                     </button>
@@ -46,7 +58,10 @@ export const History = ({ sessions, texts, onClear }) => {
                 
                 <button
                     onClick={onClear}
-                    className="p-2 text-fear-gray/50 hover:text-fear-red transition-colors"
+                    className="p-2 transition-colors duration-200"
+                    style={{ color: "rgba(176, 176, 176, 0.3)" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF0000"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.3)"}
                     title="Clear history"
                 >
                     <Trash2 className="w-4 h-4" />
@@ -64,40 +79,75 @@ export const History = ({ sessions, texts, onClear }) => {
 
 const ListView = ({ sessions, texts }) => {
     return (
-        <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-300px)]">
+        <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-300px)] no-scrollbar">
             {sessions.map((session, index) => (
                 <div
                     key={session.id}
-                    className="border border-fear-red/20 bg-fear-red/5 rounded p-3"
+                    className="rounded p-3 transition-all duration-200"
+                    style={{
+                        backgroundColor: "#000000",
+                        border: "1px solid rgba(255, 0, 0, 0.12)",
+                        borderLeft: "2px solid rgba(255, 0, 0, 0.4)",
+                    }}
                 >
                     <div className="flex justify-between items-start mb-2">
                         <div>
-                            <div className="text-fear-gray text-[10px] tracking-wider">
+                            <div 
+                                className="flex items-center gap-1.5 text-[10px] tracking-wider"
+                                style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                            >
+                                <Clock className="w-3 h-3" />
                                 {session.date}
                             </div>
-                            <div className="text-fear-red/80 text-xs mt-0.5">
+                            <div 
+                                className="text-xs mt-1 tracking-wide"
+                                style={{ color: "rgba(255, 0, 0, 0.7)" }}
+                            >
                                 {session.name}
                             </div>
                         </div>
-                        <div className="text-[10px] text-fear-gray/50">
-                            #{sessions.length - index}
+                        <div 
+                            className="text-[9px]"
+                            style={{ color: "rgba(176, 176, 176, 0.3)" }}
+                        >
+                            #{String(sessions.length - index).padStart(2, '0')}
                         </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-2 mt-3">
-                        <div className="bg-fear-black/50 rounded p-2">
-                            <div className="text-[9px] text-fear-gray/60 tracking-wider">
+                        <div 
+                            className="rounded p-2"
+                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        >
+                            <div 
+                                className="text-[9px] tracking-wider flex items-center gap-1"
+                                style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                            >
+                                <Activity className="w-2.5 h-2.5" />
                                 {texts.maxBpm}
                             </div>
-                            <div className="text-fear-red text-lg font-bold">
+                            <div 
+                                className="text-lg font-bold mt-0.5"
+                                style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                            >
                                 {session.maxBpm}
                             </div>
                         </div>
-                        <div className="bg-fear-black/50 rounded p-2">
-                            <div className="text-[9px] text-fear-gray/60 tracking-wider">
+                        <div 
+                            className="rounded p-2"
+                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        >
+                            <div 
+                                className="text-[9px] tracking-wider flex items-center gap-1"
+                                style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                            >
+                                <TrendingUp className="w-2.5 h-2.5" />
                                 {texts.maxStress}
                             </div>
-                            <div className="text-fear-red text-lg font-bold">
+                            <div 
+                                className="text-lg font-bold mt-0.5"
+                                style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                            >
                                 {session.maxStress}%
                             </div>
                         </div>
@@ -109,7 +159,6 @@ const ListView = ({ sessions, texts }) => {
 };
 
 const GraphView = ({ sessions }) => {
-    // Generate path from session data
     const generatePath = () => {
         if (sessions.length === 0) return "";
         
@@ -135,15 +184,24 @@ const GraphView = ({ sessions }) => {
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="text-fear-gray text-[10px] tracking-[0.2em] mb-4">
+            <div 
+                className="text-[10px] tracking-[0.2em] mb-4"
+                style={{ color: "rgba(176, 176, 176, 0.4)" }}
+            >
                 FEAR EVOLUTION
             </div>
             
-            <div className="w-full max-w-sm border border-fear-red/20 rounded p-4 bg-fear-black">
+            <div 
+                className="w-full max-w-sm rounded p-4"
+                style={{ 
+                    backgroundColor: "#000000",
+                    border: "1px solid rgba(255, 0, 0, 0.15)"
+                }}
+            >
                 <svg 
                     viewBox="0 0 300 150" 
                     className="w-full h-auto"
-                    style={{ filter: "drop-shadow(0 0 4px rgba(255, 0, 0, 0.4))" }}
+                    style={{ filter: "drop-shadow(0 0 4px rgba(255, 0, 0, 0.3))" }}
                 >
                     {/* Grid */}
                     {[0, 1, 2, 3].map(i => (
@@ -153,7 +211,7 @@ const GraphView = ({ sessions }) => {
                             y1={10 + i * 43.33}
                             x2="290"
                             y2={10 + i * 43.33}
-                            stroke="rgba(255, 0, 0, 0.1)"
+                            stroke="rgba(255, 0, 0, 0.08)"
                             strokeWidth="1"
                         />
                     ))}
@@ -161,9 +219,12 @@ const GraphView = ({ sessions }) => {
                     {/* Data line */}
                     <path
                         d={generatePath()}
-                        className="history-line"
+                        stroke="#FF0000"
+                        strokeWidth="2"
+                        fill="none"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        style={{ filter: "drop-shadow(0 0 4px rgba(255, 0, 0, 0.5))" }}
                     />
                     
                     {/* Data points */}
@@ -178,10 +239,10 @@ const GraphView = ({ sessions }) => {
                                 key={session.id}
                                 cx={x}
                                 cy={y}
-                                r="4"
+                                r="3"
                                 fill="#FF0000"
                                 stroke="#000"
-                                strokeWidth="2"
+                                strokeWidth="1.5"
                             />
                         );
                     })}
@@ -189,7 +250,10 @@ const GraphView = ({ sessions }) => {
             </div>
 
             <div className="mt-4 text-center">
-                <div className="text-fear-gray/60 text-[10px]">
+                <div 
+                    className="text-[10px]"
+                    style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                >
                     {sessions.length} SESSION{sessions.length !== 1 ? 'S' : ''} RECORDED
                 </div>
             </div>
