@@ -670,15 +670,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 400ms ease, transform 400ms ease;
 }
 
 .watch-fullscreen.active {
     display: flex;
-    opacity: 1;
-    transform: scale(1);
 }
 
 /* Watch Face Wrapper */
