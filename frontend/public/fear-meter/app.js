@@ -655,13 +655,17 @@
             }
         } catch (e) {}
         
-        // Show panic overlay flash
+        // Show panic overlay flash (smartphone)
         DOM.panicOverlay.classList.remove('hidden');
         DOM.panicOverlay.classList.add('active');
         
         setTimeout(() => {
             DOM.panicOverlay.classList.remove('active');
         }, 200);
+        
+        // Trigger watch panic flash (synced with smartphone)
+        triggerWatchPanicFlash();
+        updateWatchMode();
         
         // Show critical alert after delay
         STATE.panicTimeout = setTimeout(() => {
