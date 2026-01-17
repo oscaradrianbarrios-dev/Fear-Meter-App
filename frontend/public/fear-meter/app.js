@@ -1225,6 +1225,9 @@
         STATE.isWatchFullscreen = true;
         STATE.currentView = 'watch';
         
+        // Stop oscilloscope animation when entering watch mode
+        stopOscilloscopeAnimation();
+        
         // Hide other views
         if (DOM.viewMonitor) DOM.viewMonitor.classList.remove('active');
         if (DOM.viewHistory) DOM.viewHistory.classList.remove('active');
@@ -1235,11 +1238,11 @@
         }
         
         // Setup canvas and start animation after DOM is ready
-        requestAnimationFrame(() => {
+        setTimeout(() => {
             setupWatchCanvas();
             startWatchAnimation();
             updateWatchMode();
-        });
+        }, 50);
         
         // Update menu active state
         DOM.menuItems.forEach(item => {
@@ -1276,6 +1279,9 @@
         }
         
         STATE.currentView = 'monitor';
+        
+        // Restart oscilloscope animation when returning to monitor
+        startOscilloscopeAnimation();
         
         // Update menu active state
         DOM.menuItems.forEach(item => {
