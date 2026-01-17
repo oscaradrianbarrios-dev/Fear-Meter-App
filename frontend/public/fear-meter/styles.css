@@ -1734,51 +1734,61 @@ body::before {
 }
 
 /* ============================================
-   PANIC OVERLAY & CRITICAL ALERT
+   PANIC OVERLAY & CRITICAL ALERT - DISTURBING
    ============================================ */
 
 .panic-overlay {
     position: fixed;
     inset: 0;
-    background-color: var(--fear-black);
+    background-color: var(--fear-red);
     z-index: 200;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 100ms ease;
 }
 
 .panic-overlay.active {
     pointer-events: auto;
-    animation: panic-flash 200ms ease-in-out;
+    animation: panic-flash 300ms ease-out;
+}
+
+/* UI Freeze overlay */
+.ui-frozen {
+    position: fixed;
+    inset: 0;
+    background-color: transparent;
+    z-index: 198;
+    pointer-events: all;
 }
 
 .critical-alert {
     position: fixed;
     inset: 0;
-    background-color: rgba(139, 0, 0, 0.95);
+    background-color: var(--fear-dark-red);
     z-index: 201;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--transition-fast);
 }
 
 .critical-alert.visible {
     opacity: 1;
     pointer-events: auto;
+    animation: ui-freeze 0.5s ease-in-out infinite;
 }
 
 .critical-text {
     font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.2em;
+    font-size: 24px;
+    letter-spacing: 0.3em;
     color: var(--fear-white);
-    text-shadow: 0 0 30px var(--fear-red), 0 0 60px var(--fear-red);
-    animation: jitter 0.1s ease-in-out infinite;
+    text-shadow: 0 0 30px var(--fear-red), 0 0 60px var(--fear-red), 0 0 100px var(--fear-red);
+    animation: jitter 0.08s ease-in-out infinite;
     text-align: center;
     padding: 0 24px;
+    text-transform: uppercase;
 }
 
 /* ============================================
@@ -1791,7 +1801,7 @@ body::before {
     }
     
     .data-value {
-        font-size: 28px;
+        font-size: 32px;
     }
     
     .main-button {
@@ -1800,6 +1810,6 @@ body::before {
     }
     
     .critical-text {
-        font-size: 24px;
+        font-size: 32px;
     }
 }
