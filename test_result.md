@@ -216,7 +216,8 @@ metadata:
   test_sequence: 1
 
 test_plan:
-  current_focus: []
+  current_focus: 
+    - "Psychological Tension Adjustments"
   stuck_tasks: []
   test_all: true
   test_priority: "completed"
@@ -226,3 +227,5 @@ agent_communication:
     message: "Starting comprehensive testing of FEAR METER biometric horror application. Will test all main features including monitor view, session management, panic mode, navigation, watch mode, history, and demo mode."
   - agent: "testing"
     message: "✅ COMPREHENSIVE TESTING COMPLETED SUCCESSFULLY - All 7 major features tested and working perfectly. Main Monitor View: Header, oscilloscope, data grid, and START/STOP button all functional. Session Management: BPM fluctuation (60-140 range), stress correlation, signal status changes, tap interactions working. Panic Mode: Red flash overlay, critical alert text, UI blocking, and aggressive animations triggered correctly when BPM >110. Side Menu: Right-side slide animation, all menu items, language switching (EN/ES) working. Watch Mode: Circular face, tick marks, BPM display, status indicators functional. History: LIST view with session data, GRAPH view with fear evolution chart, clear button working. Demo Mode: Banner display, aggressive BPM increases, faster panic triggering all working. No critical issues found - application is production ready."
+  - agent: "testing"
+    message: "🎯 PSYCHOLOGICAL TENSION ADJUSTMENTS TESTING COMPLETED - Verified specific tension enhancements: ✅ Initial Impact (300ms delay): BPM/STRESS/SIGNAL correctly show '---' for first 300ms, then reveal data with staggered animation. ✅ Menu Reveal: Menu uses FADE IN animation (not slide) with blur effect, 'SYSTEM ACCESS' text at top and 'RESTRICTED ACCESS' at bottom confirmed. ✅ Visual Tension: UI has 85% brightness filter applied for darker, clinical feel. ✅ Core Functionality: All features still working - session start/stop, BPM fluctuation (60-140), panic mode trigger at BPM >110, watch mode navigation, history view, language switching (EN/ES). Minor issue: Panic mode overlay may not always be visible but BPM threshold detection working. All psychological tension adjustments successfully implemented and functional."
