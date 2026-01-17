@@ -913,14 +913,15 @@
         const width = rect.width;
         const height = rect.height;
         const centerY = height / 2;
+        const bpm = STATE.bpm;
 
         // Clear canvas
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, width, height);
 
-        // Draw grid lines
-        const gridOpacity = STATE.isPanic ? 0.03 : 0.06;
-        ctx.strokeStyle = `rgba(${STATE.isPanic ? '139, 0, 0' : '255, 0, 0'}, ${gridOpacity})`;
+        // Draw grid lines - more subtle
+        const gridOpacity = STATE.isPanic ? 0.02 : 0.04;
+        ctx.strokeStyle = `rgba(255, 0, 0, ${gridOpacity})`;
         ctx.lineWidth = 1;
         
         for (let y = 0; y <= height; y += height / 4) {
@@ -938,8 +939,8 @@
         }
 
         if (!STATE.isActive) {
-            // Flat line when inactive
-            ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
+            // Flat line when inactive - barely visible
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.1)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(0, centerY);
@@ -958,16 +959,42 @@
             amplitudeMultiplier = 0.3 + (0.7 * (1 - Math.pow(1 - rampProgress, 3)));
         }
 
-        // PANIC MODE settings
-        const baseFrequency = STATE.bpm / 60;
-        const frequencyMultiplier = STATE.isPanic ? 2.0 : 1.0;
-        const frequency = baseFrequency * frequencyMultiplier;
+        // CHAOTIC oscilloscope based on BPM levels
+        const isElevated = bpm > 100;
+        const isCritical = bpm > 120;
+        const isPanic = STATE.isPanic;
         
-        const speed = (frequency * 4) + (STATE.isPanic ? 3 : 0);
-        const baseAmplitude = STATE.isPanic ? height * 0.42 : height * 0.28;
+        const baseFrequency = bpm / 60;
+        let frequencyMultiplier = 1.0;
+        let chaosMultiplier = 1.0;
+        
+        if (isPanic) {
+            frequencyMultiplier = 2.5;
+            chaosMultiplier = 3.0;
+        } else if (isCritical) {
+            frequencyMultiplier = 1.8;
+            chaosMultiplier = 2.0;
+        } else if (isElevated) {
+            frequencyMultiplier = 1.3;
+            chaosMultiplier = 1.4;
+        }
+        
+        const frequency = baseFrequency * frequencyMultiplier;
+        const speed = (frequency * 4) + (isPanic ? 5 : isCritical ? 2 : 0);
+        
+        // Amplitude increases with BPM
+        let baseAmplitude = height * 0.25;
+        if (isPanic) {
+            baseAmplitude = height * 0.45;
+        } else if (isCritical) {
+            baseAmplitude = height * 0.38;
+        } else if (isElevated) {
+            baseAmplitude = height * 0.32;
+        }
         const amplitude = baseAmplitude * amplitudeMultiplier;
         
-        const jitterAmount = STATE.isPanic ? 8 : 0.5;
+        // CHAOS: Jitter increases with BPM
+        const jitterAmount = isPanic ? 12 : isCritical ? 6 : isElevated ? 2 : 0.3;
         const jitter = (Math.random() - 0.5) * jitterAmount;
         const timingJitter = STATE.isPanic ? (Math.random() - 0.5) * 0.15 : 0;
 
