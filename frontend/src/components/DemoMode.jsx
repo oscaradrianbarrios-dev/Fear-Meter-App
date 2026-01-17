@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Header from "./Header";
 import Monitor from "./Monitor";
 import WatchMode from "./WatchMode";
 import History from "./History";
 import SideMenu from "./SideMenu";
 import CriticalAlert from "./CriticalAlert";
+import PanicOverlay from "./PanicOverlay";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 
@@ -12,8 +13,10 @@ export const DemoMode = () => {
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
     const [language, setLanguage] = useState("EN");
-    const [showCriticalAlert, setShowCriticalAlert] = useState(false);
+    const [showCriticalMessage, setShowCriticalMessage] = useState(false);
+    const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const panicTimeoutRef = useRef(null);
 
     const {
         bpm,
@@ -21,31 +24,33 @@ export const DemoMode = () => {
         signal,
         isActive,
         isPanic,
+        isRecovering,
         startSimulation,
         stopSimulation,
         triggerTap,
     } = useBiometricSimulation({
-        isDemo: true, // Aggressive mode for investors
-        onPanic: () => {
-            if (!isBlocked) {
-                setShowCriticalAlert(true);
-                setIsBlocked(true);
-                
-                if (navigator.vibrate) {
-                    navigator.vibrate([200, 100, 200, 100, 200]);
-                }
-                
-                setTimeout(() => {
-                    setShowCriticalAlert(false);
-                    setIsBlocked(false);
-                }, 1000);
-            }
+        isDemo: true,
+        onPanicStart: () => {
+            setIsBlocked(true);
+            setPanicActive(true);
+            
+            panicTimeoutRef.current = setTimeout(() => {
+                setShowCriticalMessage(true);
+            }, 520);
         },
+        onPanicEnd: () => {},
     });
+
+    const handlePanicSequenceComplete = useCallback(() => {
+        setTimeout(() => {
+            setPanicActive(false);
+            setShowCriticalMessage(false);
+            setIsBlocked(false);
+        }, 300);
+    }, []);
 
     const {
         sessions,
-        currentSession,
         startSession,
         endSession,
         clearHistory,
@@ -121,18 +126,39 @@ export const DemoMode = () => {
         <div 
             className="min-h-screen bg-fear-black font-fear flex flex-col relative overflow-hidden"
             onClick={isActive && !isBlocked ? triggerTap : undefined}
+            style={{
+                transition: isRecovering ? "filter 300ms ease-out" : "none",
+                filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
+            }}
         >
             {/* Demo Mode Banner */}
-            <div className="bg-fear-dark-red/30 border-b border-fear-dark-red py-1 text-center">
-                <p className="text-fear-gray text-[10px] tracking-[0.3em] uppercase">
+            <div 
+                className="py-1 text-center"
+                style={{ 
+                    backgroundColor: "rgba(139, 0, 0, 0.15)",
+                    borderBottom: "1px solid rgba(139, 0, 0, 0.3)"
+                }}
+            >
+                <p 
+                    className="text-[9px] tracking-[0.3em] uppercase"
+                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                >
                     DEMO MODE — SIMULATED DATA
                 </p>
             </div>
 
-            {showCriticalAlert && <CriticalAlert text={t.criticalAlert} />}
+            <PanicOverlay 
+                active={panicActive} 
+                onSequenceComplete={handlePanicSequenceComplete}
+            />
+            
+            <CriticalAlert 
+                visible={showCriticalMessage} 
+                language={language}
+            />
             
             <Header 
-                onMenuOpen={() => setMenuOpen(true)} 
+                onMenuOpen={() => !isBlocked && setMenuOpen(true)} 
             />
 
             <main className="flex-1 flex flex-col px-4 pb-4">
@@ -143,6 +169,7 @@ export const DemoMode = () => {
                         signal={signal}
                         isActive={isActive}
                         isPanic={isPanic}
+                        isRecovering={isRecovering}
                         onStartStop={handleStartStop}
                         texts={t}
                         isBlocked={isBlocked}
