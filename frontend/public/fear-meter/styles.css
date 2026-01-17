@@ -656,147 +656,472 @@ body {
 }
 
 /* ============================================
-   WATCH MODE
+   WATCH MODE - FULLSCREEN SMARTWATCH
    ============================================ */
 
-#view-watch {
+/* Fullscreen Watch View */
+.watch-fullscreen {
+    position: fixed !important;
+    inset: 0;
+    z-index: 90;
+    background-color: var(--fear-black);
+    display: none;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 32px 16px;
+    padding: 20px;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 400ms ease, transform 400ms ease;
 }
 
-.watch-header {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--fear-gray);
-    margin-bottom: 24px;
+.watch-fullscreen.active {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
 }
 
-.watch-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-}
-
-.watch-container.jitter {
-    animation: jitter 0.1s ease-in-out infinite;
-}
-
-#watch-canvas {
+/* Watch Face Wrapper */
+.watch-face-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
     width: 100%;
-    height: 100%;
-    display: block;
+    max-height: 70vh;
 }
 
-.watch-center {
+/* Watch Face - Circular Container */
+.watch-face {
+    position: relative;
+    width: min(320px, 80vw);
+    height: min(320px, 80vw);
+    border-radius: 50%;
+    background-color: var(--fear-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Outer Ring - Pulsing Border */
+.watch-ring {
     position: absolute;
     inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 0, 0, 0.2);
+    pointer-events: none;
+    transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.watch-ring.active {
+    border-color: rgba(255, 0, 0, 0.4);
+    animation: watch-ring-pulse 2s ease-in-out infinite;
+}
+
+.watch-ring.panic {
+    border-color: rgba(139, 0, 0, 0.8);
+    border-width: 3px;
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.5), inset 0 0 30px rgba(139, 0, 0, 0.2);
+    animation: watch-ring-panic 0.3s ease-in-out infinite;
+}
+
+@keyframes watch-ring-pulse {
+    0%, 100% {
+        border-color: rgba(255, 0, 0, 0.3);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+    }
+    50% {
+        border-color: rgba(255, 0, 0, 0.5);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+    }
+}
+
+@keyframes watch-ring-panic {
+    0%, 100% {
+        border-color: rgba(139, 0, 0, 0.8);
+        box-shadow: 0 0 30px rgba(139, 0, 0, 0.5), inset 0 0 30px rgba(139, 0, 0, 0.2);
+    }
+    50% {
+        border-color: rgba(255, 0, 0, 0.9);
+        box-shadow: 0 0 50px rgba(255, 0, 0, 0.6), inset 0 0 40px rgba(139, 0, 0, 0.3);
+    }
+}
+
+/* Canvas for Arc */
+#watch-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Center Content */
+.watch-center-content {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 20px;
 }
 
-.watch-bpm {
-    font-size: 48px;
-    font-weight: 700;
-    color: rgba(176, 176, 176, 0.5);
-    transition: all var(--transition-normal);
+/* Session Status */
+.watch-session-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+    transition: opacity 300ms ease;
 }
 
-.watch-bpm.active {
-    color: var(--fear-red);
-    text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+.watch-session-status.active {
+    opacity: 1;
 }
 
-.watch-bpm.panic {
-    color: var(--fear-red);
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.3);
+.session-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(176, 176, 176, 0.4);
+    transition: all 300ms ease;
 }
 
-.watch-label {
-    font-size: 10px;
+.session-dot.active {
+    background-color: var(--fear-red);
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+    animation: session-dot-pulse 1s ease-in-out infinite;
+}
+
+.session-dot.panic {
+    background-color: var(--fear-dark-red);
+    animation: session-dot-panic 0.2s ease-in-out infinite;
+}
+
+@keyframes session-dot-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+@keyframes session-dot-panic {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+#session-status-text {
+    font-size: 9px;
     letter-spacing: 0.2em;
-    color: var(--fear-gray);
+    color: rgba(176, 176, 176, 0.5);
+    text-transform: uppercase;
+    transition: color 300ms ease;
+}
+
+#session-status-text.active {
+    color: rgba(255, 0, 0, 0.7);
+}
+
+#session-status-text.panic {
+    color: var(--fear-dark-red);
+}
+
+/* BPM Display */
+.watch-bpm-display {
+    margin: 10px 0;
+}
+
+.watch-bpm-value {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(176, 176, 176, 0.3);
+    transition: all 300ms ease;
+    text-shadow: none;
+}
+
+.watch-bpm-value.active {
+    color: var(--fear-red);
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+
+.watch-bpm-value.panic {
+    color: var(--fear-red);
+    text-shadow: 0 0 30px rgba(255, 0, 0, 0.6), 0 0 60px rgba(255, 0, 0, 0.3);
+    animation: bpm-panic-pulse 0.15s ease-in-out infinite;
+}
+
+@keyframes bpm-panic-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.watch-bpm-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(176, 176, 176, 0.4);
     margin-top: 4px;
 }
 
-.watch-status {
+/* Live Signal Indicator */
+.watch-signal {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 24px;
+    gap: 6px;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 300ms ease;
 }
 
-.status-dot {
+.watch-signal.active {
+    opacity: 1;
+}
+
+.signal-pulse {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: rgba(176, 176, 176, 0.3);
-    transition: background-color var(--transition-normal);
-}
-
-.status-dot.active {
     background-color: var(--fear-red);
-    animation: pulse-red 2s ease-in-out infinite;
+    opacity: 0.7;
 }
 
-.status-dot.panic {
-    background-color: var(--fear-red);
-    animation: pulse-aggressive 0.5s ease-in-out infinite;
+.signal-pulse.active {
+    animation: signal-blink 1s ease-in-out infinite;
 }
 
-#watch-status-text {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    color: rgba(176, 176, 176, 0.5);
-    transition: color var(--transition-normal);
+@keyframes signal-blink {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
 }
 
-#watch-status-text.active {
-    color: var(--fear-gray);
+.watch-signal span {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: rgba(255, 0, 0, 0.5);
 }
 
-#watch-status-text.panic {
-    color: var(--fear-red);
+/* Panic Flash Overlay */
+.watch-panic-flash {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: var(--fear-dark-red);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
 }
 
-.watch-stress {
-    width: 192px;
-    margin-top: 16px;
-    display: none;
+.watch-panic-flash.active {
+    animation: watch-flash 200ms ease-out;
 }
 
-.watch-stress.visible {
-    display: block;
+@keyframes watch-flash {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
 }
 
-.stress-header {
+/* Session Saved Message */
+.watch-message {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
     display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--fear-gray);
-    margin-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+    transition: opacity 300ms ease;
 }
 
-.stress-bar {
-    height: 4px;
-    background-color: rgba(176, 176, 176, 0.2);
+.watch-message.visible {
+    opacity: 1;
+}
+
+.watch-message span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--fear-red);
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Demo Mode Indicator */
+.watch-demo-indicator {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    transition: opacity 300ms ease;
+}
+
+.watch-demo-indicator.visible {
+    opacity: 1;
+}
+
+.watch-demo-indicator span {
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    color: rgba(139, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 3px 8px;
     border-radius: 2px;
-    overflow: hidden;
+    border: 1px solid rgba(139, 0, 0, 0.3);
 }
 
-.stress-fill {
-    height: 100%;
-    width: 0%;
-    background-color: rgba(255, 0, 0, 0.7);
-    transition: all var(--transition-normal);
-    border-radius: 2px;
+/* Watch Controls */
+.watch-controls {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
 }
 
-.stress-fill.panic {
+.watch-control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    background-color: rgba(255, 0, 0, 0.05);
+    color: var(--fear-red);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.watch-control-btn:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+}
+
+.watch-control-btn:active {
+    transform: scale(0.98);
+}
+
+.watch-control-btn.secondary {
+    border-color: rgba(176, 176, 176, 0.2);
+    background-color: transparent;
+    color: rgba(176, 176, 176, 0.5);
+}
+
+.watch-control-btn.secondary:hover {
+    border-color: rgba(176, 176, 176, 0.4);
+    color: rgba(176, 176, 176, 0.8);
+    box-shadow: none;
+}
+
+.watch-control-btn.active {
     background-color: var(--fear-red);
-    box-shadow: var(--glow-red);
+    border-color: var(--fear-red);
+    color: var(--fear-black);
+}
+
+.watch-control-btn.panic {
+    background-color: var(--fear-dark-red);
+    border-color: var(--fear-dark-red);
+    animation: control-panic 0.3s ease-in-out infinite;
+}
+
+@keyframes control-panic {
+    0%, 100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); }
+}
+
+.control-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-icon svg {
+    transition: transform 200ms ease;
+}
+
+.watch-control-btn.active .control-icon svg {
+    transform: scale(0.9);
+}
+
+/* Connection Status */
+.watch-connection {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: rgba(255, 0, 0, 0.03);
+    border: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+.connection-icon {
+    color: rgba(255, 0, 0, 0.5);
+    animation: connection-pulse 2s ease-in-out infinite;
+}
+
+@keyframes connection-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.watch-connection span {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: rgba(176, 176, 176, 0.4);
+}
+
+/* Watch Face Jitter (Panic) */
+.watch-face.jitter {
+    animation: watch-jitter 0.08s ease-in-out infinite;
+}
+
+@keyframes watch-jitter {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-1px, 1px) rotate(-0.5deg); }
+    50% { transform: translate(1px, -1px) rotate(0.5deg); }
+    75% { transform: translate(-1px, -1px) rotate(-0.3deg); }
+}
+
+/* Responsive adjustments */
+@media (max-height: 600px) {
+    .watch-face {
+        width: min(260px, 70vw);
+        height: min(260px, 70vw);
+    }
+    
+    .watch-bpm-value {
+        font-size: 56px;
+    }
+    
+    .watch-controls {
+        margin-top: 16px;
+    }
+    
+    .watch-control-btn {
+        padding: 10px 20px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .watch-face {
+        width: min(240px, 85vw);
+        height: min(240px, 85vw);
+    }
+    
+    .watch-bpm-value {
+        font-size: 48px;
+    }
 }
 
 /* ============================================
