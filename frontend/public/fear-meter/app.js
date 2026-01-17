@@ -1519,6 +1519,15 @@
         STATE.panicActive = false;
         STATE.oscilloscopeStartTime = Date.now();
         
+        // Initialize and play startup audio
+        AudioEngine.init();
+        AudioEngine.playStaticBurst(0.8);
+        
+        // Start heartbeat sound after static burst
+        setTimeout(() => {
+            AudioEngine.startHeartbeat();
+        }, 900);
+        
         // Start simulation
         STATE.simulationInterval = setInterval(simulateBpm, CONFIG.SIMULATION_INTERVAL);
         
@@ -1544,6 +1553,9 @@
         STATE.signal = 'ACTIVE';
         STATE.panicActive = false;
         STATE.oscilloscopeStartTime = null;
+        
+        // Stop audio
+        AudioEngine.stopHeartbeat();
         
         // Clear intervals
         if (STATE.simulationInterval) {
