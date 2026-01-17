@@ -1019,15 +1019,29 @@
         // Cancel any existing animation
         if (STATE.watchAnimation) {
             cancelAnimationFrame(STATE.watchAnimation);
+            STATE.watchAnimation = null;
         }
         
+        // Draw once immediately
+        drawWatchArc();
+        
+        // Then start animation loop only while in watch mode
         const animate = () => {
-            if (STATE.isWatchFullscreen) {
-                drawWatchArc();
+            if (!STATE.isWatchFullscreen) {
+                STATE.watchAnimation = null;
+                return; // Stop animation when not in watch mode
             }
+            drawWatchArc();
             STATE.watchAnimation = requestAnimationFrame(animate);
         };
-        animate();
+        STATE.watchAnimation = requestAnimationFrame(animate);
+    }
+    
+    function stopWatchAnimation() {
+        if (STATE.watchAnimation) {
+            cancelAnimationFrame(STATE.watchAnimation);
+            STATE.watchAnimation = null;
+        }
     }
     
     function drawWatchArc() {
