@@ -3,7 +3,7 @@
    Color Palette:
    - Black: #000000
    - Primary Red: #FF0000
-   - Dark Red: #8B0000
+   - Dark Red: #8B0000 (danger states only)
    - Secondary Gray: #B0B0B0
    ============================================ */
 
@@ -21,9 +21,8 @@
     --glow-red-intense: 0 0 15px rgba(255, 0, 0, 0.35), 0 0 30px rgba(255, 0, 0, 0.15);
     --glow-dark-red: 0 0 12px rgba(139, 0, 0, 0.4);
     
-    --transition-fast: 150ms ease;
-    --transition-normal: 300ms ease;
-    --transition-slow: 500ms ease;
+    --screen-darken: 1;
+    --vignette-opacity: 0;
 }
 
 /* Reset & Base */
@@ -44,7 +43,45 @@ body {
     color: var(--fear-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    filter: brightness(0.85);
+}
+
+/* Screen darken effect based on BPM */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--fear-black);
+    opacity: var(--screen-darken, 0);
+    pointer-events: none;
+    z-index: 200;
+    transition: opacity 150ms linear;
+}
+
+/* Red vignette effect for high BPM */
+#vignette-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 199;
+    opacity: 0;
+    background: radial-gradient(ellipse at center, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(139, 0, 0, 0.3) 70%, 
+        rgba(139, 0, 0, 0.6) 100%);
+    transition: opacity 200ms ease;
+}
+
+#vignette-overlay.active {
+    opacity: 1;
+}
+
+#vignette-overlay.intense {
+    background: radial-gradient(ellipse at center, 
+        transparent 0%, 
+        transparent 30%, 
+        rgba(139, 0, 0, 0.5) 60%, 
+        rgba(139, 0, 0, 0.9) 100%);
 }
 
 /* Scrollbar */
