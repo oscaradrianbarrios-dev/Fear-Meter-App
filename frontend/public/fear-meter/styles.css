@@ -21,7 +21,12 @@
     --glow-red-intense: 0 0 15px rgba(255, 0, 0, 0.35), 0 0 30px rgba(255, 0, 0, 0.15);
     --glow-dark-red: 0 0 12px rgba(139, 0, 0, 0.4);
     
-    --screen-darken: 1;
+    /* Abrupt transitions - not smooth */
+    --transition-fast: 80ms ease-out;
+    --transition-normal: 120ms ease-out;
+    --transition-slow: 200ms ease-out;
+    
+    --screen-darken: 0;
     --vignette-opacity: 0;
 }
 
