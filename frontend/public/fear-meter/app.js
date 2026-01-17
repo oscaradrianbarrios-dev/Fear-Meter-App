@@ -1744,9 +1744,18 @@
     function switchView(viewName) {
         STATE.currentView = viewName;
         
+        // Handle watch fullscreen mode
+        if (viewName === 'watch') {
+            enterWatchMode();
+            return;
+        }
+        
+        // Exit watch fullscreen if active
+        STATE.isWatchFullscreen = false;
+        
         // Update view visibility
         DOM.viewMonitor.classList.toggle('active', viewName === 'monitor');
-        DOM.viewWatch.classList.toggle('active', viewName === 'watch');
+        DOM.viewWatch.classList.remove('active');
         DOM.viewHistory.classList.toggle('active', viewName === 'history');
         
         // Update menu items
@@ -1757,11 +1766,6 @@
         // Render history if switching to it
         if (viewName === 'history') {
             renderHistory();
-        }
-        
-        // Initial draw for watch mode
-        if (viewName === 'watch') {
-            drawWatch();
         }
         
         closeMenu();
