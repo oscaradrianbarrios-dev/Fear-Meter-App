@@ -101,3 +101,112 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the FEAR METER biometric horror application at https://stress-monitor-3.preview.emergentagent.com"
+
+frontend:
+  - task: "Main Monitor View"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Monitor.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - Header with FEAR METER v1.0 text and hamburger menu, ECG Oscilloscope canvas, Data Grid with BPM/STRESS/SIGNAL, Circular START/STOP button"
+
+  - task: "Session Management"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/hooks/useBiometricSimulation.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - START/STOP session functionality, BPM fluctuation 60-140, stress proportional to BPM, signal status changes, tap to increase BPM/stress"
+
+  - task: "Panic Mode"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/CriticalAlert.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - Red flash overlay when BPM > 110, CRITICAL STRESS DETECTED text, UI blocks for 1 second, aggressive animations"
+
+  - task: "Side Menu Navigation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SideMenu.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - Opens from right side, contains Monitor/Watch Mode/History/Language/About options, language switch EN/ES"
+
+  - task: "Watch Mode"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/WatchMode.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - Circular watch face with tick marks, BPM number in center, progress arc shows BPM level, status indicator"
+
+  - task: "History View"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/History.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - LIST view with past sessions, GRAPH view with line chart, clear history button"
+
+  - task: "Demo Mode"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/DemoMode.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required - DEMO MODE banner, simulated data, more aggressive BPM/stress increases, faster panic mode trigger"
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+
+test_plan:
+  current_focus:
+    - "Main Monitor View"
+    - "Session Management"
+    - "Panic Mode"
+    - "Side Menu Navigation"
+    - "Watch Mode"
+    - "History View"
+    - "Demo Mode"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "testing"
+    message: "Starting comprehensive testing of FEAR METER biometric horror application. Will test all main features including monitor view, session management, panic mode, navigation, watch mode, history, and demo mode."
