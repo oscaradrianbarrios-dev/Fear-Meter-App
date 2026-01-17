@@ -37,17 +37,47 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Marcadores de eventos PANIC
 - Análisis técnico por sesión
 
-### 5. Modo Reloj (Watch Mode)
-- UI circular simulando smartwatch
-- Arco de progreso para BPM
-- Indicadores de estado y estrés
+### 5. Watch Mode - FULLSCREEN SMARTWATCH ✅ NEW
+**Interfaz fullscreen que simula un ecosistema Watch + Smartphone**
 
-### 6. Menú Lateral
+#### Layout
+- Pantalla circular centrada (320px en desktop, responsivo en móvil)
+- Fondo negro absoluto (#000000)
+- Borde rojo tenue pulsante
+- BPM grande al centro (72px)
+- Arco de progreso circular que se llena según BPM
+- Indicador "LIVE FEAR SIGNAL"
+
+#### Sincronización Smartphone ↔ Watch
+- Watch refleja BPM actual en tiempo real
+- Estado de sesión sincronizado (START/STOP)
+- Eventos de pánico reflejados en ambos dispositivos
+- Flash rojo en Watch durante pánico
+- Arco se vuelve sólido durante pánico
+- Mensaje "SESSION SAVED" al finalizar
+
+#### Controles
+- Botón START/STOP integrado
+- Botón EXIT para volver al Monitor
+- Tap en watch face para aumentar stress
+- Long-press (2s) para activar Demo Mode
+
+### 6. Demo Mode para Inversores ✅ ENHANCED
+- Activación: long-press en Watch face o acceso oculto
+- Loop controlado con BPM progresivo (70→125→85)
+- Evento de pánico simulado automáticamente
+- Indicador discreto "DEMO DATA — SIMULATED"
+- No guarda datos reales en historial
+
+### 7. Menú Lateral
 - Navegación entre vistas
 - Selector de idioma (EN/ES)
-- Long-press para modo demo (oculto)
+- About / Legal
 
-### 7. Modo Demo para Inversores
+### 8. Audio System (Web Audio API)
+- Sonido de estática clínica al iniciar sesión
+- Latido rítmico sincronizado con BPM
+- Alarma de pánico con tonos disonantes
 - Datos más estables (70-110 BPM)
 - Historial pre-cargado
 - Indicador discreto "DEMO MODE"
