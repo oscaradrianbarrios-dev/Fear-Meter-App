@@ -1,20 +1,21 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
     const canvasRef = useRef(null);
+    const [canvasReady, setCanvasReady] = useState(false);
 
-    useEffect(() => {
+    const drawWatch = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d");
-        const size = Math.min(canvas.width, canvas.height);
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = size * 0.4;
+        const displaySize = parseInt(canvas.style.width) || 280;
+        const centerX = displaySize / 2;
+        const centerY = displaySize / 2;
+        const radius = displaySize * 0.4;
 
         // Clear
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, displaySize, displaySize);
 
         // Background circle
         ctx.beginPath();
@@ -31,22 +32,24 @@ export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
         const endAngle = startAngle + (Math.PI * 2 * Math.min(progress, 1));
 
         // Glow effect for arc
-        ctx.shadowColor = "#FF0000";
-        ctx.shadowBlur = isPanic ? 30 : 15;
+        if (isActive && progress > 0) {
+            ctx.shadowColor = "#FF0000";
+            ctx.shadowBlur = isPanic ? 30 : 15;
 
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-        ctx.strokeStyle = isPanic ? "#FF0000" : "#FF0000";
-        ctx.lineWidth = isPanic ? 8 : 6;
-        ctx.lineCap = "round";
-        ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.strokeStyle = "#FF0000";
+            ctx.lineWidth = isPanic ? 8 : 6;
+            ctx.lineCap = "round";
+            ctx.stroke();
 
-        ctx.shadowBlur = 0;
+            ctx.shadowBlur = 0;
+        }
 
         // Inner circle decoration
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius * 0.85, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
+        ctx.strokeStyle = "rgba(255, 0, 0, 0.15)";
         ctx.lineWidth = 1;
         ctx.stroke();
 
@@ -54,7 +57,7 @@ export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
         for (let i = 0; i < 12; i++) {
             const angle = (Math.PI * 2 * i) / 12 - Math.PI / 2;
             const innerR = radius * 0.9;
-            const outerR = radius * 0.95;
+            const outerR = radius * 0.97;
             
             ctx.beginPath();
             ctx.moveTo(
@@ -69,8 +72,13 @@ export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
             ctx.lineWidth = 2;
             ctx.stroke();
         }
-
     }, [bpm, isActive, isPanic]);
+
+    useEffect(() => {
+        if (canvasReady) {
+            drawWatch();
+        }
+    }, [bpm, isActive, isPanic, canvasReady, drawWatch]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -85,6 +93,7 @@ export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
             canvas.style.height = `${size}px`;
             const ctx = canvas.getContext("2d");
             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            setCanvasReady(true);
         };
 
         updateSize();
