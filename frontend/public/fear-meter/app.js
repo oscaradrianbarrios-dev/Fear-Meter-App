@@ -847,6 +847,12 @@
     function drawOscilloscope() {
         const canvas = DOM.oscilloscope;
         if (!canvas) return;
+        
+        // Don't run animation if we're in watch mode
+        if (STATE.currentView === 'watch') {
+            STATE.oscilloscopeAnimation = null;
+            return;
+        }
 
         const ctx = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();
