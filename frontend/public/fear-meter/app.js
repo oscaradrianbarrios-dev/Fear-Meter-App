@@ -1278,6 +1278,9 @@
     function exitWatchMode() {
         STATE.isWatchFullscreen = false;
         
+        // Stop watch animation
+        stopWatchAnimation();
+        
         // Exit Demo Mode if active
         if (STATE.isDemoMode) {
             exitDemoMode();
