@@ -1228,16 +1228,17 @@
         if (DOM.viewMonitor) DOM.viewMonitor.classList.remove('active');
         if (DOM.viewHistory) DOM.viewHistory.classList.remove('active');
         
-        // Show watch fullscreen with transition
+        // Show watch fullscreen
         if (DOM.viewWatch) {
             DOM.viewWatch.classList.add('active');
         }
         
-        // Setup canvas if needed
-        setTimeout(() => {
+        // Setup canvas and start animation after DOM is ready
+        requestAnimationFrame(() => {
             setupWatchCanvas();
+            startWatchAnimation();
             updateWatchMode();
-        }, 50);
+        });
         
         // Update menu active state
         DOM.menuItems.forEach(item => {
@@ -1255,8 +1256,27 @@
             exitDemoMode();
         }
         
-        // Switch to monitor view
-        switchView('monitor');
+        // Stop session if active
+        if (STATE.isActive) {
+            stopMonitoring();
+        }
+        
+        // Hide watch view
+        if (DOM.viewWatch) {
+            DOM.viewWatch.classList.remove('active');
+        }
+        
+        // Show monitor view
+        if (DOM.viewMonitor) {
+            DOM.viewMonitor.classList.add('active');
+        }
+        
+        STATE.currentView = 'monitor';
+        
+        // Update menu active state
+        DOM.menuItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.view === 'monitor');
+        });
     }
     
     // ============================================
