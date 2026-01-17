@@ -2123,9 +2123,17 @@
                     DOM.sessionDetail.classList.add('hidden');
                 }
             }
-            if (e.key === ' ' && !STATE.menuOpen) {
+            if (e.key === ' ' && !STATE.menuOpen && !STATE.isWatchFullscreen) {
                 e.preventDefault();
                 toggleMonitoring();
+            }
+            // Press 'w' to toggle watch mode
+            if (e.key === 'w' && !STATE.menuOpen) {
+                if (STATE.isWatchFullscreen) {
+                    exitWatchMode();
+                } else {
+                    enterWatchMode();
+                }
             }
         });
     }
@@ -2138,7 +2146,6 @@
         cacheDOMElements();
         setupEventListeners();
         setupOscilloscope();
-        setupWatchCanvas();
         
         // Start oscilloscope animation
         drawOscilloscope();
