@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Trash2, Clock, Activity, TrendingUp } from "lucide-react";
+import { Trash2, Clock, Activity, TrendingUp, AlertTriangle, ChevronLeft, X } from "lucide-react";
 
-export const History = ({ sessions, texts, onClear }) => {
+export const History = ({ sessions, texts, onClear, onDeleteSession }) => {
     const [viewMode, setViewMode] = useState("list");
+    const [selectedSession, setSelectedSession] = useState(null);
 
     if (sessions.length === 0) {
         return (
@@ -20,6 +21,17 @@ export const History = ({ sessions, texts, onClear }) => {
                     {texts.noSessions}
                 </p>
             </div>
+        );
+    }
+
+    // Detailed session view
+    if (selectedSession) {
+        return (
+            <SessionDetail 
+                session={selectedSession} 
+                onClose={() => setSelectedSession(null)}
+                texts={texts}
+            />
         );
     }
 
@@ -69,7 +81,11 @@ export const History = ({ sessions, texts, onClear }) => {
             </div>
 
             {viewMode === "list" ? (
-                <ListView sessions={sessions} texts={texts} />
+                <ListView 
+                    sessions={sessions} 
+                    texts={texts} 
+                    onSelectSession={setSelectedSession}
+                />
             ) : (
                 <GraphView sessions={sessions} />
             )}
@@ -77,34 +93,74 @@ export const History = ({ sessions, texts, onClear }) => {
     );
 };
 
-const ListView = ({ sessions, texts }) => {
+const ListView = ({ sessions, texts, onSelectSession }) => {
     return (
         <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-300px)] no-scrollbar">
             {sessions.map((session, index) => (
                 <div
                     key={session.id}
-                    className="rounded p-3 transition-all duration-200"
+                    onClick={() => onSelectSession(session)}
+                    className="rounded p-3 transition-all duration-200 cursor-pointer"
                     style={{
                         backgroundColor: "#000000",
-                        border: "1px solid rgba(255, 0, 0, 0.12)",
-                        borderLeft: "2px solid rgba(255, 0, 0, 0.4)",
+                        border: session.hasPanicEvent 
+                            ? "1px solid rgba(139, 0, 0, 0.5)" 
+                            : "1px solid rgba(255, 0, 0, 0.12)",
+                        borderLeft: session.hasPanicEvent 
+                            ? "3px solid #8B0000" 
+                            : "2px solid rgba(255, 0, 0, 0.4)",
+                        animation: `fadeSlideIn 0.3s ease-out ${index * 50}ms both`,
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.02)";
+                        e.currentTarget.style.borderColor = session.hasPanicEvent 
+                            ? "rgba(139, 0, 0, 0.7)" 
+                            : "rgba(255, 0, 0, 0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "#000000";
+                        e.currentTarget.style.borderColor = session.hasPanicEvent 
+                            ? "rgba(139, 0, 0, 0.5)" 
+                            : "rgba(255, 0, 0, 0.12)";
                     }}
                 >
                     <div className="flex justify-between items-start mb-2">
-                        <div>
-                            <div 
-                                className="flex items-center gap-1.5 text-[10px] tracking-wider"
-                                style={{ color: "rgba(176, 176, 176, 0.5)" }}
-                            >
-                                <Clock className="w-3 h-3" />
-                                {session.date}
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                                <div 
+                                    className="flex items-center gap-1.5 text-[10px] tracking-wider"
+                                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                                >
+                                    <Clock className="w-3 h-3" />
+                                    {session.date}
+                                </div>
+                                {session.hasPanicEvent && (
+                                    <div 
+                                        className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] tracking-wider"
+                                        style={{ 
+                                            backgroundColor: "rgba(139, 0, 0, 0.3)",
+                                            color: "#FF0000",
+                                        }}
+                                    >
+                                        <AlertTriangle className="w-2.5 h-2.5" />
+                                        PANIC
+                                    </div>
+                                )}
                             </div>
                             <div 
                                 className="text-xs mt-1 tracking-wide"
-                                style={{ color: "rgba(255, 0, 0, 0.7)" }}
+                                style={{ color: session.hasPanicEvent ? "#8B0000" : "rgba(255, 0, 0, 0.7)" }}
                             >
                                 {session.name}
                             </div>
+                            {session.durationText && (
+                                <div 
+                                    className="text-[9px] mt-0.5"
+                                    style={{ color: "rgba(176, 176, 176, 0.35)" }}
+                                >
+                                    Duration: {session.durationText}
+                                </div>
+                            )}
                         </div>
                         <div 
                             className="text-[9px]"
@@ -114,23 +170,41 @@ const ListView = ({ sessions, texts }) => {
                         </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-2 mt-3">
+                    {/* Stress Bar */}
+                    <div className="mt-2 mb-3">
+                        <div 
+                            className="h-1 rounded-full overflow-hidden"
+                            style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                        >
+                            <div 
+                                className="h-full rounded-full transition-all duration-500"
+                                style={{ 
+                                    width: `${session.maxStress || 0}%`,
+                                    backgroundColor: session.maxStress > 85 ? "#8B0000" : "#FF0000",
+                                    boxShadow: session.maxStress > 85 
+                                        ? "0 0 8px rgba(139, 0, 0, 0.5)" 
+                                        : "0 0 4px rgba(255, 0, 0, 0.3)",
+                                }}
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2">
                         <div 
                             className="rounded p-2"
                             style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
                         >
                             <div 
-                                className="text-[9px] tracking-wider flex items-center gap-1"
+                                className="text-[8px] tracking-wider"
                                 style={{ color: "rgba(176, 176, 176, 0.4)" }}
                             >
-                                <Activity className="w-2.5 h-2.5" />
-                                {texts.maxBpm}
+                                PEAK BPM
                             </div>
                             <div 
-                                className="text-lg font-bold mt-0.5"
-                                style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                                className="text-base font-bold mt-0.5"
+                                style={{ color: session.maxBpm > 120 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
                             >
-                                {session.maxBpm}
+                                {session.maxBpm || 0}
                             </div>
                         </div>
                         <div 
@@ -138,22 +212,324 @@ const ListView = ({ sessions, texts }) => {
                             style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
                         >
                             <div 
-                                className="text-[9px] tracking-wider flex items-center gap-1"
+                                className="text-[8px] tracking-wider"
                                 style={{ color: "rgba(176, 176, 176, 0.4)" }}
                             >
-                                <TrendingUp className="w-2.5 h-2.5" />
-                                {texts.maxStress}
+                                AVG BPM
                             </div>
                             <div 
-                                className="text-lg font-bold mt-0.5"
-                                style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                                className="text-base font-bold mt-0.5"
+                                style={{ color: "rgba(255, 0, 0, 0.6)" }}
                             >
-                                {session.maxStress}%
+                                {session.avgBpm || session.maxBpm || 0}
+                            </div>
+                        </div>
+                        <div 
+                            className="rounded p-2"
+                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        >
+                            <div 
+                                className="text-[8px] tracking-wider"
+                                style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                            >
+                                MAX STRESS
+                            </div>
+                            <div 
+                                className="text-base font-bold mt-0.5"
+                                style={{ color: session.maxStress > 85 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                            >
+                                {session.maxStress || 0}%
                             </div>
                         </div>
                     </div>
                 </div>
             ))}
+        </div>
+    );
+};
+
+const SessionDetail = ({ session, onClose, texts }) => {
+    const hasCritical = session.maxBpm > 120 || session.maxStress > 85;
+    
+    // Generate mini BPM graph path
+    const generateBpmPath = () => {
+        if (!session.bpmHistory || session.bpmHistory.length === 0) {
+            // Fallback: generate synthetic path based on max values
+            return "M 10 75 Q 75 60, 150 45 T 290 35";
+        }
+        
+        const history = session.bpmHistory;
+        const width = 280;
+        const height = 80;
+        const padding = 10;
+        
+        const maxBpm = Math.max(...history.map(h => h.value), 140);
+        const minBpm = Math.min(...history.map(h => h.value), 60);
+        
+        const points = history.map((point, i) => {
+            const x = padding + (i / (history.length - 1 || 1)) * (width - padding * 2);
+            const y = height - padding - ((point.value - minBpm) / (maxBpm - minBpm || 1)) * (height - padding * 2);
+            return { x, y };
+        });
+
+        if (points.length === 1) {
+            return `M ${points[0].x} ${points[0].y} L ${points[0].x + 1} ${points[0].y}`;
+        }
+
+        return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    };
+
+    return (
+        <div 
+            className="flex-1 flex flex-col py-4"
+            style={{ animation: "fadeSlideIn 0.3s ease-out" }}
+        >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+                <button
+                    onClick={onClose}
+                    className="flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200"
+                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF0000"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.5)"}
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span className="text-[10px] tracking-wider">BACK</span>
+                </button>
+                
+                <div 
+                    className="text-[10px] tracking-[0.2em]"
+                    style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                >
+                    SESSION DETAIL
+                </div>
+            </div>
+
+            {/* Session Info */}
+            <div 
+                className="rounded p-4 mb-4"
+                style={{ 
+                    backgroundColor: "#000000",
+                    border: session.hasPanicEvent 
+                        ? "1px solid rgba(139, 0, 0, 0.5)" 
+                        : "1px solid rgba(255, 0, 0, 0.15)",
+                }}
+            >
+                <div className="flex justify-between items-start mb-3">
+                    <div>
+                        <div 
+                            className="text-sm font-bold tracking-wide"
+                            style={{ color: session.hasPanicEvent ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                        >
+                            {session.name}
+                        </div>
+                        <div 
+                            className="text-[10px] mt-1"
+                            style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                        >
+                            {session.date}
+                        </div>
+                    </div>
+                    {session.hasPanicEvent && (
+                        <div 
+                            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] tracking-wider"
+                            style={{ 
+                                backgroundColor: "rgba(139, 0, 0, 0.3)",
+                                color: "#FF0000",
+                            }}
+                        >
+                            <AlertTriangle className="w-3 h-3" />
+                            PANIC EVENT
+                        </div>
+                    )}
+                </div>
+
+                {session.durationText && (
+                    <div 
+                        className="text-[10px] mb-3"
+                        style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                    >
+                        DURATION: {session.durationText}
+                    </div>
+                )}
+
+                {/* Mini BPM Graph */}
+                <div 
+                    className="rounded p-3 mb-3"
+                    style={{ 
+                        backgroundColor: "rgba(255, 0, 0, 0.02)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
+                    }}
+                >
+                    <div 
+                        className="text-[9px] tracking-wider mb-2"
+                        style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                    >
+                        BPM TIMELINE
+                    </div>
+                    <svg 
+                        viewBox="0 0 300 100" 
+                        className="w-full h-20"
+                        style={{ filter: "drop-shadow(0 0 3px rgba(255, 0, 0, 0.3))" }}
+                    >
+                        {/* Grid lines */}
+                        {[0, 1, 2, 3].map(i => (
+                            <line
+                                key={`grid-${i}`}
+                                x1="10"
+                                y1={10 + i * 26.67}
+                                x2="290"
+                                y2={10 + i * 26.67}
+                                stroke="rgba(255, 0, 0, 0.05)"
+                                strokeWidth="1"
+                            />
+                        ))}
+                        
+                        {/* BPM line */}
+                        <path
+                            d={generateBpmPath()}
+                            stroke={session.hasPanicEvent ? "#8B0000" : "#FF0000"}
+                            strokeWidth="2"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-2">
+                    <div 
+                        className="rounded p-3"
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                    >
+                        <div 
+                            className="text-[8px] tracking-wider mb-1"
+                            style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                        >
+                            PEAK BPM
+                        </div>
+                        <div 
+                            className="text-2xl font-bold"
+                            style={{ color: session.maxBpm > 120 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                        >
+                            {session.maxBpm || 0}
+                        </div>
+                    </div>
+                    <div 
+                        className="rounded p-3"
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                    >
+                        <div 
+                            className="text-[8px] tracking-wider mb-1"
+                            style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                        >
+                            MAX STRESS
+                        </div>
+                        <div 
+                            className="text-2xl font-bold"
+                            style={{ color: session.maxStress > 85 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                        >
+                            {session.maxStress || 0}%
+                        </div>
+                    </div>
+                    <div 
+                        className="rounded p-3"
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                    >
+                        <div 
+                            className="text-[8px] tracking-wider mb-1"
+                            style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                        >
+                            AVG BPM
+                        </div>
+                        <div 
+                            className="text-2xl font-bold"
+                            style={{ color: "rgba(255, 0, 0, 0.6)" }}
+                        >
+                            {session.avgBpm || session.maxBpm || 0}
+                        </div>
+                    </div>
+                    <div 
+                        className="rounded p-3"
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                    >
+                        <div 
+                            className="text-[8px] tracking-wider mb-1"
+                            style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                        >
+                            PANIC EVENTS
+                        </div>
+                        <div 
+                            className="text-2xl font-bold"
+                            style={{ color: session.panicCount > 0 ? "#8B0000" : "rgba(176, 176, 176, 0.4)" }}
+                        >
+                            {session.panicCount || 0}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Technical Analysis */}
+            <div 
+                className="rounded p-4"
+                style={{ 
+                    backgroundColor: "#000000",
+                    border: "1px solid rgba(255, 0, 0, 0.1)",
+                }}
+            >
+                <div 
+                    className="text-[9px] tracking-[0.2em] mb-3"
+                    style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                >
+                    TECHNICAL ANALYSIS
+                </div>
+
+                {session.maxBpm > 100 && (
+                    <div 
+                        className="flex items-center gap-2 py-2 px-3 rounded mb-2"
+                        style={{ 
+                            backgroundColor: "rgba(255, 0, 0, 0.05)",
+                            borderLeft: "2px solid rgba(255, 0, 0, 0.5)",
+                        }}
+                    >
+                        <TrendingUp className="w-3 h-3" style={{ color: "#FF0000" }} />
+                        <span 
+                            className="text-[10px] tracking-wider"
+                            style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                        >
+                            PEAK FEAR EVENT DETECTED
+                        </span>
+                    </div>
+                )}
+
+                {hasCritical && (
+                    <div 
+                        className="flex items-center gap-2 py-2 px-3 rounded mb-2"
+                        style={{ 
+                            backgroundColor: "rgba(139, 0, 0, 0.1)",
+                            borderLeft: "2px solid #8B0000",
+                        }}
+                    >
+                        <AlertTriangle className="w-3 h-3" style={{ color: "#8B0000" }} />
+                        <span 
+                            className="text-[10px] tracking-wider"
+                            style={{ color: "#8B0000" }}
+                        >
+                            CRITICAL STRESS DETECTED
+                        </span>
+                    </div>
+                )}
+
+                {!session.maxBpm || session.maxBpm < 80 && (
+                    <div 
+                        className="text-[10px] tracking-wider"
+                        style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                    >
+                        NOMINAL STRESS LEVELS
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
@@ -166,13 +542,13 @@ const GraphView = ({ sessions }) => {
         const height = 150;
         const padding = 10;
         
-        const maxBpm = Math.max(...sessions.map(s => s.maxBpm), 140);
-        const minBpm = Math.min(...sessions.map(s => s.maxBpm), 60);
+        const maxBpm = Math.max(...sessions.map(s => s.maxBpm || 0), 140);
+        const minBpm = Math.min(...sessions.map(s => s.maxBpm || 60), 60);
         
         const points = sessions.slice(-10).map((session, i, arr) => {
             const x = padding + (i / Math.max(arr.length - 1, 1)) * (width - padding * 2);
-            const y = height - padding - ((session.maxBpm - minBpm) / (maxBpm - minBpm || 1)) * (height - padding * 2);
-            return { x, y };
+            const y = height - padding - (((session.maxBpm || 60) - minBpm) / (maxBpm - minBpm || 1)) * (height - padding * 2);
+            return { x, y, session };
         });
 
         if (points.length === 1) {
@@ -229,10 +605,10 @@ const GraphView = ({ sessions }) => {
                     
                     {/* Data points */}
                     {sessions.slice(-10).map((session, i, arr) => {
-                        const maxBpm = Math.max(...sessions.map(s => s.maxBpm), 140);
-                        const minBpm = Math.min(...sessions.map(s => s.maxBpm), 60);
+                        const maxBpm = Math.max(...sessions.map(s => s.maxBpm || 0), 140);
+                        const minBpm = Math.min(...sessions.map(s => s.maxBpm || 60), 60);
                         const x = 10 + (i / Math.max(arr.length - 1, 1)) * 280;
-                        const y = 140 - ((session.maxBpm - minBpm) / (maxBpm - minBpm || 1)) * 130;
+                        const y = 140 - (((session.maxBpm || 60) - minBpm) / (maxBpm - minBpm || 1)) * 130;
                         
                         return (
                             <circle
@@ -240,7 +616,7 @@ const GraphView = ({ sessions }) => {
                                 cx={x}
                                 cy={y}
                                 r="3"
-                                fill="#FF0000"
+                                fill={session.hasPanicEvent ? "#8B0000" : "#FF0000"}
                                 stroke="#000"
                                 strokeWidth="1.5"
                             />
@@ -256,6 +632,15 @@ const GraphView = ({ sessions }) => {
                 >
                     {sessions.length} SESSION{sessions.length !== 1 ? 'S' : ''} RECORDED
                 </div>
+                {sessions.some(s => s.hasPanicEvent) && (
+                    <div 
+                        className="text-[9px] mt-1 flex items-center justify-center gap-1"
+                        style={{ color: "#8B0000" }}
+                    >
+                        <AlertTriangle className="w-3 h-3" />
+                        {sessions.filter(s => s.hasPanicEvent).length} PANIC EVENT{sessions.filter(s => s.hasPanicEvent).length !== 1 ? 'S' : ''}
+                    </div>
+                )}
             </div>
         </div>
     );
