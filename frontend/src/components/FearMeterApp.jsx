@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Monitor from "./Monitor";
 import WatchMode from "./WatchMode";
@@ -10,13 +11,17 @@ import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 
 export const FearMeterApp = () => {
+    const navigate = useNavigate();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
     const [language, setLanguage] = useState("EN");
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
     const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [showDemoOption, setShowDemoOption] = useState(false);
     const panicTimeoutRef = useRef(null);
+    const containerRef = useRef(null);
+    const touchStartRef = useRef({ x: 0, y: 0 });
 
     const {
         bpm,
@@ -30,22 +35,17 @@ export const FearMeterApp = () => {
         triggerTap,
     } = useBiometricSimulation({
         onPanicStart: () => {
-            // Freeze UI and start panic sequence
             setIsBlocked(true);
             setPanicActive(true);
             
-            // Show critical message after blackout/flash (500ms)
             panicTimeoutRef.current = setTimeout(() => {
                 setShowCriticalMessage(true);
             }, 520);
         },
-        onPanicEnd: () => {
-            // Gradual UI return handled by recovery
-        },
+        onPanicEnd: () => {},
     });
 
     const handlePanicSequenceComplete = useCallback(() => {
-        // Gradual unblock over 300ms
         setTimeout(() => {
             setPanicActive(false);
             setShowCriticalMessage(false);
@@ -78,6 +78,40 @@ export const FearMeterApp = () => {
     const handleLanguageChange = useCallback((lang) => {
         setLanguage(lang);
     }, []);
+
+    // Long press on logo activates demo option visibility
+    const handleDemoActivate = useCallback(() => {
+        setShowDemoOption(true);
+        setMenuOpen(true);
+    }, []);
+
+    // Navigate to demo mode
+    const handleGoToDemo = useCallback(() => {
+        navigate("/demo");
+    }, [navigate]);
+
+    // Swipe detection for menu
+    const handleTouchStart = useCallback((e) => {
+        touchStartRef.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+        };
+    }, []);
+
+    const handleTouchEnd = useCallback((e) => {
+        const touchEnd = {
+            x: e.changedTouches[0].clientX,
+            y: e.changedTouches[0].clientY,
+        };
+        
+        const deltaX = touchEnd.x - touchStartRef.current.x;
+        const deltaY = Math.abs(touchEnd.y - touchStartRef.current.y);
+        
+        // Swipe from left edge to open menu
+        if (touchStartRef.current.x < 30 && deltaX > 50 && deltaY < 50 && !isBlocked) {
+            setMenuOpen(true);
+        }
+    }, [isBlocked]);
 
     const texts = {
         EN: {
@@ -128,28 +162,29 @@ export const FearMeterApp = () => {
 
     return (
         <div 
+            ref={containerRef}
             className="min-h-screen bg-fear-black font-fear flex flex-col relative overflow-hidden"
             onClick={isActive && !isBlocked ? triggerTap : undefined}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             style={{
-                // Gradual UI recovery transition
                 transition: isRecovering ? "filter 300ms ease-out" : "none",
                 filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
             }}
         >
-            {/* Panic blackout/flash overlay */}
             <PanicOverlay 
                 active={panicActive} 
                 onSequenceComplete={handlePanicSequenceComplete}
             />
             
-            {/* Critical message (no background, just text) */}
             <CriticalAlert 
                 visible={showCriticalMessage} 
                 language={language}
             />
             
             <Header 
-                onMenuOpen={() => !isBlocked && setMenuOpen(true)} 
+                onMenuOpen={() => !isBlocked && setMenuOpen(true)}
+                onDemoActivate={handleDemoActivate}
             />
 
             <main className="flex-1 flex flex-col px-4 pb-4">
@@ -211,6 +246,8 @@ export const FearMeterApp = () => {
                 language={language}
                 onLanguageChange={handleLanguageChange}
                 texts={t}
+                showDemoOption={showDemoOption}
+                onDemoActivate={handleGoToDemo}
             />
         </div>
     );
