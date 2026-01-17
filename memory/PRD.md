@@ -8,7 +8,7 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 
 ---
 
-## Core Features (Implemented ✅)
+## Core Features (All Implemented ✅)
 
 ### 1. Monitor Principal
 - Osciloscopio ECG animado en canvas
@@ -37,7 +37,7 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Marcadores de eventos PANIC
 - Análisis técnico por sesión
 
-### 5. Watch Mode - FULLSCREEN SMARTWATCH ✅ NEW
+### 5. Watch Mode - FULLSCREEN SMARTWATCH ✅
 **Interfaz fullscreen que simula un ecosistema Watch + Smartphone**
 
 #### Layout
@@ -56,71 +56,22 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Arco se vuelve sólido durante pánico
 - Mensaje "SESSION SAVED" al finalizar
 
-#### Controles
-- Botón START/STOP integrado
-- Botón EXIT para volver al Monitor
-- Tap en watch face para aumentar stress
-- Long-press (2s) para activar Demo Mode
-
-### 6. Demo Mode para Inversores ✅ ENHANCED
-- Activación: long-press en Watch face o acceso oculto
-- Loop controlado con BPM progresivo (70→125→85)
-- Evento de pánico simulado automáticamente
-- Indicador discreto "DEMO DATA — SIMULATED"
-- No guarda datos reales en historial
-
-### 7. Investor Demo Experience ✅ UPDATED WITH BUSINESS MODEL
+### 6. Investor Demo Experience ✅
 **URL: `/investor-demo/`** - Experiencia cinematográfica de 45 segundos con modelo de negocio completo
 
-#### Timeline (10 pantallas automáticas):
-1. **Impact (0-3s)**: "WHAT IF HORROR COULD MEASURE REAL FEAR?" + 72 BPM
-2. **Problem (3-7s)**: "ENTERTAINMENT HAS NEVER MEASURED EMOTION. UNTIL NOW."
-3. **Solution (7-12s)**: Split view Smartphone + Smartwatch sincronizados
-4. **Demo (12-17s)**: Evento de pánico simulado "109 BPM CRITICAL" + flash rojo
-5. **Applications (17-22s)**: Horror Movies, Games & VR, Live Experiences, Biometric Content
-6. **Layer 1 - B2C (22-27s)**: FREE ($0) | CORE ($3.99/mo) | SLASHER ($6.99/mo)
-7. **Layer 2 - Hardware (27-32s)**: ETERNAL NIGHT ($79-99) | SLASHER EDITION ($149-199)
-8. **Layer 3 - B2B (32-37s)**: Content License + FEAR INDEX™ 💀 THE REAL VALUE
-9. **Projection (37-41s)**: 50K users • $200K MRR • $300K B2B/year
-10. **Closing (41-45s)**: "FEAR METER IS NOT AN APP. IT'S THE FIRST LAYER OF EMOTIONAL DATA FOR ENTERTAINMENT."
-
-#### Business Model Highlights:
-- **Recurrencia**: Suscripción mensual B2C
-- **Margen alto**: Software + Data
-- **Hardware como ancla**: Entrada al ecosistema
-- **B2B Licensing**: La joya - $0.05-0.20 por sesión medida
-- **FEAR INDEX™**: Rankings reales de miedo, no encuestas
-
-#### Features:
-- Totalmente automático (sin clicks)
-- Barra de progreso roja en la parte inferior
-- Botón "REQUEST DECK" (mailto:investors@fearmeter.io)
-- Botón "REPLAY" al finalizar
-- Osciloscopio animado de fondo
-
-### 8. Menú Lateral
-- Navegación entre vistas
-- Selector de idioma (EN/ES)
-- About / Legal
-
-### 8. Audio System (Web Audio API)
+### 7. Audio System (Web Audio API) ✅
 - Sonido de estática clínica al iniciar sesión
-- Latido rítmico sincronizado con BPM
+- Latido rítmico sincronizado con BPM (acelera con BPM alto)
 - Alarma de pánico con tonos disonantes
-- Datos más estables (70-110 BPM)
-- Historial pre-cargado
-- Indicador discreto "DEMO MODE"
+
+### 8. PWA - Progressive Web App ✅
+- manifest.json con todos los iconos
+- Service Worker para funcionalidad offline
+- Instalable en dispositivos móviles
 
 ---
 
 ## Technical Stack
-
-### React Version (Development)
-- React 18 + React Router
-- Tailwind CSS + Shadcn/UI components
-- Custom hooks: useBiometricSimulation, useSessionManager
-- Canvas API para osciloscopio
-- localStorage para persistencia
 
 ### Vanilla JS Version (Production/Export)
 - HTML5 + CSS3 + Vanilla JavaScript
@@ -146,149 +97,37 @@ White: #FFFFFF
 - Weights: 400 (regular), 700 (bold)
 - Letter-spacing: 0.1em - 0.3em
 
-### Visual Effects
-- Subtle pulsing animations
-- Glow effects (red shadows)
-- Micro-tremor for tension
-- Screen jitter during panic
-- Amplitude ramp on oscilloscope start
-
----
-
-## File Structure
-
-### React App
-```
-/app/frontend/src/
-├── components/
-│   ├── FearMeterApp.jsx (Main wrapper)
-│   ├── Monitor.jsx
-│   ├── Oscilloscope.jsx
-│   ├── DataGrid.jsx
-│   ├── MainButton.jsx
-│   ├── SideMenu.jsx
-│   ├── WatchMode.jsx
-│   ├── History.jsx
-│   ├── CriticalAlert.jsx
-│   └── PanicOverlay.jsx
-├── hooks/
-│   ├── useBiometricSimulation.js
-│   └── useSessionManager.js
-└── index.css
-```
-
-### Vanilla JS Version
-```
-/app/frontend/public/fear-meter/
-├── index.html
-├── styles.css
-└── app.js
-```
-
----
-
-## Data Schema (localStorage)
-
-```json
-{
-  "key": "fear_meter_sessions",
-  "sessions": [
-    {
-      "id": 1736637600000,
-      "startTime": 1736637600000,
-      "endTime": 1736637720000,
-      "name": "Night Terror",
-      "date": "Jan 11, 2026, 10:00 PM",
-      "duration": 120000,
-      "durationText": "2m 0s",
-      "avgBpm": 95,
-      "maxBpm": 128,
-      "maxStress": 85,
-      "bpmHistory": [{"timestamp": ..., "value": 72}, ...],
-      "panicEvents": [{"timestamp": ..., "bpm": 125, "stress": 88}],
-      "hasPanicEvent": true,
-      "panicCount": 1
-    }
-  ]
-}
-```
-
----
-
-## URLs & Routes
-
-- `/` - Main React App (Monitor)
-- `/demo` - Demo Mode for Investors
-- `/fear-meter/` - Static Vanilla JS version
-
----
-
-## Completed Work Log
-
-### January 2026
-- ✅ Initial scaffolding with React + Tailwind + Shadcn
-- ✅ Core UI components (Header, Monitor, Oscilloscope, DataGrid)
-- ✅ Biometric simulation hook with realistic fluctuation
-- ✅ Panic Mode with visual effects (freeze, flash, jitter)
-- ✅ Side Menu with language switching (EN/ES)
-- ✅ Watch Mode with circular UI
-- ✅ History view (list + graph + detail)
-- ✅ Demo Mode for investors
-- ✅ Fear Sessions with localStorage persistence
-- ✅ **Production export: Vanilla JS version** (HTML + CSS + JS)
-
----
-
-## Pending Tasks (Backlog)
-
-### P2 - Low Priority
-- [ ] About / Legal page content
-- [ ] Additional languages (PT, FR, DE)
-
-### Future Enhancements
-- [ ] Real device integration (heart rate monitors via Web Bluetooth)
-- [ ] Export session data to JSON/CSV
-- [ ] Share sessions feature
-- [ ] Leaderboard of "most terrified"
-
----
-
-## Recently Completed (January 2026)
-
-### ✅ Web Audio API - Sound Effects
-- **Static burst sound** on session start (clinical, unsettling)
-- **Rhythmic heartbeat** that accelerates with BPM
-- **Panic alarm** with dissonant tones during critical events
-- All sounds generated programmatically - no external audio files
-
-### ✅ PWA Manifest & Installation
-- Full PWA support for mobile installation
-- Service Worker for offline functionality
-- App icons (72px to 512px)
-- Standalone display mode
-- Theme color: black (#000000)
-
 ---
 
 ## File Structure (Complete)
 
 ```
-/app/frontend/public/fear-meter/
-├── index.html          (13.6KB) - Main HTML with PWA meta tags
-├── styles.css          (26.9KB) - Complete design system
-├── app.js              (63.1KB) - Logic + Audio Engine
-├── manifest.json       (2.2KB)  - PWA manifest
-├── sw.js               (5.0KB)  - Service Worker
-└── icons/
-    ├── icon-72.png
-    ├── icon-96.png
-    ├── icon-128.png
-    ├── icon-144.png
-    ├── icon-152.png
-    ├── icon-192.png
-    ├── icon-384.png
-    └── icon-512.png
+/app/frontend/public/
+├── fear-meter/
+│   ├── index.html          - Main HTML with PWA meta tags
+│   ├── styles.css          - Complete design system
+│   ├── app.js              - Logic + Audio Engine
+│   ├── manifest.json       - PWA manifest
+│   ├── sw.js               - Service Worker
+│   └── icons/              - PWA icons (72px to 512px)
+│
+└── investor-demo/
+    ├── index.html          - Investor demo structure
+    ├── demo.css            - Demo styles
+    └── demo.js             - Automated demo timeline
 ```
+
+---
+
+## Bug Fixes (January 2026)
+
+### ✅ Watch Mode Animation Bug - FIXED
+- **Problem**: `requestAnimationFrame` loop was blocking Playwright's idle detection, causing screenshot timeouts
+- **Solution**: 
+  1. Changed Watch animation from `requestAnimationFrame` to `setInterval(100ms)`
+  2. Added `startOscilloscopeAnimation()` and `stopOscilloscopeAnimation()` functions
+  3. Oscilloscope animation now stops when entering Watch Mode and restarts when exiting
+  4. Removed duplicate `updateWatchMode()` function with incorrect DOM references
 
 ---
 
@@ -300,7 +139,25 @@ The project is ready for "Save to GitHub". The Vanilla JS version at `/fear-mete
 - Vercel
 - Any static hosting
 
-No build step required - just upload the 3 files.
+No build step required - just upload the files.
+
+---
+
+## Pending Tasks (Backlog)
+
+### P1 - Next Priority
+- [ ] Traducir Investor Demo al español
+
+### P2 - Low Priority
+- [ ] About / Legal page content
+- [ ] Additional languages (PT, FR, DE)
+- [ ] Animated logo for Fear Meter
+
+### Future Enhancements
+- [ ] Real device integration (heart rate monitors via Web Bluetooth)
+- [ ] Export session data to JSON/CSV
+- [ ] Share sessions feature
+- [ ] Leaderboard of "most terrified"
 
 ---
 
