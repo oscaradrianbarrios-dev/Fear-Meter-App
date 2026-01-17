@@ -69,7 +69,27 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Indicador discreto "DEMO DATA — SIMULATED"
 - No guarda datos reales en historial
 
-### 7. Menú Lateral
+### 7. Investor Demo Experience ✅ NEW
+**URL: `/investor-demo/`** - Experiencia cinematográfica de 30 segundos
+
+#### Timeline (7 pantallas automáticas):
+1. **Impact (0-3s)**: "WHAT IF HORROR COULD MEASURE REAL FEAR?" + 72 BPM
+2. **Problem (3-7s)**: "ENTERTAINMENT HAS NEVER MEASURED EMOTION. UNTIL NOW."
+3. **Solution (7-12s)**: Split view Smartphone + Smartwatch sincronizados
+4. **Demo (12-18s)**: Evento de pánico simulado "112 BPM CRITICAL" + flash rojo
+5. **Applications (18-24s)**: Horror Movies, Games & VR, Live Experiences, Biometric Content
+6. **Business Model (24-28s)**: "HARDWARE + SOFTWARE + DATA" - Scalable. Licensable. Global.
+7. **Closing (28-30s)**: "FEAR IS DATA. DATA IS VALUE." + © 2026 FEAR METER
+
+#### Features:
+- Totalmente automático (sin clicks)
+- Barra de progreso roja en la parte inferior
+- Botón "REQUEST DECK" (mailto:investors@fearmeter.io)
+- Botón "REPLAY" al finalizar
+- Osciloscopio animado de fondo
+- Vibración durante evento de pánico
+
+### 8. Menú Lateral
 - Navegación entre vistas
 - Selector de idioma (EN/ES)
 - About / Legal
