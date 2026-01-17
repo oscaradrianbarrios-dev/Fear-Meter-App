@@ -1935,6 +1935,25 @@
             startMonitoring();
         }
     }
+    
+    // Toggle monitoring from watch mode
+    function toggleWatchSession() {
+        if (STATE.isBlocked) return;
+        
+        // Initialize audio on first interaction
+        AudioEngine.init();
+        
+        if (STATE.isActive) {
+            stopMonitoring();
+            
+            // Exit demo mode if active
+            if (STATE.isDemoMode) {
+                exitDemoMode();
+            }
+        } else {
+            startMonitoring();
+        }
+    }
 
     // ============================================
     // EVENT HANDLERS
@@ -1963,6 +1982,58 @@
             });
         });
         
+        // Watch Mode Controls
+        if (DOM.watchStartBtn) {
+            DOM.watchStartBtn.addEventListener('click', toggleWatchSession);
+        }
+        
+        if (DOM.watchExitBtn) {
+            DOM.watchExitBtn.addEventListener('click', exitWatchMode);
+        }
+        
+        // Watch face tap to increase stress
+        if (DOM.watchFace) {
+            DOM.watchFace.addEventListener('click', (e) => {
+                // Don't trigger on buttons
+                if (e.target.closest('button')) return;
+                triggerTap();
+            });
+        }
+        
+        // Long press on watch to activate demo mode
+        let watchLongPressTimer = null;
+        if (DOM.watchFace) {
+            DOM.watchFace.addEventListener('mousedown', () => {
+                watchLongPressTimer = setTimeout(() => {
+                    if (!STATE.isDemoMode && !STATE.isActive) {
+                        enterDemoMode();
+                    }
+                }, 2000);
+            });
+            
+            DOM.watchFace.addEventListener('mouseup', () => {
+                if (watchLongPressTimer) {
+                    clearTimeout(watchLongPressTimer);
+                    watchLongPressTimer = null;
+                }
+            });
+            
+            DOM.watchFace.addEventListener('touchstart', () => {
+                watchLongPressTimer = setTimeout(() => {
+                    if (!STATE.isDemoMode && !STATE.isActive) {
+                        enterDemoMode();
+                    }
+                }, 2000);
+            });
+            
+            DOM.watchFace.addEventListener('touchend', () => {
+                if (watchLongPressTimer) {
+                    clearTimeout(watchLongPressTimer);
+                    watchLongPressTimer = null;
+                }
+            });
+        }
+        
         // History view toggle
         DOM.btnListView.addEventListener('click', () => {
             DOM.btnListView.classList.add('active');
@@ -1985,8 +2056,8 @@
         
         // Tap to increase stress (click anywhere on app when active)
         document.getElementById('app').addEventListener('click', (e) => {
-            // Don't trigger if clicking buttons or menu
-            if (e.target.closest('button') || e.target.closest('.side-menu') || e.target.closest('.menu-overlay')) {
+            // Don't trigger if clicking buttons or menu or in watch mode
+            if (e.target.closest('button') || e.target.closest('.side-menu') || e.target.closest('.menu-overlay') || e.target.closest('.watch-fullscreen')) {
                 return;
             }
             triggerTap();
@@ -2007,8 +2078,8 @@
             const deltaX = touchEndX - touchStartX;
             const deltaY = Math.abs(touchEndY - touchStartY);
             
-            // Swipe from left edge to open menu
-            if (touchStartX < 30 && deltaX > 50 && deltaY < 50 && !STATE.isBlocked) {
+            // Swipe from left edge to open menu (not in watch fullscreen)
+            if (touchStartX < 30 && deltaX > 50 && deltaY < 50 && !STATE.isBlocked && !STATE.isWatchFullscreen) {
                 openMenu();
             }
         });
@@ -2016,6 +2087,10 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                if (STATE.isWatchFullscreen) {
+                    exitWatchMode();
+                    return;
+                }
                 if (STATE.menuOpen) {
                     closeMenu();
                 }
