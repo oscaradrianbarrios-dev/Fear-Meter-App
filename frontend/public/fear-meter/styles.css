@@ -86,7 +86,7 @@ body::before {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -95,7 +95,7 @@ body::before {
 
 ::-webkit-scrollbar-thumb {
     background: var(--fear-red);
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -103,7 +103,7 @@ body::before {
 }
 
 /* ============================================
-   ANIMATIONS
+   ANIMATIONS - DISTURBING
    ============================================ */
 
 @keyframes pulse-red {
@@ -132,24 +132,58 @@ body::before {
     }
 }
 
+/* BPM heartbeat pulse - synced via JS */
+@keyframes bpm-pulse {
+    0% { 
+        transform: scale(1);
+        text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+    }
+    15% { 
+        transform: scale(1.08);
+        text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+    30% { 
+        transform: scale(1);
+        text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+    }
+    100% { 
+        transform: scale(1);
+        text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+    }
+}
+
+/* High stress flicker */
+@keyframes stress-flicker {
+    0%, 100% { opacity: 1; }
+    10% { opacity: 0.85; }
+    20% { opacity: 1; }
+    30% { opacity: 0.9; }
+    40% { opacity: 1; }
+    50% { opacity: 0.75; }
+    60% { opacity: 1; }
+    70% { opacity: 0.88; }
+    80% { opacity: 1; }
+    90% { opacity: 0.92; }
+}
+
 @keyframes jitter {
     0%, 100% { transform: translate(0, 0); }
-    10% { transform: translate(-1px, 1px); }
-    20% { transform: translate(1px, -1px); }
+    10% { transform: translate(-2px, 1px); }
+    20% { transform: translate(2px, -2px); }
     30% { transform: translate(-1px, -1px); }
-    40% { transform: translate(1px, 1px); }
-    50% { transform: translate(-1px, 0); }
-    60% { transform: translate(1px, 0); }
-    70% { transform: translate(0, -1px); }
-    80% { transform: translate(0, 1px); }
-    90% { transform: translate(-1px, 1px); }
+    40% { transform: translate(2px, 2px); }
+    50% { transform: translate(-2px, 0); }
+    60% { transform: translate(1px, 1px); }
+    70% { transform: translate(0, -2px); }
+    80% { transform: translate(1px, 2px); }
+    90% { transform: translate(-2px, 1px); }
 }
 
 @keyframes micro-tremor {
     0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(0.3px, 0); }
-    50% { transform: translate(-0.2px, 0.2px); }
-    75% { transform: translate(0.2px, -0.1px); }
+    25% { transform: translate(0.5px, 0); }
+    50% { transform: translate(-0.3px, 0.3px); }
+    75% { transform: translate(0.3px, -0.2px); }
 }
 
 @keyframes fadeSlideIn {
@@ -187,13 +221,33 @@ body::before {
 
 @keyframes panic-flash {
     0% { background-color: var(--fear-black); }
+    25% { background-color: var(--fear-red); }
     50% { background-color: var(--fear-dark-red); }
+    75% { background-color: var(--fear-red); }
     100% { background-color: var(--fear-black); }
 }
 
 @keyframes violent-pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    50% { transform: scale(1.05); }
+}
+
+/* UI freeze effect */
+@keyframes ui-freeze {
+    0%, 100% { filter: none; }
+    50% { filter: contrast(1.2) brightness(0.8); }
+}
+
+/* Menu abrupt appearance */
+@keyframes menu-slam {
+    0% { 
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% { 
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* ============================================
