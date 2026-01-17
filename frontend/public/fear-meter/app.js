@@ -964,29 +964,6 @@
     }
 
     // ============================================
-    // WATCH MODE DRAWING
-    // ============================================
-    
-    function setupWatchCanvas() {
-        const canvas = DOM.watchCanvas;
-        if (!canvas) return;
-
-        const updateSize = () => {
-            const container = canvas.parentElement;
-            const size = Math.min(container.offsetWidth, 280);
-            canvas.width = size * window.devicePixelRatio;
-            canvas.height = size * window.devicePixelRatio;
-            canvas.style.width = `${size}px`;
-            canvas.style.height = `${size}px`;
-            const ctx = canvas.getContext('2d');
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-        };
-
-        updateSize();
-        window.addEventListener('resize', updateSize);
-    }
-
-    // ============================================
     // WATCH MODE - FULLSCREEN SMARTWATCH
     // ============================================
     
