@@ -471,11 +471,21 @@
         DOM.progressFill.style.width = '0%';
         DOM.replayBtn.classList.remove('visible');
         
-        // Reset all animations
-        document.querySelectorAll('.device, .app-item, .model-item, .model-plus, .tagline, .footer').forEach(el => {
-            el.classList.remove('visible');
+        // Reset all animations - extended for business model screens
+        const animatedElements = [
+            '.device', '.app-item', 
+            '.layer-header', '.pricing-card', '.hardware-card', '.b2b-card',
+            '.projection-header', '.projection-item', '.projection-note',
+            '.footer'
+        ];
+        
+        animatedElements.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.classList.remove('visible');
+            });
         });
-        DOM.finalPulse.classList.remove('visible');
+        
+        if (DOM.finalPulse) DOM.finalPulse.classList.remove('visible');
 
         // Show deck button after a delay
         setTimeout(() => {
@@ -508,7 +518,7 @@
         setTimeout(start, 500);
 
         console.log('%c FEAR METER ', 'background: #8B0000; color: #FF0000; font-size: 14px; font-weight: bold;');
-        console.log('%c Investor Demo ', 'color: #B0B0B0; font-size: 10px;');
+        console.log('%c Investor Demo — Business Model ', 'color: #B0B0B0; font-size: 10px;');
     }
 
     // Start when DOM is ready
