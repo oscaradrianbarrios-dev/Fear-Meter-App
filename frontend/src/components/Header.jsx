@@ -1,6 +1,25 @@
 import { Menu } from "lucide-react";
+import { useRef, useCallback } from "react";
 
-export const Header = ({ onMenuOpen }) => {
+export const Header = ({ onMenuOpen, onDemoActivate }) => {
+    const longPressRef = useRef(null);
+    const longPressStartRef = useRef(null);
+
+    // Long press on logo (5 seconds) to activate demo mode
+    const handleLogoTouchStart = useCallback(() => {
+        longPressStartRef.current = Date.now();
+        longPressRef.current = setTimeout(() => {
+            onDemoActivate?.();
+        }, 5000);
+    }, [onDemoActivate]);
+
+    const handleLogoTouchEnd = useCallback(() => {
+        if (longPressRef.current) {
+            clearTimeout(longPressRef.current);
+            longPressRef.current = null;
+        }
+    }, []);
+
     return (
         <header 
             className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between"
@@ -9,7 +28,27 @@ export const Header = ({ onMenuOpen }) => {
                 borderBottom: "1px solid rgba(255, 0, 0, 0.1)"
             }}
         >
-            <div className="flex items-center gap-2">
+            {/* Menu button - LEFT side */}
+            <button
+                onClick={onMenuOpen}
+                className="p-2 transition-colors duration-200"
+                style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.8)"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.5)"}
+                aria-label="Open menu"
+            >
+                <Menu className="w-5 h-5" />
+            </button>
+
+            {/* Logo - Center, with long press detection */}
+            <div 
+                className="flex items-center gap-2 select-none cursor-default"
+                onMouseDown={handleLogoTouchStart}
+                onMouseUp={handleLogoTouchEnd}
+                onMouseLeave={handleLogoTouchEnd}
+                onTouchStart={handleLogoTouchStart}
+                onTouchEnd={handleLogoTouchEnd}
+            >
                 <div 
                     className="w-1.5 h-1.5 rounded-full animate-pulse-red"
                     style={{ backgroundColor: "rgba(255, 0, 0, 0.6)" }}
@@ -27,17 +66,9 @@ export const Header = ({ onMenuOpen }) => {
                     </span>
                 </h1>
             </div>
-            
-            <button
-                onClick={onMenuOpen}
-                className="p-2 transition-colors duration-300"
-                style={{ color: "rgba(176, 176, 176, 0.5)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.7)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.5)"}
-                aria-label="Open menu"
-            >
-                <Menu className="w-5 h-5" />
-            </button>
+
+            {/* Spacer for symmetry */}
+            <div className="w-9" />
         </header>
     );
 };
