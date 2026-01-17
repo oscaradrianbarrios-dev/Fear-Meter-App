@@ -1838,6 +1838,9 @@
     // ============================================
     
     function startMonitoring() {
+        // Don't start new session in demo mode (demo has its own simulation)
+        if (STATE.isDemoMode) return;
+        
         STATE.isActive = true;
         STATE.isPanic = false;
         STATE.isRecovering = false;
@@ -1859,8 +1862,10 @@
         // Start simulation
         STATE.simulationInterval = setInterval(simulateBpm, CONFIG.SIMULATION_INTERVAL);
         
-        // Start session recording
-        startSession();
+        // Start session recording (only if not in demo mode)
+        if (!STATE.isDemoMode) {
+            startSession();
+        }
         
         // Update UI
         DOM.oscilloscopeContainer.classList.add('ramping');
@@ -1870,9 +1875,12 @@
         
         updateMainButton();
         updateOscilloscopeIndicator();
+        updateWatchMode();
     }
 
     function stopMonitoring() {
+        const wasRecording = STATE.isRecording && !STATE.isDemoMode;
+        
         STATE.isActive = false;
         STATE.isPanic = false;
         STATE.isRecovering = false;
@@ -1899,8 +1907,15 @@
             STATE.panicTimeout = null;
         }
         
-        // End session
-        endSession();
+        // End session and save (only if not demo mode)
+        if (!STATE.isDemoMode) {
+            endSession();
+            
+            // Show "SESSION SAVED" message on watch
+            if (wasRecording && STATE.isWatchFullscreen) {
+                showWatchMessage('SESSION SAVED', 2000);
+            }
+        }
         
         // Update UI
         updateMainButton();
@@ -1908,6 +1923,7 @@
         updateOscilloscopeIndicator();
         updatePanicUI(false);
         updateStabilizingLabel();
+        updateWatchMode();
     }
 
     function toggleMonitoring() {
