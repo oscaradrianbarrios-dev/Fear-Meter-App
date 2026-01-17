@@ -385,69 +385,394 @@ body {
 }
 
 /* ============================================
-   BUSINESS MODEL (Screen 6)
+   LAYER HEADER (Revenue Layers)
    ============================================ */
 
-.business-model {
+.layer-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
     margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.layer-header.visible {
+    animation: layerReveal 600ms ease forwards;
+}
+
+@keyframes layerReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.layer-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(255, 0, 0, 0.5);
+    padding: 4px 12px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.layer-title {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    text-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+}
+
+.layer-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--dark-red);
+    margin-top: 8px;
+}
+
+.layer-header.jewel .layer-title {
+    color: var(--dark-red);
+    text-shadow: 0 0 40px rgba(139, 0, 0, 0.6);
+}
+
+.layer-header.jewel .layer-subtitle {
+    animation: jewelPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes jewelPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* ============================================
+   PRICING GRID (B2C Subscription)
+   ============================================ */
+
+.pricing-grid {
+    display: flex;
+    gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.model-item {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 700;
+.pricing-card {
+    background: rgba(255, 0, 0, 0.03);
+    border: 1px solid rgba(255, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 24px 32px;
+    min-width: 160px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.pricing-card.visible {
+    animation: cardReveal 500ms ease forwards;
+}
+
+.pricing-card:nth-child(1).visible { animation-delay: 0ms; }
+.pricing-card:nth-child(2).visible { animation-delay: 200ms; }
+.pricing-card:nth-child(3).visible { animation-delay: 400ms; }
+
+@keyframes cardReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pricing-card.featured {
+    border-color: rgba(255, 0, 0, 0.4);
+    background: rgba(255, 0, 0, 0.08);
+}
+
+.pricing-card.premium {
+    border-color: var(--dark-red);
+    background: rgba(139, 0, 0, 0.15);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.2);
+}
+
+.price-name {
+    font-size: 12px;
+    letter-spacing: 0.2em;
     color: var(--gray);
+    margin-bottom: 8px;
+}
+
+.price-amount {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    color: var(--red);
+}
+
+.price-amount span {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.pricing-card.premium .price-amount {
+    color: var(--dark-red);
+    text-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+}
+
+.price-desc {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(176, 176, 176, 0.6);
+    margin-top: 8px;
+}
+
+/* ============================================
+   HARDWARE GRID
+   ============================================ */
+
+.hardware-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hardware-card {
+    background: rgba(255, 0, 0, 0.03);
+    border: 1px solid rgba(255, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 30px 40px;
+    min-width: 200px;
+    text-align: center;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.hardware-card.visible {
+    animation: hwReveal 600ms ease forwards;
+}
+
+.hardware-card:nth-child(1).visible { animation-delay: 0ms; }
+.hardware-card:nth-child(2).visible { animation-delay: 300ms; }
+
+@keyframes hwReveal {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.hardware-card.premium {
+    border-color: var(--dark-red);
+    background: rgba(139, 0, 0, 0.1);
+    box-shadow: 0 0 40px rgba(139, 0, 0, 0.2);
+}
+
+.hw-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--black);
+    background: var(--dark-red);
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.hw-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.hw-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    margin-bottom: 8px;
+}
+
+.hardware-card.premium .hw-name {
+    color: var(--dark-red);
+}
+
+.hw-price {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+}
+
+.hw-margin {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 0, 0, 0.6);
+    margin-bottom: 12px;
+}
+
+.hw-desc {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(176, 176, 176, 0.5);
+}
+
+/* ============================================
+   B2B GRID (THE JEWEL)
+   ============================================ */
+
+.b2b-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.b2b-card {
+    background: rgba(139, 0, 0, 0.08);
+    border: 1px solid rgba(139, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 30px;
+    min-width: 280px;
+    max-width: 320px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.b2b-card.visible {
+    animation: b2bReveal 600ms ease forwards;
+}
+
+.b2b-card:nth-child(1).visible { animation-delay: 0ms; }
+.b2b-card:nth-child(2).visible { animation-delay: 300ms; }
+
+@keyframes b2bReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.b2b-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.b2b-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--dark-red);
+    margin-bottom: 8px;
+}
+
+.b2b-targets {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(176, 176, 176, 0.5);
+    margin-bottom: 16px;
+}
+
+.b2b-model {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    margin-bottom: 8px;
+}
+
+.b2b-example {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 0, 0, 0.6);
+    padding: 8px 12px;
+    background: rgba(255, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+/* ============================================
+   PROJECTION GRID
+   ============================================ */
+
+.projection-header {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--gray);
+    margin-bottom: 40px;
+    opacity: 0;
+}
+
+.projection-header.visible {
+    animation: projHeaderReveal 500ms ease forwards;
+}
+
+@keyframes projHeaderReveal {
+    to { opacity: 0.7; }
+}
+
+.projection-grid {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.projection-item {
+    text-align: center;
     opacity: 0;
     transform: scale(0.8);
 }
 
-.model-item.visible {
-    animation: modelReveal 500ms ease forwards;
+.projection-item.visible {
+    animation: projReveal 600ms ease forwards;
 }
 
-.model-item:nth-child(1).visible { animation-delay: 0ms; }
-.model-item:nth-child(3).visible { animation-delay: 400ms; }
-.model-item:nth-child(5).visible { animation-delay: 800ms; }
+.projection-item:nth-child(1).visible { animation-delay: 0ms; }
+.projection-item:nth-child(2).visible { animation-delay: 300ms; }
+.projection-item:nth-child(3).visible { animation-delay: 600ms; }
 
-@keyframes modelReveal {
+@keyframes projReveal {
     to {
         opacity: 1;
         transform: scale(1);
-        color: var(--red);
-        text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
     }
 }
 
-.model-plus {
-    font-size: clamp(24px, 4vw, 36px);
-    color: rgba(255, 0, 0, 0.4);
+.proj-metric {
+    font-size: clamp(36px, 8vw, 56px);
+    font-weight: 700;
+    color: var(--red);
+    text-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+    line-height: 1;
+}
+
+.proj-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    margin-top: 8px;
+}
+
+.projection-note {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(176, 176, 176, 0.4);
     opacity: 0;
 }
 
-.model-plus.visible {
-    animation: plusReveal 300ms ease forwards;
+.projection-note.visible {
+    animation: noteReveal 500ms ease forwards;
+    animation-delay: 900ms;
 }
 
-.model-plus:nth-child(2).visible { animation-delay: 200ms; }
-.model-plus:nth-child(4).visible { animation-delay: 600ms; }
-
-@keyframes plusReveal {
+@keyframes noteReveal {
     to { opacity: 1; }
 }
 
-.tagline {
-    font-size: clamp(14px, 2.5vw, 20px);
-    letter-spacing: 0.2em;
-    color: var(--gray);
-    opacity: 0;
-}
-
-.tagline.visible {
-    animation: taglineReveal 600ms ease forwards;
+/* ============================================
+   FINAL SCREEN
+   ============================================ */
     animation-delay: 1200ms;
 }
 
