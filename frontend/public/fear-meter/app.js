@@ -626,6 +626,9 @@
         STATE.isPanic = true;
         STATE.isBlocked = true;
         
+        // Play panic alarm sound
+        AudioEngine.playPanicAlarm();
+        
         // Trigger vibration if available
         try {
             if (navigator.vibrate) {
