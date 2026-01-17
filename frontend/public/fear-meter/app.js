@@ -981,72 +981,369 @@
         window.addEventListener('resize', updateSize);
     }
 
-    function drawWatch() {
+    // ============================================
+    // WATCH MODE - FULLSCREEN SMARTWATCH
+    // ============================================
+    
+    function setupWatchCanvas() {
         const canvas = DOM.watchCanvas;
         if (!canvas) return;
-
+        
+        const updateSize = () => {
+            const face = DOM.watchFace;
+            if (!face) return;
+            
+            const size = face.offsetWidth;
+            canvas.width = size * window.devicePixelRatio;
+            canvas.height = size * window.devicePixelRatio;
+            canvas.style.width = `${size}px`;
+            canvas.style.height = `${size}px`;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        };
+        
+        updateSize();
+        window.addEventListener('resize', updateSize);
+        
+        // Start watch animation loop
+        startWatchAnimation();
+    }
+    
+    function startWatchAnimation() {
+        const animate = () => {
+            if (STATE.isWatchFullscreen) {
+                drawWatchArc();
+            }
+            STATE.watchAnimation = requestAnimationFrame(animate);
+        };
+        animate();
+    }
+    
+    function drawWatchArc() {
+        const canvas = DOM.watchCanvas;
+        if (!canvas) return;
+        
         const ctx = canvas.getContext('2d');
-        const displaySize = parseInt(canvas.style.width) || 280;
-        const centerX = displaySize / 2;
-        const centerY = displaySize / 2;
-        const radius = displaySize * 0.4;
-
-        ctx.clearRect(0, 0, displaySize, displaySize);
-
-        // Background circle
+        const size = parseInt(canvas.style.width) || 320;
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = size * 0.42;
+        const arcWidth = STATE.isPanic ? 10 : 6;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, size, size);
+        
+        // Draw background arc (track)
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#000000';
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.08)';
+        ctx.lineWidth = arcWidth;
         ctx.stroke();
-
-        // Progress arc
-        const progress = STATE.isActive ? (STATE.bpm - 60) / 80 : 0;
-        const startAngle = -Math.PI / 2;
-        const endAngle = startAngle + (Math.PI * 2 * Math.min(progress, 1));
-
-        if (STATE.isActive && progress > 0) {
-            ctx.shadowColor = '#FF0000';
-            ctx.shadowBlur = STATE.isPanic ? 30 : 15;
-
+        
+        // Calculate progress (BPM 60-140 = 0-100%)
+        const minBpm = 60;
+        const maxBpm = 140;
+        const progress = STATE.isActive 
+            ? Math.min((STATE.bpm - minBpm) / (maxBpm - minBpm), 1) 
+            : 0;
+        
+        if (progress > 0) {
+            const startAngle = -Math.PI / 2;
+            const endAngle = startAngle + (Math.PI * 2 * progress);
+            
+            // Glow effect
+            ctx.shadowColor = STATE.isPanic ? '#8B0000' : '#FF0000';
+            ctx.shadowBlur = STATE.isPanic ? 25 : 15;
+            
+            // Draw progress arc
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.strokeStyle = '#FF0000';
-            ctx.lineWidth = STATE.isPanic ? 8 : 6;
+            
+            // Color intensity based on BPM
+            const intensity = 0.5 + (progress * 0.5);
+            ctx.strokeStyle = STATE.isPanic 
+                ? `rgba(139, 0, 0, ${intensity})`
+                : `rgba(255, 0, 0, ${intensity})`;
+            
+            ctx.lineWidth = arcWidth;
             ctx.lineCap = 'round';
             ctx.stroke();
-
+            
+            // Reset shadow
             ctx.shadowBlur = 0;
+            
+            // Draw arc end cap glow
+            if (STATE.isActive) {
+                const endX = centerX + Math.cos(endAngle) * radius;
+                const endY = centerY + Math.sin(endAngle) * radius;
+                
+                ctx.beginPath();
+                ctx.arc(endX, endY, arcWidth / 2 + 2, 0, Math.PI * 2);
+                ctx.fillStyle = STATE.isPanic 
+                    ? 'rgba(139, 0, 0, 0.8)'
+                    : 'rgba(255, 0, 0, 0.6)';
+                ctx.fill();
+            }
         }
-
-        // Inner circle
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius * 0.85, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Tick marks
-        for (let i = 0; i < 12; i++) {
-            const angle = (Math.PI * 2 * i) / 12 - Math.PI / 2;
-            const innerR = radius * 0.9;
-            const outerR = radius * 0.97;
+        
+        // Draw tick marks
+        const tickCount = 12;
+        for (let i = 0; i < tickCount; i++) {
+            const angle = (Math.PI * 2 * i) / tickCount - Math.PI / 2;
+            const innerRadius = radius + arcWidth + 4;
+            const outerRadius = innerRadius + 6;
             
             ctx.beginPath();
             ctx.moveTo(
-                centerX + Math.cos(angle) * innerR,
-                centerY + Math.sin(angle) * innerR
+                centerX + Math.cos(angle) * innerRadius,
+                centerY + Math.sin(angle) * innerRadius
             );
             ctx.lineTo(
-                centerX + Math.cos(angle) * outerR,
-                centerY + Math.sin(angle) * outerR
+                centerX + Math.cos(angle) * outerRadius,
+                centerY + Math.sin(angle) * outerRadius
             );
-            ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
+            ctx.lineWidth = i % 3 === 0 ? 2 : 1;
             ctx.stroke();
         }
+    }
+    
+    function updateWatchMode() {
+        if (!DOM.watchBpm) return;
+        
+        // Update BPM display
+        DOM.watchBpm.textContent = STATE.isActive ? STATE.bpm : '---';
+        DOM.watchBpm.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+        DOM.watchBpm.classList.toggle('panic', STATE.isPanic);
+        
+        // Update session status
+        if (DOM.sessionDot) {
+            DOM.sessionDot.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+            DOM.sessionDot.classList.toggle('panic', STATE.isPanic);
+        }
+        
+        if (DOM.sessionStatusText) {
+            if (STATE.isPanic) {
+                DOM.sessionStatusText.textContent = 'CRITICAL';
+                DOM.sessionStatusText.className = 'panic';
+            } else if (STATE.isActive) {
+                DOM.sessionStatusText.textContent = 'RECORDING';
+                DOM.sessionStatusText.className = 'active';
+            } else {
+                DOM.sessionStatusText.textContent = 'STANDBY';
+                DOM.sessionStatusText.className = '';
+            }
+        }
+        
+        if (DOM.watchSessionStatus) {
+            DOM.watchSessionStatus.classList.toggle('active', STATE.isActive);
+        }
+        
+        // Update live signal indicator
+        if (DOM.watchSignal) {
+            DOM.watchSignal.classList.toggle('active', STATE.isActive);
+        }
+        
+        if (DOM.signalPulse) {
+            DOM.signalPulse.classList.toggle('active', STATE.isActive);
+        }
+        
+        // Update watch ring
+        if (DOM.watchRing) {
+            DOM.watchRing.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+            DOM.watchRing.classList.toggle('panic', STATE.isPanic);
+        }
+        
+        // Update watch face jitter
+        if (DOM.watchFace) {
+            DOM.watchFace.classList.toggle('jitter', STATE.isPanic);
+        }
+        
+        // Update control button
+        if (DOM.watchStartBtn) {
+            DOM.watchStartBtn.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+            DOM.watchStartBtn.classList.toggle('panic', STATE.isPanic);
+        }
+        
+        if (DOM.watchControlText) {
+            DOM.watchControlText.textContent = STATE.isActive ? 'STOP' : 'START';
+        }
+        
+        if (DOM.controlIcon) {
+            DOM.controlIcon.innerHTML = STATE.isActive 
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+        }
+        
+        // Update demo indicator
+        if (DOM.watchDemoIndicator) {
+            DOM.watchDemoIndicator.classList.toggle('visible', STATE.isDemoMode);
+        }
+    }
+    
+    function triggerWatchPanicFlash() {
+        if (!DOM.watchPanicFlash) return;
+        
+        DOM.watchPanicFlash.classList.add('active');
+        
+        // Vibrate device if supported
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 200]);
+            }
+        } catch (e) {}
+        
+        setTimeout(() => {
+            DOM.watchPanicFlash.classList.remove('active');
+        }, 200);
+    }
+    
+    function showWatchMessage(message, duration = 2000) {
+        if (!DOM.watchMessage || !DOM.watchMessageText) return;
+        
+        DOM.watchMessageText.textContent = message;
+        DOM.watchMessage.classList.add('visible');
+        
+        setTimeout(() => {
+            DOM.watchMessage.classList.remove('visible');
+        }, duration);
+    }
+    
+    function enterWatchMode() {
+        STATE.isWatchFullscreen = true;
+        STATE.currentView = 'watch';
+        
+        // Hide other views
+        if (DOM.viewMonitor) DOM.viewMonitor.classList.remove('active');
+        if (DOM.viewHistory) DOM.viewHistory.classList.remove('active');
+        
+        // Show watch fullscreen with transition
+        if (DOM.viewWatch) {
+            DOM.viewWatch.classList.add('active');
+        }
+        
+        // Setup canvas if needed
+        setTimeout(() => {
+            setupWatchCanvas();
+            updateWatchMode();
+        }, 50);
+        
+        // Update menu active state
+        DOM.menuItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.view === 'watch');
+        });
+        
+        closeMenu();
+    }
+    
+    function exitWatchMode() {
+        STATE.isWatchFullscreen = false;
+        
+        // Exit Demo Mode if active
+        if (STATE.isDemoMode) {
+            exitDemoMode();
+        }
+        
+        // Switch to monitor view
+        switchView('monitor');
+    }
+    
+    // ============================================
+    // DEMO MODE - INVESTOR SIMULATION
+    // ============================================
+    
+    function enterDemoMode() {
+        STATE.isDemoMode = true;
+        STATE.demoPanicTriggered = false;
+        
+        // Show demo indicator
+        if (DOM.watchDemoIndicator) {
+            DOM.watchDemoIndicator.classList.add('visible');
+        }
+        
+        // Start controlled simulation if not already active
+        if (!STATE.isActive) {
+            startDemoSimulation();
+        }
+    }
+    
+    function exitDemoMode() {
+        STATE.isDemoMode = false;
+        STATE.demoPanicTriggered = false;
+        
+        // Clear demo interval
+        if (STATE.demoInterval) {
+            clearInterval(STATE.demoInterval);
+            STATE.demoInterval = null;
+        }
+        
+        // Hide demo indicator
+        if (DOM.watchDemoIndicator) {
+            DOM.watchDemoIndicator.classList.remove('visible');
+        }
+    }
+    
+    function startDemoSimulation() {
+        STATE.isActive = true;
+        STATE.baseBpm = 70;
+        STATE.targetBpm = 70;
+        
+        // Initialize audio
+        AudioEngine.init();
+        AudioEngine.playStaticBurst(0.5);
+        setTimeout(() => AudioEngine.startHeartbeat(), 600);
+        
+        // Update UI
+        updateMainButton();
+        updateWatchMode();
+        updateOscilloscopeIndicator();
+        
+        // Demo progression: gradually increase BPM over time
+        let demoStep = 0;
+        const demoDuration = 30000; // 30 seconds total demo
+        const stepInterval = 500;
+        const totalSteps = demoDuration / stepInterval;
+        
+        STATE.demoInterval = setInterval(() => {
+            demoStep++;
+            const progress = demoStep / totalSteps;
+            
+            if (progress < 0.4) {
+                // Phase 1: Gradual increase (70-90 BPM)
+                STATE.targetBpm = 70 + (progress / 0.4) * 20;
+            } else if (progress < 0.6) {
+                // Phase 2: Build tension (90-105 BPM)
+                STATE.targetBpm = 90 + ((progress - 0.4) / 0.2) * 15;
+            } else if (progress < 0.75) {
+                // Phase 3: Approach panic (105-115 BPM)
+                STATE.targetBpm = 105 + ((progress - 0.6) / 0.15) * 10;
+                
+                // Trigger panic near the end of this phase
+                if (progress > 0.7 && !STATE.demoPanicTriggered) {
+                    STATE.demoPanicTriggered = true;
+                    STATE.targetBpm = 125;
+                }
+            } else if (progress < 0.9) {
+                // Phase 4: Recovery (115-85 BPM)
+                STATE.targetBpm = 115 - ((progress - 0.75) / 0.15) * 30;
+            } else {
+                // Phase 5: Stable end (85 BPM)
+                STATE.targetBpm = 85;
+            }
+            
+            // Add small variation
+            STATE.targetBpm += (Math.random() - 0.5) * 4;
+            
+            // Reset demo at end
+            if (demoStep >= totalSteps) {
+                demoStep = 0;
+                STATE.demoPanicTriggered = false;
+            }
+        }, stepInterval);
+        
+        // Start normal simulation
+        STATE.simulationInterval = setInterval(simulateBpm, CONFIG.SIMULATION_INTERVAL);
     }
 
     // ============================================
