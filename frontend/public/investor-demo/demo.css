@@ -800,14 +800,24 @@ body {
 }
 
 .headline.final .line {
-    font-size: clamp(28px, 6vw, 56px);
+    font-size: clamp(18px, 4vw, 32px);
+}
+
+.headline.final .line.small {
+    font-size: clamp(14px, 2.5vw, 20px);
+    color: var(--gray);
+    margin-bottom: 16px;
+}
+
+.headline.final .line.large {
+    font-size: clamp(22px, 5vw, 42px);
 }
 
 .footer {
     position: absolute;
     bottom: 40px;
     font-size: 10px;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.2em;
     color: rgba(176, 176, 176, 0.4);
     opacity: 0;
 }
