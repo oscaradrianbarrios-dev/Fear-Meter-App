@@ -1,0 +1,1424 @@
+/**
+ * FEAR METER v1.0 - Biometric Horror System
+ * Experimental Fear Detection Interface
+ * 
+ * © 2026 FEAR METER - All Rights Reserved
+ */
+
+(function() {
+    'use strict';
+
+    // ============================================
+    // CONFIGURATION & STATE
+    // ============================================
+    
+    const CONFIG = {
+        STORAGE_KEY: 'fear_meter_sessions',
+        PANIC_BPM_THRESHOLD: 110,
+        PANIC_STRESS_THRESHOLD: 75,
+        PANIC_COOLDOWN: 8000,
+        MAX_SESSIONS: 50,
+        SIMULATION_INTERVAL: 100,
+    };
+
+    const STATE = {
+        currentView: 'monitor',
+        isActive: false,
+        isPanic: false,
+        isRecovering: false,
+        isBlocked: false,
+        menuOpen: false,
+        language: 'EN',
+        
+        // Biometric data
+        bpm: 72,
+        stress: 0,
+        signal: 'ACTIVE',
+        
+        // Simulation refs
+        baseBpm: 72,
+        targetBpm: 72,
+        lastPanic: 0,
+        panicActive: false,
+        simulationInterval: null,
+        recoveryInterval: null,
+        panicTimeout: null,
+        
+        // Session tracking
+        currentSession: null,
+        isRecording: false,
+        bpmHistory: [],
+        stressHistory: [],
+        panicEvents: [],
+        peakBpm: 0,
+        peakStress: 0,
+        totalBpm: 0,
+        sampleCount: 0,
+        
+        // Oscilloscope
+        oscilloscopePhase: 0,
+        oscilloscopeStartTime: null,
+        oscilloscopeAnimation: null,
+    };
+
+    // ============================================
+    // TRANSLATIONS
+    // ============================================
+    
+    const TEXTS = {
+        EN: {
+            monitor: 'Monitor',
+            watchMode: 'Watch Mode',
+            history: 'History',
+            language: 'Language',
+            about: 'About / Legal',
+            startSession: 'START SESSION',
+            stopSession: 'STOP SESSION',
+            bpm: 'BPM',
+            stress: 'STRESS',
+            signal: 'SIGNAL',
+            active: 'ACTIVE',
+            unstable: 'UNSTABLE',
+            critical: 'CRITICAL',
+            criticalAlert: 'CRITICAL STRESS DETECTED',
+            noSessions: 'NO SESSIONS RECORDED',
+            maxBpm: 'MAX BPM',
+            maxStress: 'MAX STRESS',
+            footer: '© 2026 FEAR METER',
+            footerSub: 'Experimental Biometric Horror System',
+        },
+        ES: {
+            monitor: 'Monitor',
+            watchMode: 'Modo Reloj',
+            history: 'Historial',
+            language: 'Idioma',
+            about: 'Acerca de / Legal',
+            startSession: 'INICIAR SESIÓN',
+            stopSession: 'DETENER SESIÓN',
+            bpm: 'BPM',
+            stress: 'ESTRÉS',
+            signal: 'SEÑAL',
+            active: 'ACTIVO',
+            unstable: 'INESTABLE',
+            critical: 'CRÍTICO',
+            criticalAlert: 'ESTRÉS CRÍTICO DETECTADO',
+            noSessions: 'SIN SESIONES REGISTRADAS',
+            maxBpm: 'BPM MÁX',
+            maxStress: 'ESTRÉS MÁX',
+            footer: '© 2026 FEAR METER',
+            footerSub: 'Sistema Biométrico de Horror Experimental',
+        },
+    };
+
+    const SESSION_NAMES = [
+        'Night Terror', 'Shadow Encounter', 'Dark Vision', 'Fear Response',
+        'Stress Event', 'Panic Episode', 'Anxiety Spike', 'Horror Moment',
+        'Dread Instance', 'Terror Wave',
+    ];
+
+    // ============================================
+    // DOM ELEMENTS
+    // ============================================
+    
+    const DOM = {};
+
+    function cacheDOMElements() {
+        // Views
+        DOM.viewMonitor = document.getElementById('view-monitor');
+        DOM.viewWatch = document.getElementById('view-watch');
+        DOM.viewHistory = document.getElementById('view-history');
+        
+        // Oscilloscope
+        DOM.oscilloscopeContainer = document.getElementById('oscilloscope-container');
+        DOM.oscilloscope = document.getElementById('oscilloscope');
+        DOM.ecgIndicator = document.querySelector('.ecg-indicator');
+        DOM.criticalLabel = document.getElementById('critical-label');
+        DOM.stabilizingLabel = document.getElementById('stabilizing-label');
+        
+        // Data grid
+        DOM.bpmBlock = document.getElementById('bpm-block');
+        DOM.stressBlock = document.getElementById('stress-block');
+        DOM.signalBlock = document.getElementById('signal-block');
+        DOM.bpmValue = document.getElementById('bpm-value');
+        DOM.stressValue = document.getElementById('stress-value');
+        DOM.signalValue = document.getElementById('signal-value');
+        
+        // Main button
+        DOM.mainBtn = document.getElementById('main-btn');
+        
+        // Menu
+        DOM.menuBtn = document.getElementById('menu-btn');
+        DOM.menuOverlay = document.getElementById('menu-overlay');
+        DOM.sideMenu = document.getElementById('side-menu');
+        DOM.menuClose = document.getElementById('menu-close');
+        DOM.menuItems = document.querySelectorAll('.menu-item[data-view]');
+        DOM.langBtns = document.querySelectorAll('.lang-btn');
+        
+        // Watch mode
+        DOM.watchCanvas = document.getElementById('watch-canvas');
+        DOM.watchBpm = document.getElementById('watch-bpm');
+        DOM.watchStatusDot = document.getElementById('watch-status-dot');
+        DOM.watchStatusText = document.getElementById('watch-status-text');
+        DOM.watchStressContainer = document.getElementById('watch-stress-container');
+        DOM.watchStressPercent = document.getElementById('watch-stress-percent');
+        DOM.watchStressFill = document.getElementById('watch-stress-fill');
+        DOM.watchContainer = document.querySelector('.watch-container');
+        
+        // History
+        DOM.historyList = document.getElementById('history-list');
+        DOM.historyGraph = document.getElementById('history-graph');
+        DOM.historyEmpty = document.getElementById('history-empty');
+        DOM.historySvg = document.getElementById('history-svg');
+        DOM.graphInfo = document.getElementById('graph-info');
+        DOM.btnListView = document.getElementById('btn-list-view');
+        DOM.btnGraphView = document.getElementById('btn-graph-view');
+        DOM.btnClearHistory = document.getElementById('btn-clear-history');
+        DOM.sessionDetail = document.getElementById('session-detail');
+        
+        // Panic/Critical
+        DOM.panicOverlay = document.getElementById('panic-overlay');
+        DOM.criticalAlert = document.getElementById('critical-alert');
+    }
+
+    // ============================================
+    // UTILITIES
+    // ============================================
+    
+    function formatDate(timestamp) {
+        const date = timestamp ? new Date(timestamp) : new Date();
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    }
+
+    function formatDuration(ms) {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        
+        if (minutes === 0) {
+            return `${remainingSeconds}s`;
+        }
+        return `${minutes}m ${remainingSeconds}s`;
+    }
+
+    function generateSessionName() {
+        return SESSION_NAMES[Math.floor(Math.random() * SESSION_NAMES.length)];
+    }
+
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    // ============================================
+    // LOCAL STORAGE
+    // ============================================
+    
+    function loadSessions() {
+        try {
+            const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            console.error('Failed to load sessions:', e);
+            return [];
+        }
+    }
+
+    function saveSessions(sessions) {
+        try {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(sessions));
+        } catch (e) {
+            console.error('Failed to save sessions:', e);
+        }
+    }
+
+    // ============================================
+    // BIOMETRIC SIMULATION
+    // ============================================
+    
+    function calculateStress(currentBpm) {
+        const minBpm = 60;
+        const maxBpm = 140;
+        const normalized = (currentBpm - minBpm) / (maxBpm - minBpm);
+        return clamp(Math.round(normalized * 100), 0, 100);
+    }
+
+    function calculateSignal(currentBpm, currentStress) {
+        if (currentBpm > CONFIG.PANIC_BPM_THRESHOLD && currentStress > CONFIG.PANIC_STRESS_THRESHOLD) {
+            return 'CRITICAL';
+        }
+        if (currentBpm > 95 || currentStress > 50) {
+            return 'UNSTABLE';
+        }
+        return 'ACTIVE';
+    }
+
+    function startRecovery() {
+        STATE.isRecovering = true;
+        updateStabilizingLabel();
+        
+        const recoveryDuration = 3000;
+        const startTime = Date.now();
+        const startBpm = STATE.targetBpm;
+        const targetRecoveryBpm = 85;
+        
+        STATE.recoveryInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / recoveryDuration, 1);
+            const easeProgress = 1 - Math.pow(1 - progress, 2);
+            
+            STATE.targetBpm = startBpm - ((startBpm - targetRecoveryBpm) * easeProgress);
+            
+            if (progress >= 1) {
+                clearInterval(STATE.recoveryInterval);
+                STATE.recoveryInterval = null;
+                STATE.isRecovering = false;
+                updateStabilizingLabel();
+            }
+        }, 50);
+    }
+
+    function simulateBpm() {
+        const now = Date.now();
+        
+        // Gradually move towards target
+        const diff = STATE.targetBpm - STATE.baseBpm;
+        STATE.baseBpm += diff * 0.1;
+        
+        // Add natural variation
+        const variationAmount = STATE.isPanic ? 6 : 4;
+        const variation = (Math.random() - 0.5) * variationAmount;
+        
+        // Normal mode behavior
+        if (!STATE.isRecovering) {
+            // Random spikes
+            if (Math.random() < 0.03) {
+                STATE.targetBpm = Math.min(135, STATE.baseBpm + Math.random() * 25);
+            }
+            
+            // Gradual decrease when elevated
+            if (STATE.targetBpm > 85 && Math.random() < 0.04 && !STATE.isPanic) {
+                STATE.targetBpm -= 1.5;
+            }
+        }
+
+        const newBpm = Math.round(clamp(STATE.baseBpm + variation, 60, 140));
+        const newStress = calculateStress(newBpm);
+        const newSignal = calculateSignal(newBpm, newStress);
+        
+        STATE.bpm = newBpm;
+        STATE.stress = newStress;
+        STATE.signal = newSignal;
+
+        // PANIC ACTIVATION
+        const shouldPanic = newBpm > CONFIG.PANIC_BPM_THRESHOLD && newStress > CONFIG.PANIC_STRESS_THRESHOLD;
+        
+        if (shouldPanic && !STATE.panicActive && now - STATE.lastPanic > CONFIG.PANIC_COOLDOWN) {
+            triggerPanic();
+        } else if (!shouldPanic && STATE.panicActive) {
+            endPanic();
+        }
+
+        // Record data if session is active
+        if (STATE.isRecording) {
+            recordDataPoint(newBpm, newStress);
+        }
+
+        // Update UI
+        updateDataDisplay();
+        updateWatchMode();
+    }
+
+    function triggerPanic() {
+        STATE.panicActive = true;
+        STATE.lastPanic = Date.now();
+        STATE.isPanic = true;
+        STATE.isBlocked = true;
+        
+        // Trigger vibration if available
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]);
+            }
+        } catch (e) {}
+        
+        // Show panic overlay flash
+        DOM.panicOverlay.classList.remove('hidden');
+        DOM.panicOverlay.classList.add('active');
+        
+        setTimeout(() => {
+            DOM.panicOverlay.classList.remove('active');
+        }, 200);
+        
+        // Show critical alert after delay
+        STATE.panicTimeout = setTimeout(() => {
+            DOM.criticalAlert.classList.remove('hidden');
+            DOM.criticalAlert.classList.add('visible');
+            
+            // Auto-dismiss after 2 seconds
+            setTimeout(() => {
+                handlePanicSequenceComplete();
+            }, 2000);
+        }, 520);
+        
+        updatePanicUI(true);
+    }
+
+    function endPanic() {
+        STATE.panicActive = false;
+        STATE.isPanic = false;
+        startRecovery();
+        updatePanicUI(false);
+    }
+
+    function handlePanicSequenceComplete() {
+        DOM.criticalAlert.classList.remove('visible');
+        
+        setTimeout(() => {
+            DOM.criticalAlert.classList.add('hidden');
+            DOM.panicOverlay.classList.add('hidden');
+            STATE.isBlocked = false;
+        }, 300);
+    }
+
+    function triggerTap() {
+        if (!STATE.isActive || STATE.isRecovering || STATE.isBlocked) return;
+        
+        STATE.targetBpm = Math.min(140, STATE.targetBpm + 10);
+        STATE.baseBpm = Math.min(140, STATE.baseBpm + 4);
+    }
+
+    // ============================================
+    // SESSION MANAGEMENT
+    // ============================================
+    
+    function startSession() {
+        STATE.currentSession = {
+            id: Date.now(),
+            startTime: Date.now(),
+            name: generateSessionName(),
+        };
+        
+        // Reset tracking
+        STATE.bpmHistory = [];
+        STATE.stressHistory = [];
+        STATE.panicEvents = [];
+        STATE.peakBpm = 0;
+        STATE.peakStress = 0;
+        STATE.totalBpm = 0;
+        STATE.sampleCount = 0;
+        STATE.isRecording = true;
+    }
+
+    function recordDataPoint(bpm, stress) {
+        if (!STATE.isRecording) return;
+        
+        const timestamp = Date.now();
+        
+        // Update history (keep last 100 points)
+        STATE.bpmHistory.push({ timestamp, value: bpm });
+        STATE.stressHistory.push({ timestamp, value: stress });
+        
+        if (STATE.bpmHistory.length > 100) STATE.bpmHistory.shift();
+        if (STATE.stressHistory.length > 100) STATE.stressHistory.shift();
+        
+        // Update peaks
+        if (bpm > STATE.peakBpm) STATE.peakBpm = bpm;
+        if (stress > STATE.peakStress) STATE.peakStress = stress;
+        
+        // Update average
+        STATE.totalBpm += bpm;
+        STATE.sampleCount += 1;
+        
+        // Check for PANIC EVENT
+        if (bpm > 120 && stress > 85) {
+            const lastPanic = STATE.panicEvents[STATE.panicEvents.length - 1];
+            if (!lastPanic || timestamp - lastPanic.timestamp > 5000) {
+                STATE.panicEvents.push({ timestamp, bpm, stress });
+                
+                try {
+                    if (navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+                } catch (e) {}
+            }
+        }
+    }
+
+    function endSession() {
+        if (!STATE.currentSession || !STATE.isRecording) return null;
+
+        const endTime = Date.now();
+        const duration = endTime - STATE.currentSession.startTime;
+        const avgBpm = STATE.sampleCount > 0 
+            ? Math.round(STATE.totalBpm / STATE.sampleCount) 
+            : 0;
+
+        const completedSession = {
+            ...STATE.currentSession,
+            endTime,
+            date: formatDate(STATE.currentSession.startTime),
+            duration,
+            durationText: formatDuration(duration),
+            avgBpm,
+            maxBpm: STATE.peakBpm,
+            maxStress: STATE.peakStress,
+            bpmHistory: [...STATE.bpmHistory],
+            panicEvents: [...STATE.panicEvents],
+            hasPanicEvent: STATE.panicEvents.length > 0,
+            panicCount: STATE.panicEvents.length,
+        };
+
+        // Save to storage
+        const sessions = loadSessions();
+        sessions.unshift(completedSession);
+        saveSessions(sessions.slice(0, CONFIG.MAX_SESSIONS));
+
+        // Reset state
+        STATE.currentSession = null;
+        STATE.isRecording = false;
+        STATE.bpmHistory = [];
+        STATE.stressHistory = [];
+        STATE.panicEvents = [];
+        STATE.peakBpm = 0;
+        STATE.peakStress = 0;
+        STATE.totalBpm = 0;
+        STATE.sampleCount = 0;
+
+        return completedSession;
+    }
+
+    function clearAllHistory() {
+        saveSessions([]);
+        renderHistory();
+    }
+
+    // ============================================
+    // OSCILLOSCOPE DRAWING
+    // ============================================
+    
+    function setupOscilloscope() {
+        const canvas = DOM.oscilloscope;
+        if (!canvas) return;
+
+        const updateSize = () => {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        };
+
+        updateSize();
+        window.addEventListener('resize', updateSize);
+    }
+
+    function drawOscilloscope() {
+        const canvas = DOM.oscilloscope;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const centerY = height / 2;
+
+        // Clear canvas
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw grid lines
+        const gridOpacity = STATE.isPanic ? 0.03 : 0.06;
+        ctx.strokeStyle = `rgba(${STATE.isPanic ? '139, 0, 0' : '255, 0, 0'}, ${gridOpacity})`;
+        ctx.lineWidth = 1;
+        
+        for (let y = 0; y <= height; y += height / 4) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+        }
+
+        for (let x = 0; x <= width; x += width / 8) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+
+        if (!STATE.isActive) {
+            // Flat line when inactive
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+            
+            STATE.oscilloscopeAnimation = requestAnimationFrame(drawOscilloscope);
+            return;
+        }
+
+        // Calculate amplitude ramp
+        let amplitudeMultiplier = 1;
+        if (STATE.oscilloscopeStartTime) {
+            const elapsed = Date.now() - STATE.oscilloscopeStartTime;
+            const rampProgress = Math.min(elapsed / 2000, 1);
+            amplitudeMultiplier = 0.3 + (0.7 * (1 - Math.pow(1 - rampProgress, 3)));
+        }
+
+        // PANIC MODE settings
+        const baseFrequency = STATE.bpm / 60;
+        const frequencyMultiplier = STATE.isPanic ? 2.0 : 1.0;
+        const frequency = baseFrequency * frequencyMultiplier;
+        
+        const speed = (frequency * 4) + (STATE.isPanic ? 3 : 0);
+        const baseAmplitude = STATE.isPanic ? height * 0.42 : height * 0.28;
+        const amplitude = baseAmplitude * amplitudeMultiplier;
+        
+        const jitterAmount = STATE.isPanic ? 8 : 0.5;
+        const jitter = (Math.random() - 0.5) * jitterAmount;
+        const timingJitter = STATE.isPanic ? (Math.random() - 0.5) * 0.15 : 0;
+
+        STATE.oscilloscopePhase += speed * 0.02;
+
+        // ECG waveform
+        const strokeColor = STATE.isPanic ? 'rgba(139, 0, 0, 0.95)' : 'rgba(255, 0, 0, 0.85)';
+        const glowColor = STATE.isPanic ? '#8B0000' : '#FF0000';
+        
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = STATE.isPanic ? 2.5 : 1.5;
+        ctx.shadowColor = glowColor;
+        ctx.shadowBlur = STATE.isPanic ? 12 : 4;
+        ctx.beginPath();
+
+        for (let x = 0; x < width; x++) {
+            const t = (x / width) * Math.PI * 4 * frequencyMultiplier + STATE.oscilloscopePhase;
+            
+            let y = 0;
+            const cyclePos = ((t + timingJitter) % (Math.PI * 2)) / (Math.PI * 2);
+            
+            if (cyclePos < 0.1) {
+                y = Math.sin(cyclePos * Math.PI * 10) * 0.2;
+            } else if (cyclePos < 0.15) {
+                y = 0;
+            } else if (cyclePos < 0.2) {
+                y = -0.1;
+            } else if (cyclePos < 0.25) {
+                const spikeMultiplier = STATE.isPanic ? 1.3 : 1;
+                y = Math.sin((cyclePos - 0.2) * Math.PI * 20) * spikeMultiplier;
+            } else if (cyclePos < 0.3) {
+                y = STATE.isPanic ? -0.3 : -0.2;
+            } else if (cyclePos < 0.35) {
+                y = 0;
+            } else if (cyclePos < 0.5) {
+                y = Math.sin((cyclePos - 0.35) * Math.PI * 6.67) * 0.3;
+            } else {
+                y = 0;
+            }
+
+            const pixelNoise = STATE.isPanic ? (Math.random() - 0.5) * 2 : 0;
+            const yPos = centerY - (y * amplitude) + jitter + pixelNoise;
+            
+            if (x === 0) {
+                ctx.moveTo(x, yPos);
+            } else {
+                ctx.lineTo(x, yPos);
+            }
+        }
+
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Scan line during panic
+        if (STATE.isPanic) {
+            const scanSpeed = 1500;
+            const scanY = (Date.now() % scanSpeed) / scanSpeed * height;
+            ctx.strokeStyle = 'rgba(139, 0, 0, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, scanY);
+            ctx.lineTo(width, scanY);
+            ctx.stroke();
+        }
+
+        STATE.oscilloscopeAnimation = requestAnimationFrame(drawOscilloscope);
+    }
+
+    // ============================================
+    // WATCH MODE DRAWING
+    // ============================================
+    
+    function setupWatchCanvas() {
+        const canvas = DOM.watchCanvas;
+        if (!canvas) return;
+
+        const updateSize = () => {
+            const container = canvas.parentElement;
+            const size = Math.min(container.offsetWidth, 280);
+            canvas.width = size * window.devicePixelRatio;
+            canvas.height = size * window.devicePixelRatio;
+            canvas.style.width = `${size}px`;
+            canvas.style.height = `${size}px`;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        };
+
+        updateSize();
+        window.addEventListener('resize', updateSize);
+    }
+
+    function drawWatch() {
+        const canvas = DOM.watchCanvas;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const displaySize = parseInt(canvas.style.width) || 280;
+        const centerX = displaySize / 2;
+        const centerY = displaySize / 2;
+        const radius = displaySize * 0.4;
+
+        ctx.clearRect(0, 0, displaySize, displaySize);
+
+        // Background circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Progress arc
+        const progress = STATE.isActive ? (STATE.bpm - 60) / 80 : 0;
+        const startAngle = -Math.PI / 2;
+        const endAngle = startAngle + (Math.PI * 2 * Math.min(progress, 1));
+
+        if (STATE.isActive && progress > 0) {
+            ctx.shadowColor = '#FF0000';
+            ctx.shadowBlur = STATE.isPanic ? 30 : 15;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = STATE.isPanic ? 8 : 6;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            ctx.shadowBlur = 0;
+        }
+
+        // Inner circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius * 0.85, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Tick marks
+        for (let i = 0; i < 12; i++) {
+            const angle = (Math.PI * 2 * i) / 12 - Math.PI / 2;
+            const innerR = radius * 0.9;
+            const outerR = radius * 0.97;
+            
+            ctx.beginPath();
+            ctx.moveTo(
+                centerX + Math.cos(angle) * innerR,
+                centerY + Math.sin(angle) * innerR
+            );
+            ctx.lineTo(
+                centerX + Math.cos(angle) * outerR,
+                centerY + Math.sin(angle) * outerR
+            );
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+
+    // ============================================
+    // UI UPDATES
+    // ============================================
+    
+    function updateDataDisplay() {
+        const t = TEXTS[STATE.language];
+        
+        if (STATE.isActive) {
+            DOM.bpmValue.textContent = STATE.bpm;
+            DOM.stressValue.textContent = `${STATE.stress}%`;
+            
+            if (STATE.signal === 'CRITICAL') {
+                DOM.signalValue.textContent = t.critical;
+            } else if (STATE.signal === 'UNSTABLE') {
+                DOM.signalValue.textContent = t.unstable;
+            } else {
+                DOM.signalValue.textContent = t.active;
+            }
+        } else {
+            DOM.bpmValue.textContent = '---';
+            DOM.stressValue.textContent = '---';
+            DOM.signalValue.textContent = '---';
+        }
+        
+        // Update classes
+        const isDataActive = STATE.isActive;
+        const isPanic = STATE.isPanic;
+        
+        [DOM.bpmBlock, DOM.stressBlock, DOM.signalBlock].forEach(block => {
+            block.classList.toggle('active', isDataActive && !isPanic);
+            block.classList.toggle('critical', isPanic);
+        });
+        
+        [DOM.bpmValue, DOM.stressValue].forEach(value => {
+            value.classList.toggle('active', isDataActive && !isPanic);
+            value.classList.toggle('panic', isPanic);
+        });
+        
+        DOM.signalValue.classList.remove('unstable', 'critical-signal');
+        if (STATE.signal === 'CRITICAL') {
+            DOM.signalValue.classList.add('critical-signal');
+        } else if (STATE.signal === 'UNSTABLE') {
+            DOM.signalValue.classList.add('unstable');
+        }
+        DOM.signalValue.classList.toggle('active', isDataActive);
+    }
+
+    function updateWatchMode() {
+        // Update watch BPM display
+        DOM.watchBpm.textContent = STATE.isActive ? STATE.bpm : '---';
+        DOM.watchBpm.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+        DOM.watchBpm.classList.toggle('panic', STATE.isPanic);
+        
+        // Update status
+        DOM.watchStatusDot.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+        DOM.watchStatusDot.classList.toggle('panic', STATE.isPanic);
+        
+        if (STATE.isPanic) {
+            DOM.watchStatusText.textContent = 'CRITICAL';
+            DOM.watchStatusText.className = 'panic';
+        } else if (STATE.isActive) {
+            DOM.watchStatusText.textContent = 'MONITORING';
+            DOM.watchStatusText.className = 'active';
+        } else {
+            DOM.watchStatusText.textContent = 'STANDBY';
+            DOM.watchStatusText.className = '';
+        }
+        
+        // Update stress bar
+        DOM.watchStressContainer.classList.toggle('visible', STATE.isActive);
+        DOM.watchStressPercent.textContent = `${STATE.stress}%`;
+        DOM.watchStressPercent.classList.toggle('panic', STATE.isPanic);
+        DOM.watchStressFill.style.width = `${STATE.stress}%`;
+        DOM.watchStressFill.classList.toggle('panic', STATE.isPanic);
+        
+        // Update jitter
+        DOM.watchContainer.classList.toggle('jitter', STATE.isPanic);
+        
+        // Redraw canvas
+        drawWatch();
+    }
+
+    function updateMainButton() {
+        const t = TEXTS[STATE.language];
+        const btn = DOM.mainBtn;
+        const span = btn.querySelector('span');
+        
+        span.textContent = STATE.isActive ? t.stopSession : t.startSession;
+        
+        btn.classList.toggle('active', STATE.isActive && !STATE.isPanic);
+        btn.classList.toggle('panic', STATE.isPanic);
+        btn.disabled = STATE.isBlocked;
+    }
+
+    function updatePanicUI(isPanic) {
+        DOM.oscilloscopeContainer.classList.toggle('panic', isPanic);
+        DOM.ecgIndicator.classList.toggle('panic', isPanic);
+        DOM.criticalLabel.classList.toggle('hidden', !isPanic);
+        updateMainButton();
+    }
+
+    function updateStabilizingLabel() {
+        DOM.stabilizingLabel.classList.toggle('hidden', !STATE.isRecovering);
+    }
+
+    function updateOscilloscopeIndicator() {
+        DOM.ecgIndicator.classList.toggle('active', STATE.isActive);
+    }
+
+    // ============================================
+    // HISTORY RENDERING
+    // ============================================
+    
+    function renderHistory() {
+        const sessions = loadSessions();
+        
+        if (sessions.length === 0) {
+            DOM.historyList.classList.add('hidden');
+            DOM.historyGraph.classList.add('hidden');
+            DOM.historyEmpty.classList.remove('hidden');
+            return;
+        }
+        
+        DOM.historyEmpty.classList.add('hidden');
+        
+        if (DOM.btnListView.classList.contains('active')) {
+            DOM.historyList.classList.remove('hidden');
+            DOM.historyGraph.classList.add('hidden');
+            renderHistoryList(sessions);
+        } else {
+            DOM.historyList.classList.add('hidden');
+            DOM.historyGraph.classList.remove('hidden');
+            renderHistoryGraph(sessions);
+        }
+    }
+
+    function renderHistoryList(sessions) {
+        DOM.historyList.innerHTML = sessions.map((session, index) => `
+            <div class="history-item ${session.hasPanicEvent ? 'has-panic' : ''}" 
+                 data-session-id="${session.id}"
+                 style="animation-delay: ${index * 50}ms">
+                <div class="history-item-header">
+                    <div class="history-item-info">
+                        <div class="history-item-date">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ${session.date}
+                            ${session.hasPanicEvent ? `
+                                <span class="panic-badge">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    PANIC
+                                </span>
+                            ` : ''}
+                        </div>
+                        <div class="history-item-name ${session.hasPanicEvent ? 'panic' : ''}">${session.name}</div>
+                        ${session.durationText ? `<div class="history-item-duration">Duration: ${session.durationText}</div>` : ''}
+                    </div>
+                    <div class="history-item-number">#${String(sessions.length - index).padStart(2, '0')}</div>
+                </div>
+                <div class="history-stress-bar">
+                    <div class="history-stress-fill" style="width: ${session.maxStress || 0}%; background-color: ${session.maxStress > 85 ? '#8B0000' : '#FF0000'}; box-shadow: ${session.maxStress > 85 ? '0 0 8px rgba(139, 0, 0, 0.5)' : '0 0 4px rgba(255, 0, 0, 0.3)'}"></div>
+                </div>
+                <div class="history-stats">
+                    <div class="history-stat">
+                        <div class="history-stat-label">PEAK BPM</div>
+                        <div class="history-stat-value ${session.maxBpm > 120 ? 'panic' : ''}">${session.maxBpm || 0}</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-stat-label">AVG BPM</div>
+                        <div class="history-stat-value avg">${session.avgBpm || session.maxBpm || 0}</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-stat-label">MAX STRESS</div>
+                        <div class="history-stat-value ${session.maxStress > 85 ? 'panic' : ''}">${session.maxStress || 0}%</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Add click handlers
+        DOM.historyList.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const sessionId = parseInt(item.dataset.sessionId);
+                const session = sessions.find(s => s.id === sessionId);
+                if (session) {
+                    showSessionDetail(session);
+                }
+            });
+        });
+    }
+
+    function renderHistoryGraph(sessions) {
+        const svg = DOM.historySvg;
+        const recentSessions = sessions.slice(0, 10);
+        
+        if (recentSessions.length === 0) {
+            svg.innerHTML = '';
+            return;
+        }
+
+        const width = 300;
+        const height = 150;
+        const padding = 10;
+        
+        const maxBpm = Math.max(...recentSessions.map(s => s.maxBpm || 0), 140);
+        const minBpm = Math.min(...recentSessions.map(s => s.maxBpm || 60), 60);
+        
+        const points = recentSessions.map((session, i, arr) => {
+            const x = padding + (i / Math.max(arr.length - 1, 1)) * (width - padding * 2);
+            const y = height - padding - (((session.maxBpm || 60) - minBpm) / (maxBpm - minBpm || 1)) * (height - padding * 2);
+            return { x, y, session };
+        });
+
+        // Generate path
+        let pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+        
+        // Generate circles
+        const circles = points.map(p => `
+            <circle
+                cx="${p.x}"
+                cy="${p.y}"
+                r="3"
+                fill="${p.session.hasPanicEvent ? '#8B0000' : '#FF0000'}"
+                stroke="#000"
+                stroke-width="1.5"
+            />
+        `).join('');
+
+        // Grid lines
+        const gridLines = [0, 1, 2, 3].map(i => `
+            <line
+                x1="10"
+                y1="${10 + i * 43.33}"
+                x2="290"
+                y2="${10 + i * 43.33}"
+                stroke="rgba(255, 0, 0, 0.08)"
+                stroke-width="1"
+            />
+        `).join('');
+
+        svg.innerHTML = `
+            ${gridLines}
+            <path
+                d="${pathD}"
+                stroke="#FF0000"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.5))"
+            />
+            ${circles}
+        `;
+
+        // Update info
+        const panicCount = sessions.filter(s => s.hasPanicEvent).length;
+        DOM.graphInfo.innerHTML = `
+            <div>${sessions.length} SESSION${sessions.length !== 1 ? 'S' : ''} RECORDED</div>
+            ${panicCount > 0 ? `
+                <div class="graph-panic-info">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    </svg>
+                    ${panicCount} PANIC EVENT${panicCount !== 1 ? 'S' : ''}
+                </div>
+            ` : ''}
+        `;
+    }
+
+    function showSessionDetail(session) {
+        const hasCritical = session.maxBpm > 120 || session.maxStress > 85;
+        
+        // Generate BPM graph path
+        let bpmPath = 'M 10 75 Q 75 60, 150 45 T 290 35';
+        if (session.bpmHistory && session.bpmHistory.length > 0) {
+            const history = session.bpmHistory;
+            const maxBpm = Math.max(...history.map(h => h.value), 140);
+            const minBpm = Math.min(...history.map(h => h.value), 60);
+            
+            const pathPoints = history.map((point, i) => {
+                const x = 10 + (i / (history.length - 1 || 1)) * 280;
+                const y = 90 - ((point.value - minBpm) / (maxBpm - minBpm || 1)) * 70;
+                return { x, y };
+            });
+            
+            bpmPath = pathPoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+        }
+
+        DOM.sessionDetail.innerHTML = `
+            <div class="detail-header">
+                <button class="back-btn" id="detail-back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    BACK
+                </button>
+                <div class="detail-title">SESSION DETAIL</div>
+            </div>
+            
+            <div class="detail-card ${session.hasPanicEvent ? 'has-panic' : ''}">
+                <div class="detail-card-header">
+                    <div>
+                        <div class="detail-name ${session.hasPanicEvent ? 'panic' : ''}">${session.name}</div>
+                        <div class="detail-date">${session.date}</div>
+                    </div>
+                    ${session.hasPanicEvent ? `
+                        <span class="panic-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            </svg>
+                            PANIC EVENT
+                        </span>
+                    ` : ''}
+                </div>
+                
+                ${session.durationText ? `<div class="detail-duration">DURATION: ${session.durationText}</div>` : ''}
+                
+                <div class="detail-graph">
+                    <div class="detail-graph-label">BPM TIMELINE</div>
+                    <svg viewBox="0 0 300 100">
+                        ${[0, 1, 2, 3].map(i => `
+                            <line x1="10" y1="${10 + i * 26.67}" x2="290" y2="${10 + i * 26.67}" stroke="rgba(255, 0, 0, 0.05)" stroke-width="1"/>
+                        `).join('')}
+                        <path d="${bpmPath}" stroke="${session.hasPanicEvent ? '#8B0000' : '#FF0000'}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                
+                <div class="detail-stats">
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">PEAK BPM</div>
+                        <div class="detail-stat-value ${session.maxBpm > 120 ? 'panic' : ''}">${session.maxBpm || 0}</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">MAX STRESS</div>
+                        <div class="detail-stat-value ${session.maxStress > 85 ? 'panic' : ''}">${session.maxStress || 0}%</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">AVG BPM</div>
+                        <div class="detail-stat-value avg">${session.avgBpm || session.maxBpm || 0}</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">PANIC EVENTS</div>
+                        <div class="detail-stat-value ${session.panicCount > 0 ? 'panic' : 'muted'}">${session.panicCount || 0}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-analysis">
+                <div class="detail-analysis-title">TECHNICAL ANALYSIS</div>
+                ${session.maxBpm > 100 ? `
+                    <div class="analysis-item peak">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        <span>PEAK FEAR EVENT DETECTED</span>
+                    </div>
+                ` : ''}
+                ${hasCritical ? `
+                    <div class="analysis-item critical">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        </svg>
+                        <span>CRITICAL STRESS DETECTED</span>
+                    </div>
+                ` : ''}
+                ${!session.maxBpm || session.maxBpm < 80 ? `
+                    <div class="analysis-nominal">NOMINAL STRESS LEVELS</div>
+                ` : ''}
+            </div>
+        `;
+        
+        DOM.sessionDetail.classList.remove('hidden');
+        
+        // Add back button handler
+        document.getElementById('detail-back').addEventListener('click', () => {
+            DOM.sessionDetail.classList.add('hidden');
+        });
+    }
+
+    // ============================================
+    // VIEW MANAGEMENT
+    // ============================================
+    
+    function switchView(viewName) {
+        STATE.currentView = viewName;
+        
+        // Update view visibility
+        DOM.viewMonitor.classList.toggle('active', viewName === 'monitor');
+        DOM.viewWatch.classList.toggle('active', viewName === 'watch');
+        DOM.viewHistory.classList.toggle('active', viewName === 'history');
+        
+        // Update menu items
+        DOM.menuItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.view === viewName);
+        });
+        
+        // Render history if switching to it
+        if (viewName === 'history') {
+            renderHistory();
+        }
+        
+        // Initial draw for watch mode
+        if (viewName === 'watch') {
+            drawWatch();
+        }
+        
+        closeMenu();
+    }
+
+    // ============================================
+    // MENU MANAGEMENT
+    // ============================================
+    
+    function openMenu() {
+        if (STATE.isBlocked) return;
+        
+        STATE.menuOpen = true;
+        DOM.menuOverlay.classList.remove('hidden');
+        
+        requestAnimationFrame(() => {
+            DOM.menuOverlay.classList.add('visible');
+            DOM.sideMenu.classList.add('open');
+        });
+    }
+
+    function closeMenu() {
+        STATE.menuOpen = false;
+        DOM.menuOverlay.classList.remove('visible');
+        DOM.sideMenu.classList.remove('open');
+        
+        setTimeout(() => {
+            DOM.menuOverlay.classList.add('hidden');
+        }, 250);
+    }
+
+    // ============================================
+    // LANGUAGE MANAGEMENT
+    // ============================================
+    
+    function setLanguage(lang) {
+        STATE.language = lang;
+        
+        // Update active button
+        DOM.langBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        
+        // Update all text elements
+        const t = TEXTS[lang];
+        
+        document.querySelectorAll('[data-text-monitor]').forEach(el => el.textContent = t.monitor);
+        document.querySelectorAll('[data-text-watch]').forEach(el => el.textContent = t.watchMode);
+        document.querySelectorAll('[data-text-history]').forEach(el => el.textContent = t.history);
+        document.querySelectorAll('[data-text-language]').forEach(el => el.textContent = t.language);
+        document.querySelectorAll('[data-text-about]').forEach(el => el.textContent = t.about);
+        document.querySelectorAll('[data-text-bpm]').forEach(el => el.textContent = t.bpm);
+        document.querySelectorAll('[data-text-stress]').forEach(el => el.textContent = t.stress);
+        document.querySelectorAll('[data-text-signal]').forEach(el => el.textContent = t.signal);
+        document.querySelectorAll('[data-text-no-sessions]').forEach(el => el.textContent = t.noSessions);
+        document.querySelectorAll('[data-text-footer]').forEach(el => el.textContent = t.footer);
+        document.querySelectorAll('[data-text-footer-sub]').forEach(el => el.textContent = t.footerSub);
+        document.querySelectorAll('[data-text-critical]').forEach(el => el.textContent = t.criticalAlert);
+        document.querySelectorAll('[data-text-watch-mode]').forEach(el => el.textContent = t.watchMode);
+        
+        // Update main button text
+        updateMainButton();
+        
+        // Update data display
+        updateDataDisplay();
+    }
+
+    // ============================================
+    // START/STOP SIMULATION
+    // ============================================
+    
+    function startMonitoring() {
+        STATE.isActive = true;
+        STATE.isPanic = false;
+        STATE.isRecovering = false;
+        STATE.baseBpm = 72;
+        STATE.targetBpm = 78;
+        STATE.lastPanic = 0;
+        STATE.panicActive = false;
+        STATE.oscilloscopeStartTime = Date.now();
+        
+        // Start simulation
+        STATE.simulationInterval = setInterval(simulateBpm, CONFIG.SIMULATION_INTERVAL);
+        
+        // Start session recording
+        startSession();
+        
+        // Update UI
+        DOM.oscilloscopeContainer.classList.add('ramping');
+        setTimeout(() => {
+            DOM.oscilloscopeContainer.classList.remove('ramping');
+        }, 2000);
+        
+        updateMainButton();
+        updateOscilloscopeIndicator();
+    }
+
+    function stopMonitoring() {
+        STATE.isActive = false;
+        STATE.isPanic = false;
+        STATE.isRecovering = false;
+        STATE.bpm = 72;
+        STATE.stress = 0;
+        STATE.signal = 'ACTIVE';
+        STATE.panicActive = false;
+        STATE.oscilloscopeStartTime = null;
+        
+        // Clear intervals
+        if (STATE.simulationInterval) {
+            clearInterval(STATE.simulationInterval);
+            STATE.simulationInterval = null;
+        }
+        if (STATE.recoveryInterval) {
+            clearInterval(STATE.recoveryInterval);
+            STATE.recoveryInterval = null;
+        }
+        if (STATE.panicTimeout) {
+            clearTimeout(STATE.panicTimeout);
+            STATE.panicTimeout = null;
+        }
+        
+        // End session
+        endSession();
+        
+        // Update UI
+        updateMainButton();
+        updateDataDisplay();
+        updateOscilloscopeIndicator();
+        updatePanicUI(false);
+        updateStabilizingLabel();
+    }
+
+    function toggleMonitoring() {
+        if (STATE.isBlocked) return;
+        
+        if (STATE.isActive) {
+            stopMonitoring();
+        } else {
+            startMonitoring();
+        }
+    }
+
+    // ============================================
+    // EVENT HANDLERS
+    // ============================================
+    
+    function setupEventListeners() {
+        // Main button
+        DOM.mainBtn.addEventListener('click', toggleMonitoring);
+        
+        // Menu
+        DOM.menuBtn.addEventListener('click', openMenu);
+        DOM.menuClose.addEventListener('click', closeMenu);
+        DOM.menuOverlay.addEventListener('click', closeMenu);
+        
+        // Menu navigation
+        DOM.menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                switchView(item.dataset.view);
+            });
+        });
+        
+        // Language buttons
+        DOM.langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.dataset.lang);
+            });
+        });
+        
+        // History view toggle
+        DOM.btnListView.addEventListener('click', () => {
+            DOM.btnListView.classList.add('active');
+            DOM.btnGraphView.classList.remove('active');
+            renderHistory();
+        });
+        
+        DOM.btnGraphView.addEventListener('click', () => {
+            DOM.btnGraphView.classList.add('active');
+            DOM.btnListView.classList.remove('active');
+            renderHistory();
+        });
+        
+        // Clear history
+        DOM.btnClearHistory.addEventListener('click', () => {
+            if (confirm('Clear all session history?')) {
+                clearAllHistory();
+            }
+        });
+        
+        // Tap to increase stress (click anywhere on app when active)
+        document.getElementById('app').addEventListener('click', (e) => {
+            // Don't trigger if clicking buttons or menu
+            if (e.target.closest('button') || e.target.closest('.side-menu') || e.target.closest('.menu-overlay')) {
+                return;
+            }
+            triggerTap();
+        });
+        
+        // Touch swipe for menu
+        let touchStartX = 0;
+        let touchStartY = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            // Swipe from left edge to open menu
+            if (touchStartX < 30 && deltaX > 50 && deltaY < 50 && !STATE.isBlocked) {
+                openMenu();
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (STATE.menuOpen) {
+                    closeMenu();
+                }
+                if (!DOM.sessionDetail.classList.contains('hidden')) {
+                    DOM.sessionDetail.classList.add('hidden');
+                }
+            }
+            if (e.key === ' ' && !STATE.menuOpen) {
+                e.preventDefault();
+                toggleMonitoring();
+            }
+        });
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    
+    function init() {
+        cacheDOMElements();
+        setupEventListeners();
+        setupOscilloscope();
+        setupWatchCanvas();
+        
+        // Start oscilloscope animation
+        drawOscilloscope();
+        
+        // Initial UI state
+        updateMainButton();
+        updateDataDisplay();
+        setLanguage('EN');
+        
+        // Render history if on that view
+        if (STATE.currentView === 'history') {
+            renderHistory();
+        }
+        
+        console.log('%c FEAR METER v1.0 ', 'background: #8B0000; color: #FF0000; font-size: 14px; font-weight: bold;');
+        console.log('%c Experimental Biometric Horror System ', 'color: #B0B0B0; font-size: 10px;');
+    }
+
+    // Start the app
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+})();
