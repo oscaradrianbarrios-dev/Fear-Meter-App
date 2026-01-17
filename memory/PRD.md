@@ -69,17 +69,27 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Indicador discreto "DEMO DATA — SIMULATED"
 - No guarda datos reales en historial
 
-### 7. Investor Demo Experience ✅ NEW
-**URL: `/investor-demo/`** - Experiencia cinematográfica de 30 segundos
+### 7. Investor Demo Experience ✅ UPDATED WITH BUSINESS MODEL
+**URL: `/investor-demo/`** - Experiencia cinematográfica de 45 segundos con modelo de negocio completo
 
-#### Timeline (7 pantallas automáticas):
+#### Timeline (10 pantallas automáticas):
 1. **Impact (0-3s)**: "WHAT IF HORROR COULD MEASURE REAL FEAR?" + 72 BPM
 2. **Problem (3-7s)**: "ENTERTAINMENT HAS NEVER MEASURED EMOTION. UNTIL NOW."
 3. **Solution (7-12s)**: Split view Smartphone + Smartwatch sincronizados
-4. **Demo (12-18s)**: Evento de pánico simulado "112 BPM CRITICAL" + flash rojo
-5. **Applications (18-24s)**: Horror Movies, Games & VR, Live Experiences, Biometric Content
-6. **Business Model (24-28s)**: "HARDWARE + SOFTWARE + DATA" - Scalable. Licensable. Global.
-7. **Closing (28-30s)**: "FEAR IS DATA. DATA IS VALUE." + © 2026 FEAR METER
+4. **Demo (12-17s)**: Evento de pánico simulado "109 BPM CRITICAL" + flash rojo
+5. **Applications (17-22s)**: Horror Movies, Games & VR, Live Experiences, Biometric Content
+6. **Layer 1 - B2C (22-27s)**: FREE ($0) | CORE ($3.99/mo) | SLASHER ($6.99/mo)
+7. **Layer 2 - Hardware (27-32s)**: ETERNAL NIGHT ($79-99) | SLASHER EDITION ($149-199)
+8. **Layer 3 - B2B (32-37s)**: Content License + FEAR INDEX™ 💀 THE REAL VALUE
+9. **Projection (37-41s)**: 50K users • $200K MRR • $300K B2B/year
+10. **Closing (41-45s)**: "FEAR METER IS NOT AN APP. IT'S THE FIRST LAYER OF EMOTIONAL DATA FOR ENTERTAINMENT."
+
+#### Business Model Highlights:
+- **Recurrencia**: Suscripción mensual B2C
+- **Margen alto**: Software + Data
+- **Hardware como ancla**: Entrada al ecosistema
+- **B2B Licensing**: La joya - $0.05-0.20 por sesión medida
+- **FEAR INDEX™**: Rankings reales de miedo, no encuestas
 
 #### Features:
 - Totalmente automático (sin clicks)
@@ -87,7 +97,6 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Botón "REQUEST DECK" (mailto:investors@fearmeter.io)
 - Botón "REPLAY" al finalizar
 - Osciloscopio animado de fondo
-- Vibración durante evento de pánico
 
 ### 8. Menú Lateral
 - Navegación entre vistas
