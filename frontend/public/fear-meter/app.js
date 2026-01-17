@@ -830,6 +830,19 @@
         updateSize();
         window.addEventListener('resize', updateSize);
     }
+    
+    function startOscilloscopeAnimation() {
+        // Only start if not already running and we're in monitor view
+        if (STATE.oscilloscopeAnimation || STATE.currentView !== 'monitor') return;
+        drawOscilloscope();
+    }
+    
+    function stopOscilloscopeAnimation() {
+        if (STATE.oscilloscopeAnimation) {
+            cancelAnimationFrame(STATE.oscilloscopeAnimation);
+            STATE.oscilloscopeAnimation = null;
+        }
+    }
 
     function drawOscilloscope() {
         const canvas = DOM.oscilloscope;
