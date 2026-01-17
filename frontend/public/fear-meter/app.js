@@ -450,15 +450,25 @@
         DOM.menuItems = document.querySelectorAll('.menu-item[data-view]');
         DOM.langBtns = document.querySelectorAll('.lang-btn');
         
-        // Watch mode
+        // Watch Mode - Fullscreen
         DOM.watchCanvas = document.getElementById('watch-canvas');
+        DOM.watchFace = document.getElementById('watch-face');
+        DOM.watchRing = document.getElementById('watch-ring');
         DOM.watchBpm = document.getElementById('watch-bpm');
-        DOM.watchStatusDot = document.getElementById('watch-status-dot');
-        DOM.watchStatusText = document.getElementById('watch-status-text');
-        DOM.watchStressContainer = document.getElementById('watch-stress-container');
-        DOM.watchStressPercent = document.getElementById('watch-stress-percent');
-        DOM.watchStressFill = document.getElementById('watch-stress-fill');
-        DOM.watchContainer = document.querySelector('.watch-container');
+        DOM.sessionDot = document.getElementById('session-dot');
+        DOM.sessionStatusText = document.getElementById('session-status-text');
+        DOM.watchSessionStatus = document.getElementById('watch-session-status');
+        DOM.watchSignal = document.getElementById('watch-signal');
+        DOM.signalPulse = document.getElementById('signal-pulse');
+        DOM.watchPanicFlash = document.getElementById('watch-panic-flash');
+        DOM.watchMessage = document.getElementById('watch-message');
+        DOM.watchMessageText = document.getElementById('watch-message-text');
+        DOM.watchDemoIndicator = document.getElementById('watch-demo-indicator');
+        DOM.watchStartBtn = document.getElementById('watch-start-btn');
+        DOM.watchExitBtn = document.getElementById('watch-exit-btn');
+        DOM.watchControlText = document.getElementById('watch-control-text');
+        DOM.controlIcon = document.getElementById('control-icon');
+        DOM.watchConnection = document.getElementById('watch-connection');
         
         // History
         DOM.historyList = document.getElementById('history-list');
