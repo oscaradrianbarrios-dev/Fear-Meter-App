@@ -64,6 +64,15 @@
         audioContext: null,
         audioEnabled: false,
         heartbeatInterval: null,
+        
+        // Watch Mode
+        watchAnimation: null,
+        isWatchFullscreen: false,
+        
+        // Demo Mode
+        isDemoMode: false,
+        demoInterval: null,
+        demoPanicTriggered: false,
     };
 
     // ============================================
