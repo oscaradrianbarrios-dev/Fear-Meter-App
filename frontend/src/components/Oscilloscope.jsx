@@ -1,15 +1,29 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
     const phaseRef = useRef(0);
+    const startTimeRef = useRef(null);
+    const [isRamping, setIsRamping] = useState(false);
+
+    useEffect(() => {
+        if (isActive) {
+            startTimeRef.current = Date.now();
+            setIsRamping(true);
+            // Ramp completes after 2 seconds
+            const timer = setTimeout(() => setIsRamping(false), 2000);
+            return () => clearTimeout(timer);
+        } else {
+            startTimeRef.current = null;
+            setIsRamping(false);
+        }
+    }, [isActive]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        // Set canvas size
         const updateSize = () => {
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width * window.devicePixelRatio;
@@ -37,15 +51,14 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
             const height = rect.height;
             const centerY = height / 2;
 
-            // Clear canvas
+            // Clear canvas - absolute black
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, width, height);
 
-            // Draw grid lines (subtle)
-            ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
+            // Draw grid lines - barely visible
+            ctx.strokeStyle = "rgba(255, 0, 0, 0.06)";
             ctx.lineWidth = 1;
             
-            // Horizontal lines
             for (let y = 0; y <= height; y += height / 4) {
                 ctx.beginPath();
                 ctx.moveTo(0, y);
@@ -53,7 +66,6 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
                 ctx.stroke();
             }
 
-            // Vertical lines
             for (let x = 0; x <= width; x += width / 8) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
@@ -62,9 +74,9 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
             }
 
             if (!isActive) {
-                // Flat line when inactive
-                ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
-                ctx.lineWidth = 2;
+                // Flat line when inactive - subtle
+                ctx.strokeStyle = "rgba(255, 0, 0, 0.15)";
+                ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(0, centerY);
                 ctx.lineTo(width, centerY);
@@ -72,52 +84,53 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
                 return;
             }
 
-            // Calculate wave parameters based on BPM
-            const frequency = bpm / 60; // Beats per second
-            const speed = (frequency * 4) + (isPanic ? 2 : 0);
-            const amplitude = isPanic ? height * 0.4 : height * 0.3;
-            const jitter = isPanic ? Math.random() * 6 - 3 : 0;
+            // Calculate amplitude ramp (0.3 -> 1.0 over 2 seconds)
+            let amplitudeMultiplier = 1;
+            if (startTimeRef.current) {
+                const elapsed = Date.now() - startTimeRef.current;
+                const rampProgress = Math.min(elapsed / 2000, 1);
+                // Ease out cubic for natural acceleration
+                amplitudeMultiplier = 0.3 + (0.7 * (1 - Math.pow(1 - rampProgress, 3)));
+            }
 
-            // Update phase
+            const frequency = bpm / 60;
+            const speed = (frequency * 4) + (isPanic ? 1.5 : 0);
+            const baseAmplitude = isPanic ? height * 0.38 : height * 0.28;
+            const amplitude = baseAmplitude * amplitudeMultiplier;
+            
+            // Subtle jitter - micro imperfection
+            const jitter = isPanic ? Math.random() * 3 - 1.5 : Math.random() * 0.5 - 0.25;
+
             phaseRef.current += speed * 0.02;
 
-            // Generate ECG-like waveform
-            ctx.strokeStyle = "#FF0000";
-            ctx.lineWidth = isPanic ? 3 : 2;
+            // ECG waveform - restrained glow
+            ctx.strokeStyle = "rgba(255, 0, 0, 0.85)";
+            ctx.lineWidth = isPanic ? 2 : 1.5;
             ctx.shadowColor = "#FF0000";
-            ctx.shadowBlur = isPanic ? 20 : 10;
+            ctx.shadowBlur = isPanic ? 8 : 4;
             ctx.beginPath();
 
             for (let x = 0; x < width; x++) {
                 const t = (x / width) * Math.PI * 4 + phaseRef.current;
                 
-                // Create ECG-like pattern
                 let y = 0;
                 const cyclePos = (t % (Math.PI * 2)) / (Math.PI * 2);
                 
                 if (cyclePos < 0.1) {
-                    // P wave
                     y = Math.sin(cyclePos * Math.PI * 10) * 0.2;
                 } else if (cyclePos < 0.15) {
-                    // PR segment
                     y = 0;
                 } else if (cyclePos < 0.2) {
-                    // Q wave
                     y = -0.1;
                 } else if (cyclePos < 0.25) {
-                    // R wave (spike)
                     y = Math.sin((cyclePos - 0.2) * Math.PI * 20) * 1;
                 } else if (cyclePos < 0.3) {
-                    // S wave
                     y = -0.2;
                 } else if (cyclePos < 0.35) {
-                    // ST segment
                     y = 0;
                 } else if (cyclePos < 0.5) {
-                    // T wave
                     y = Math.sin((cyclePos - 0.35) * Math.PI * 6.67) * 0.3;
                 } else {
-                    // Baseline
                     y = 0;
                 }
 
@@ -133,11 +146,11 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Add scan line effect in panic mode
+            // Scan line in panic - subtle
             if (isPanic) {
-                const scanY = (Date.now() % 2000) / 2000 * height;
-                ctx.strokeStyle = "rgba(139, 0, 0, 0.5)";
-                ctx.lineWidth = 2;
+                const scanY = (Date.now() % 3000) / 3000 * height;
+                ctx.strokeStyle = "rgba(139, 0, 0, 0.25)";
+                ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(0, scanY);
                 ctx.lineTo(width, scanY);
@@ -158,26 +171,45 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
 
     return (
         <div 
-            className={`relative w-full h-40 border border-fear-red/30 bg-fear-black rounded overflow-hidden ${
-                isPanic ? "animate-jitter" : ""
+            className={`relative w-full h-40 rounded overflow-hidden ${
+                isPanic ? "micro-tremor" : ""
             }`}
+            style={{
+                border: "1px solid rgba(255, 0, 0, 0.15)",
+                backgroundColor: "#000000"
+            }}
         >
             <canvas
                 ref={canvasRef}
-                className="w-full h-full"
+                className={`w-full h-full ${isRamping ? "amplitude-ramp" : ""}`}
                 style={{ display: "block" }}
             />
             
-            {/* Corner indicators */}
+            {/* Corner indicator - minimal */}
             <div className="absolute top-2 left-2 flex items-center gap-1">
-                <div className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-fear-red" : "bg-fear-gray/30"}`} />
-                <span className="text-[10px] text-fear-gray tracking-wider">ECG</span>
+                <div 
+                    className={`w-1 h-1 rounded-full transition-all duration-500 ${
+                        isActive ? "animate-pulse-red" : ""
+                    }`}
+                    style={{ 
+                        backgroundColor: isActive ? "rgba(255, 0, 0, 0.7)" : "rgba(176, 176, 176, 0.2)" 
+                    }}
+                />
+                <span 
+                    className="text-[9px] tracking-[0.15em]"
+                    style={{ color: "rgba(176, 176, 176, 0.4)" }}
+                >
+                    ECG
+                </span>
             </div>
             
             {isPanic && (
                 <div className="absolute top-2 right-2">
-                    <span className="text-[10px] text-fear-red tracking-wider animate-pulse-aggressive font-bold">
-                        ⚠ ALERT
+                    <span 
+                        className="text-[9px] tracking-[0.15em] font-bold"
+                        style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                    >
+                        ALERT
                     </span>
                 </div>
             )}
