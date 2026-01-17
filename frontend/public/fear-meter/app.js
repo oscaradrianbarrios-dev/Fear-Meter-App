@@ -1453,41 +1453,6 @@
         DOM.signalValue.classList.toggle('active', isDataActive);
     }
 
-    function updateWatchMode() {
-        // Update watch BPM display
-        DOM.watchBpm.textContent = STATE.isActive ? STATE.bpm : '---';
-        DOM.watchBpm.classList.toggle('active', STATE.isActive && !STATE.isPanic);
-        DOM.watchBpm.classList.toggle('panic', STATE.isPanic);
-        
-        // Update status
-        DOM.watchStatusDot.classList.toggle('active', STATE.isActive && !STATE.isPanic);
-        DOM.watchStatusDot.classList.toggle('panic', STATE.isPanic);
-        
-        if (STATE.isPanic) {
-            DOM.watchStatusText.textContent = 'CRITICAL';
-            DOM.watchStatusText.className = 'panic';
-        } else if (STATE.isActive) {
-            DOM.watchStatusText.textContent = 'MONITORING';
-            DOM.watchStatusText.className = 'active';
-        } else {
-            DOM.watchStatusText.textContent = 'STANDBY';
-            DOM.watchStatusText.className = '';
-        }
-        
-        // Update stress bar
-        DOM.watchStressContainer.classList.toggle('visible', STATE.isActive);
-        DOM.watchStressPercent.textContent = `${STATE.stress}%`;
-        DOM.watchStressPercent.classList.toggle('panic', STATE.isPanic);
-        DOM.watchStressFill.style.width = `${STATE.stress}%`;
-        DOM.watchStressFill.classList.toggle('panic', STATE.isPanic);
-        
-        // Update jitter
-        DOM.watchContainer.classList.toggle('jitter', STATE.isPanic);
-        
-        // Redraw canvas
-        drawWatch();
-    }
-
     function updateMainButton() {
         const t = TEXTS[STATE.language];
         const btn = DOM.mainBtn;
