@@ -484,6 +484,8 @@
         // Panic/Critical
         DOM.panicOverlay = document.getElementById('panic-overlay');
         DOM.criticalAlert = document.getElementById('critical-alert');
+        DOM.vignetteOverlay = document.getElementById('vignette-overlay');
+        DOM.uiFrozen = document.getElementById('ui-frozen');
     }
 
     // ============================================
