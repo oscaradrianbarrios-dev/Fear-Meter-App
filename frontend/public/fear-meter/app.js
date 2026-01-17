@@ -682,6 +682,7 @@
         STATE.isPanic = false;
         startRecovery();
         updatePanicUI(false);
+        updateWatchMode();
     }
 
     function handlePanicSequenceComplete() {
