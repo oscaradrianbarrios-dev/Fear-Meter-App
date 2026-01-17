@@ -29,23 +29,24 @@ const formatDate = () => {
     });
 };
 
+const loadStoredSessions = () => {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    } catch (e) {
+        console.error("Failed to load sessions:", e);
+    }
+    return [];
+};
+
 export const useSessionManager = () => {
-    const [sessions, setSessions] = useState([]);
+    // Use lazy initialization to load from localStorage
+    const [sessions, setSessions] = useState(loadStoredSessions);
     const [currentSession, setCurrentSession] = useState(null);
     const [peakBpm, setPeakBpm] = useState(0);
     const [peakStress, setPeakStress] = useState(0);
-
-    // Load sessions from localStorage on mount
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                setSessions(JSON.parse(stored));
-            }
-        } catch (e) {
-            console.error("Failed to load sessions:", e);
-        }
-    }, []);
 
     // Save sessions to localStorage whenever they change
     useEffect(() => {
