@@ -168,9 +168,22 @@ export const DemoMode = () => {
                 )}
             </main>
 
-            <footer className="py-4 text-center border-t border-fear-red/20">
-                <p className="text-fear-gray text-xs tracking-widest">{t.footer}</p>
-                <p className="text-fear-gray/60 text-[10px] mt-1">{t.footerSub}</p>
+            <footer 
+                className="py-4 text-center"
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }}
+            >
+                <p 
+                    className="text-[10px] tracking-[0.25em]"
+                    style={{ color: "rgba(176, 176, 176, 0.35)" }}
+                >
+                    {t.footer}
+                </p>
+                <p 
+                    className="text-[9px] mt-1"
+                    style={{ color: "rgba(176, 176, 176, 0.2)" }}
+                >
+                    {t.footerSub}
+                </p>
             </footer>
 
             <SideMenu
