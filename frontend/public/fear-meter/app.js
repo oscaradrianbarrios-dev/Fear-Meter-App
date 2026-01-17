@@ -998,7 +998,10 @@
             const face = DOM.watchFace;
             if (!face) return;
             
-            const size = face.offsetWidth;
+            // Get size, fallback to 320 if not visible
+            let size = face.offsetWidth;
+            if (size === 0) size = 320;
+            
             canvas.width = size * window.devicePixelRatio;
             canvas.height = size * window.devicePixelRatio;
             canvas.style.width = `${size}px`;
@@ -1010,12 +1013,14 @@
         
         updateSize();
         window.addEventListener('resize', updateSize);
-        
-        // Start watch animation loop
-        startWatchAnimation();
     }
     
     function startWatchAnimation() {
+        // Cancel any existing animation
+        if (STATE.watchAnimation) {
+            cancelAnimationFrame(STATE.watchAnimation);
+        }
+        
         const animate = () => {
             if (STATE.isWatchFullscreen) {
                 drawWatchArc();
