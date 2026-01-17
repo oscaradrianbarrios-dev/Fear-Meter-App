@@ -210,6 +210,21 @@ frontend:
         agent: "testing"
         comment: "✅ PASSED - Demo mode working perfectly: 'DEMO MODE — SIMULATED DATA' banner visible at top, more aggressive BPM increases (reached 135 BPM, 94% stress), faster panic mode triggering, critical alert overlay working with red flash and 'CRITICAL STRESS DETECTED' text"
 
+  - task: "Psychological Tension Adjustments"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/DataGrid.jsx, /app/frontend/src/components/SideMenu.jsx, /app/frontend/src/index.css"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing required - Initial Impact (300ms delay for BPM/STRESS/SIGNAL), Menu Reveal (FADE IN with blur, not slide), Visual Tension (85% brightness, subtle red glow), Core Functionality verification"
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - All psychological tension adjustments verified: Initial Impact working (BPM/STRESS/SIGNAL show '---' for first 300ms then reveal with staggered animation), Menu Reveal uses FADE IN animation with blur effect (not slide), 'SYSTEM ACCESS' and 'RESTRICTED ACCESS' text confirmed, Visual Tension applied (85% brightness filter for darker UI), Core Functionality intact (session management, BPM fluctuation 60-140, tap interactions, watch mode, history, language switching EN/ES). Minor: Panic mode overlay may not always be visible but BPM threshold detection working correctly."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
