@@ -598,14 +598,14 @@
         STATE.baseBpm += diff * 0.1;
         
         // Add natural variation
-        const variationAmount = STATE.isPanic ? 6 : 4;
+        const variationAmount = STATE.isPanic ? 8 : 4;
         const variation = (Math.random() - 0.5) * variationAmount;
         
         // Normal mode behavior
         if (!STATE.isRecovering) {
             // Random spikes
             if (Math.random() < 0.03) {
-                STATE.targetBpm = Math.min(135, STATE.baseBpm + Math.random() * 25);
+                STATE.targetBpm = Math.min(140, STATE.baseBpm + Math.random() * 30);
             }
             
             // Gradual decrease when elevated
@@ -618,12 +618,18 @@
         const newStress = calculateStress(newBpm);
         const newSignal = calculateSignal(newBpm, newStress);
         
+        // Store previous BPM for pulse detection
+        const prevBpm = STATE.bpm;
+        
         STATE.bpm = newBpm;
         STATE.stress = newStress;
         STATE.signal = newSignal;
 
-        // PANIC ACTIVATION
-        const shouldPanic = newBpm > CONFIG.PANIC_BPM_THRESHOLD && newStress > CONFIG.PANIC_STRESS_THRESHOLD;
+        // MICRO-INTERACTIONS: Screen effects based on BPM levels
+        updateScreenEffects(newBpm);
+
+        // PANIC ACTIVATION - Lowered threshold to 125 for more frequent panic
+        const shouldPanic = newBpm > 125 && newStress > CONFIG.PANIC_STRESS_THRESHOLD;
         
         if (shouldPanic && !STATE.panicActive && now - STATE.lastPanic > CONFIG.PANIC_COOLDOWN) {
             triggerPanic();
@@ -636,9 +642,41 @@
             recordDataPoint(newBpm, newStress);
         }
 
-        // Update UI
-        updateDataDisplay();
+        // Update UI with pulse effect when BPM changes significantly
+        updateDataDisplay(prevBpm !== newBpm);
         updateWatchMode();
+    }
+    
+    // MICRO-INTERACTIONS: Screen darkening and vignette
+    function updateScreenEffects(bpm) {
+        if (!STATE.isActive) {
+            // Reset effects when not active
+            document.body.style.setProperty('--screen-darken', '0');
+            if (DOM.vignetteOverlay) {
+                DOM.vignetteOverlay.classList.remove('active', 'intense');
+            }
+            return;
+        }
+        
+        // Screen darkening above 100 BPM
+        if (bpm > 100) {
+            const darkenAmount = Math.min((bpm - 100) / 80, 0.4); // Max 40% darken at 180 BPM
+            document.body.style.setProperty('--screen-darken', darkenAmount.toString());
+        } else {
+            document.body.style.setProperty('--screen-darken', '0');
+        }
+        
+        // Vignette effect above 120 BPM
+        if (DOM.vignetteOverlay) {
+            if (bpm > 130) {
+                DOM.vignetteOverlay.classList.add('active', 'intense');
+            } else if (bpm > 120) {
+                DOM.vignetteOverlay.classList.add('active');
+                DOM.vignetteOverlay.classList.remove('intense');
+            } else {
+                DOM.vignetteOverlay.classList.remove('active', 'intense');
+            }
+        }
     }
 
     function triggerPanic() {
