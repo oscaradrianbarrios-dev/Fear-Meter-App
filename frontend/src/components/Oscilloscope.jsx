@@ -122,7 +122,6 @@ export const Oscilloscope = ({ bpm, isActive, isPanic }) => {
             ctx.stroke();
         }
 
-        animationRef.current = requestAnimationFrame(draw);
     }, [bpm, isActive, isPanic]);
 
     useEffect(() => {
