@@ -68,15 +68,27 @@ export const useBiometricSimulation = ({ onPanicStart, onPanicEnd, isDemo = fals
         const variationAmount = isPanic ? 6 : 4;
         const variation = (Math.random() - 0.5) * variationAmount;
         
-        // Demo mode: more aggressive changes
+        // Demo mode: MORE STABLE BPM (70-110), controlled behavior for investors
         if (isDemo && !isRecovering) {
-            if (Math.random() < 0.12) {
-                targetBpmRef.current = Math.min(138, targetBpmRef.current + 18);
+            // Keep BPM in stable range 70-110
+            if (targetBpmRef.current < 75) {
+                targetBpmRef.current += 0.3;
+            } else if (targetBpmRef.current > 105) {
+                targetBpmRef.current -= 0.2;
             }
-            if (targetBpmRef.current < 105) {
-                targetBpmRef.current += 0.7;
+            
+            // Occasional controlled spikes (less frequent)
+            if (Math.random() < 0.04) {
+                targetBpmRef.current = Math.min(115, targetBpmRef.current + 8);
+            }
+            
+            // Natural fluctuation within stable range
+            if (Math.random() < 0.1) {
+                const fluctuation = (Math.random() - 0.5) * 6;
+                targetBpmRef.current = Math.max(70, Math.min(110, targetBpmRef.current + fluctuation));
             }
         } else if (!isRecovering) {
+            // Normal mode: more random behavior
             if (Math.random() < 0.03) {
                 targetBpmRef.current = Math.min(135, baseBpmRef.current + Math.random() * 25);
             }
@@ -86,7 +98,10 @@ export const useBiometricSimulation = ({ onPanicStart, onPanicEnd, isDemo = fals
             }
         }
 
-        const newBpm = Math.round(Math.max(60, Math.min(140, baseBpmRef.current + variation)));
+        // Demo mode caps at 115, normal mode at 140
+        const maxBpm = isDemo ? 118 : 140;
+        const minBpm = isDemo ? 68 : 60;
+        const newBpm = Math.round(Math.max(minBpm, Math.min(maxBpm, baseBpmRef.current + variation)));
         const newStress = calculateStress(newBpm);
         
         setBpm(newBpm);
