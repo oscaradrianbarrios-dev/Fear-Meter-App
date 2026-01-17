@@ -1,0 +1,217 @@
+# FEAR METER - Product Requirements Document
+
+## Original Problem Statement
+Crear una aplicación de página única (SPA) llamada "FEAR METER" con estética de "horror biométrico". La interfaz debe ser clínica, minimalista y aterradora, no amigable. 
+
+## Product Overview
+FEAR METER es un sistema experimental de monitoreo biométrico de horror que simula la detección del miedo a través de métricas cardíacas y de estrés.
+
+---
+
+## Core Features (Implemented ✅)
+
+### 1. Monitor Principal
+- Osciloscopio ECG animado en canvas
+- Panel de datos: BPM, STRESS %, SIGNAL
+- Botón circular START/STOP SESSION
+- Fluctuación realista de datos biométricos
+
+### 2. Modo Pánico (Panic Mode)
+- Activación automática: BPM > 110 AND Stress > 75%
+- Efecto de pantalla: flash + blackout
+- Overlay "CRITICAL STRESS DETECTED"
+- Vibración del dispositivo (si disponible)
+- Jitter visual en el osciloscopio
+- Recuperación gradual
+
+### 3. Fear Sessions (Sesiones de Miedo)
+- Grabación de sesiones completas
+- Persistencia via localStorage
+- Datos guardados: fecha, duración, BPM promedio/máximo, stress máximo
+- Historial de eventos de pánico
+
+### 4. Historial (History)
+- Vista de lista con tarjetas detalladas
+- Vista de gráfico con evolución del miedo
+- Detalle de sesión con mini-gráfico BPM
+- Marcadores de eventos PANIC
+- Análisis técnico por sesión
+
+### 5. Modo Reloj (Watch Mode)
+- UI circular simulando smartwatch
+- Arco de progreso para BPM
+- Indicadores de estado y estrés
+
+### 6. Menú Lateral
+- Navegación entre vistas
+- Selector de idioma (EN/ES)
+- Long-press para modo demo (oculto)
+
+### 7. Modo Demo para Inversores
+- Datos más estables (70-110 BPM)
+- Historial pre-cargado
+- Indicador discreto "DEMO MODE"
+
+---
+
+## Technical Stack
+
+### React Version (Development)
+- React 18 + React Router
+- Tailwind CSS + Shadcn/UI components
+- Custom hooks: useBiometricSimulation, useSessionManager
+- Canvas API para osciloscopio
+- localStorage para persistencia
+
+### Vanilla JS Version (Production/Export)
+- HTML5 + CSS3 + Vanilla JavaScript
+- Sin dependencias externas
+- Archivos separados: index.html, styles.css, app.js
+- Ready for GitHub Pages o hosting estático
+
+---
+
+## Design System
+
+### Color Palette
+```
+Black (Background): #000000
+Primary Red: #FF0000
+Dark Red (Panic): #8B0000
+Secondary Gray: #B0B0B0
+White: #FFFFFF
+```
+
+### Typography
+- Font: JetBrains Mono (Google Fonts)
+- Weights: 400 (regular), 700 (bold)
+- Letter-spacing: 0.1em - 0.3em
+
+### Visual Effects
+- Subtle pulsing animations
+- Glow effects (red shadows)
+- Micro-tremor for tension
+- Screen jitter during panic
+- Amplitude ramp on oscilloscope start
+
+---
+
+## File Structure
+
+### React App
+```
+/app/frontend/src/
+├── components/
+│   ├── FearMeterApp.jsx (Main wrapper)
+│   ├── Monitor.jsx
+│   ├── Oscilloscope.jsx
+│   ├── DataGrid.jsx
+│   ├── MainButton.jsx
+│   ├── SideMenu.jsx
+│   ├── WatchMode.jsx
+│   ├── History.jsx
+│   ├── CriticalAlert.jsx
+│   └── PanicOverlay.jsx
+├── hooks/
+│   ├── useBiometricSimulation.js
+│   └── useSessionManager.js
+└── index.css
+```
+
+### Vanilla JS Version
+```
+/app/frontend/public/fear-meter/
+├── index.html
+├── styles.css
+└── app.js
+```
+
+---
+
+## Data Schema (localStorage)
+
+```json
+{
+  "key": "fear_meter_sessions",
+  "sessions": [
+    {
+      "id": 1736637600000,
+      "startTime": 1736637600000,
+      "endTime": 1736637720000,
+      "name": "Night Terror",
+      "date": "Jan 11, 2026, 10:00 PM",
+      "duration": 120000,
+      "durationText": "2m 0s",
+      "avgBpm": 95,
+      "maxBpm": 128,
+      "maxStress": 85,
+      "bpmHistory": [{"timestamp": ..., "value": 72}, ...],
+      "panicEvents": [{"timestamp": ..., "bpm": 125, "stress": 88}],
+      "hasPanicEvent": true,
+      "panicCount": 1
+    }
+  ]
+}
+```
+
+---
+
+## URLs & Routes
+
+- `/` - Main React App (Monitor)
+- `/demo` - Demo Mode for Investors
+- `/fear-meter/` - Static Vanilla JS version
+
+---
+
+## Completed Work Log
+
+### January 2026
+- ✅ Initial scaffolding with React + Tailwind + Shadcn
+- ✅ Core UI components (Header, Monitor, Oscilloscope, DataGrid)
+- ✅ Biometric simulation hook with realistic fluctuation
+- ✅ Panic Mode with visual effects (freeze, flash, jitter)
+- ✅ Side Menu with language switching (EN/ES)
+- ✅ Watch Mode with circular UI
+- ✅ History view (list + graph + detail)
+- ✅ Demo Mode for investors
+- ✅ Fear Sessions with localStorage persistence
+- ✅ **Production export: Vanilla JS version** (HTML + CSS + JS)
+
+---
+
+## Pending Tasks (Backlog)
+
+### P2 - Low Priority
+- [ ] About / Legal page content
+- [ ] Additional languages (PT, FR, DE)
+- [ ] PWA manifest for mobile install
+- [ ] Sound effects (optional)
+
+### Future Enhancements
+- [ ] Real device integration (heart rate monitors via Web Bluetooth)
+- [ ] Export session data to JSON/CSV
+- [ ] Share sessions feature
+- [ ] Leaderboard of "most terrified"
+
+---
+
+## GitHub Export Ready
+
+The project is ready for "Save to GitHub". The Vanilla JS version at `/fear-meter/` can be deployed to:
+- GitHub Pages
+- Netlify
+- Vercel
+- Any static hosting
+
+No build step required - just upload the 3 files.
+
+---
+
+## Notes
+
+- All biometric data is SIMULATED (mock)
+- No backend required
+- No external APIs
+- Designed for mobile-first (touch interactions)
+- Keyboard shortcuts: SPACE (start/stop), ESC (close menus)
