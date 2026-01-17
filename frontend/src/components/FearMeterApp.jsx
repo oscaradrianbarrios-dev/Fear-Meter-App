@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Header from "./Header";
 import Monitor from "./Monitor";
 import WatchMode from "./WatchMode";
 import History from "./History";
 import SideMenu from "./SideMenu";
 import CriticalAlert from "./CriticalAlert";
+import PanicOverlay from "./PanicOverlay";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 
@@ -12,8 +13,10 @@ export const FearMeterApp = () => {
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
     const [language, setLanguage] = useState("EN");
-    const [showCriticalAlert, setShowCriticalAlert] = useState(false);
+    const [showCriticalMessage, setShowCriticalMessage] = useState(false);
+    const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const panicTimeoutRef = useRef(null);
 
     const {
         bpm,
@@ -21,32 +24,37 @@ export const FearMeterApp = () => {
         signal,
         isActive,
         isPanic,
+        isRecovering,
         startSimulation,
         stopSimulation,
         triggerTap,
     } = useBiometricSimulation({
-        onPanic: () => {
-            if (!isBlocked) {
-                setShowCriticalAlert(true);
-                setIsBlocked(true);
-                
-                // Vibrate if supported
-                if (navigator.vibrate) {
-                    navigator.vibrate([200, 100, 200]);
-                }
-                
-                // Block UI for 1 second
-                setTimeout(() => {
-                    setShowCriticalAlert(false);
-                    setIsBlocked(false);
-                }, 1000);
-            }
+        onPanicStart: () => {
+            // Freeze UI and start panic sequence
+            setIsBlocked(true);
+            setPanicActive(true);
+            
+            // Show critical message after blackout/flash (500ms)
+            panicTimeoutRef.current = setTimeout(() => {
+                setShowCriticalMessage(true);
+            }, 520);
+        },
+        onPanicEnd: () => {
+            // Gradual UI return handled by recovery
         },
     });
 
+    const handlePanicSequenceComplete = useCallback(() => {
+        // Gradual unblock over 300ms
+        setTimeout(() => {
+            setPanicActive(false);
+            setShowCriticalMessage(false);
+            setIsBlocked(false);
+        }, 300);
+    }, []);
+
     const {
         sessions,
-        currentSession,
         startSession,
         endSession,
         clearHistory,
@@ -122,11 +130,26 @@ export const FearMeterApp = () => {
         <div 
             className="min-h-screen bg-fear-black font-fear flex flex-col relative overflow-hidden"
             onClick={isActive && !isBlocked ? triggerTap : undefined}
+            style={{
+                // Gradual UI recovery transition
+                transition: isRecovering ? "filter 300ms ease-out" : "none",
+                filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
+            }}
         >
-            {showCriticalAlert && <CriticalAlert text={t.criticalAlert} />}
+            {/* Panic blackout/flash overlay */}
+            <PanicOverlay 
+                active={panicActive} 
+                onSequenceComplete={handlePanicSequenceComplete}
+            />
+            
+            {/* Critical message (no background, just text) */}
+            <CriticalAlert 
+                visible={showCriticalMessage} 
+                language={language}
+            />
             
             <Header 
-                onMenuOpen={() => setMenuOpen(true)} 
+                onMenuOpen={() => !isBlocked && setMenuOpen(true)} 
             />
 
             <main className="flex-1 flex flex-col px-4 pb-4">
@@ -137,6 +160,7 @@ export const FearMeterApp = () => {
                         signal={signal}
                         isActive={isActive}
                         isPanic={isPanic}
+                        isRecovering={isRecovering}
                         onStartStop={handleStartStop}
                         texts={t}
                         isBlocked={isBlocked}
