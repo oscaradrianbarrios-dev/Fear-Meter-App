@@ -59,6 +59,293 @@
         oscilloscopePhase: 0,
         oscilloscopeStartTime: null,
         oscilloscopeAnimation: null,
+        
+        // Audio
+        audioContext: null,
+        audioEnabled: false,
+        heartbeatInterval: null,
+    };
+
+    // ============================================
+    // WEB AUDIO API - SOUND ENGINE
+    // ============================================
+    
+    const AudioEngine = {
+        context: null,
+        masterGain: null,
+        isInitialized: false,
+        
+        // Initialize audio context (must be called after user interaction)
+        init() {
+            if (this.isInitialized) return true;
+            
+            try {
+                this.context = new (window.AudioContext || window.webkitAudioContext)();
+                this.masterGain = this.context.createGain();
+                this.masterGain.gain.value = 0.4;
+                this.masterGain.connect(this.context.destination);
+                this.isInitialized = true;
+                STATE.audioEnabled = true;
+                console.log('%c♫ Audio Engine Initialized', 'color: #FF0000');
+                return true;
+            } catch (e) {
+                console.error('Audio initialization failed:', e);
+                return false;
+            }
+        },
+        
+        // Resume audio context if suspended
+        resume() {
+            if (this.context && this.context.state === 'suspended') {
+                this.context.resume();
+            }
+        },
+        
+        // Create clinical static/noise burst (startup sound)
+        playStaticBurst(duration = 0.8) {
+            if (!this.isInitialized) return;
+            this.resume();
+            
+            const ctx = this.context;
+            const now = ctx.currentTime;
+            
+            // Create noise buffer
+            const bufferSize = ctx.sampleRate * duration;
+            const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            
+            // Generate filtered noise (more clinical, less harsh)
+            for (let i = 0; i < bufferSize; i++) {
+                // Mix white noise with some structure
+                const noise = (Math.random() * 2 - 1) * 0.5;
+                const modulation = Math.sin(i / 100) * 0.3;
+                output[i] = noise * (1 - i / bufferSize) + modulation * 0.1;
+            }
+            
+            // Create source
+            const noiseSource = ctx.createBufferSource();
+            noiseSource.buffer = noiseBuffer;
+            
+            // Filter for clinical sound
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 800;
+            filter.Q.value = 1.5;
+            
+            // Envelope
+            const gainNode = ctx.createGain();
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            
+            // Add subtle distortion for clinical edge
+            const distortion = ctx.createWaveShaper();
+            distortion.curve = this.makeDistortionCurve(50);
+            
+            // Connect nodes
+            noiseSource.connect(filter);
+            filter.connect(distortion);
+            distortion.connect(gainNode);
+            gainNode.connect(this.masterGain);
+            
+            // Play
+            noiseSource.start(now);
+            noiseSource.stop(now + duration);
+            
+            // Add a subtle beep overlay
+            this.playBeep(400, 0.15, 0.1, now + 0.1);
+            this.playBeep(600, 0.1, 0.08, now + 0.3);
+        },
+        
+        // Play single heartbeat sound
+        playHeartbeat(intensity = 1) {
+            if (!this.isInitialized) return;
+            this.resume();
+            
+            const ctx = this.context;
+            const now = ctx.currentTime;
+            
+            // Heartbeat is two sounds: "lub" (lower) and "dub" (higher)
+            // LUB - first heart sound (mitral/tricuspid valves closing)
+            const lubOsc = ctx.createOscillator();
+            const lubGain = ctx.createGain();
+            const lubFilter = ctx.createBiquadFilter();
+            
+            lubOsc.type = 'sine';
+            lubOsc.frequency.setValueAtTime(55, now);
+            lubOsc.frequency.exponentialRampToValueAtTime(35, now + 0.1);
+            
+            lubFilter.type = 'lowpass';
+            lubFilter.frequency.value = 150;
+            
+            lubGain.gain.setValueAtTime(0, now);
+            lubGain.gain.linearRampToValueAtTime(0.6 * intensity, now + 0.02);
+            lubGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            
+            lubOsc.connect(lubFilter);
+            lubFilter.connect(lubGain);
+            lubGain.connect(this.masterGain);
+            
+            lubOsc.start(now);
+            lubOsc.stop(now + 0.2);
+            
+            // DUB - second heart sound (aortic/pulmonary valves closing)
+            const dubOsc = ctx.createOscillator();
+            const dubGain = ctx.createGain();
+            const dubFilter = ctx.createBiquadFilter();
+            
+            dubOsc.type = 'sine';
+            dubOsc.frequency.setValueAtTime(70, now + 0.12);
+            dubOsc.frequency.exponentialRampToValueAtTime(45, now + 0.22);
+            
+            dubFilter.type = 'lowpass';
+            dubFilter.frequency.value = 180;
+            
+            dubGain.gain.setValueAtTime(0, now + 0.12);
+            dubGain.gain.linearRampToValueAtTime(0.4 * intensity, now + 0.14);
+            dubGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+            
+            dubOsc.connect(dubFilter);
+            dubFilter.connect(dubGain);
+            dubGain.connect(this.masterGain);
+            
+            dubOsc.start(now + 0.12);
+            dubOsc.stop(now + 0.3);
+            
+            // Add subtle sub-bass thump for physical feel
+            const subOsc = ctx.createOscillator();
+            const subGain = ctx.createGain();
+            
+            subOsc.type = 'sine';
+            subOsc.frequency.value = 30;
+            
+            subGain.gain.setValueAtTime(0, now);
+            subGain.gain.linearRampToValueAtTime(0.3 * intensity, now + 0.01);
+            subGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            
+            subOsc.connect(subGain);
+            subGain.connect(this.masterGain);
+            
+            subOsc.start(now);
+            subOsc.stop(now + 0.15);
+        },
+        
+        // Play panic alarm sound
+        playPanicAlarm() {
+            if (!this.isInitialized) return;
+            this.resume();
+            
+            const ctx = this.context;
+            const now = ctx.currentTime;
+            
+            // Dissonant alarm tones
+            const frequencies = [440, 466.16, 523.25]; // A4, Bb4, C5 - tense cluster
+            
+            frequencies.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.value = freq;
+                
+                // Tremolo effect
+                const tremolo = ctx.createOscillator();
+                const tremoloGain = ctx.createGain();
+                tremolo.frequency.value = 8 + i * 2;
+                tremoloGain.gain.value = 0.3;
+                tremolo.connect(tremoloGain);
+                tremoloGain.connect(gain.gain);
+                
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 1.5);
+                
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                
+                tremolo.start(now);
+                osc.start(now);
+                osc.stop(now + 1.5);
+                tremolo.stop(now + 1.5);
+            });
+        },
+        
+        // Simple beep utility
+        playBeep(frequency, duration, volume, startTime) {
+            const ctx = this.context;
+            const start = startTime || ctx.currentTime;
+            
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = frequency;
+            
+            gain.gain.setValueAtTime(volume, start);
+            gain.gain.exponentialRampToValueAtTime(0.01, start + duration);
+            
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            
+            osc.start(start);
+            osc.stop(start + duration);
+        },
+        
+        // Distortion curve for clinical edge
+        makeDistortionCurve(amount) {
+            const samples = 44100;
+            const curve = new Float32Array(samples);
+            const deg = Math.PI / 180;
+            
+            for (let i = 0; i < samples; i++) {
+                const x = (i * 2) / samples - 1;
+                curve[i] = ((3 + amount) * x * 20 * deg) / (Math.PI + amount * Math.abs(x));
+            }
+            return curve;
+        },
+        
+        // Start rhythmic heartbeat synchronized to BPM
+        startHeartbeat() {
+            if (STATE.heartbeatInterval) {
+                clearInterval(STATE.heartbeatInterval);
+            }
+            
+            const scheduleNextBeat = () => {
+                if (!STATE.isActive || !this.isInitialized) {
+                    this.stopHeartbeat();
+                    return;
+                }
+                
+                // Calculate interval from BPM (ms between beats)
+                const interval = 60000 / STATE.bpm;
+                
+                // Intensity increases with BPM
+                const intensity = Math.min(1.5, 0.7 + (STATE.bpm - 60) / 100);
+                
+                this.playHeartbeat(intensity);
+                
+                // Schedule next beat
+                STATE.heartbeatInterval = setTimeout(scheduleNextBeat, interval);
+            };
+            
+            // Start immediately
+            scheduleNextBeat();
+        },
+        
+        // Stop heartbeat
+        stopHeartbeat() {
+            if (STATE.heartbeatInterval) {
+                clearTimeout(STATE.heartbeatInterval);
+                STATE.heartbeatInterval = null;
+            }
+        },
+        
+        // Cleanup
+        dispose() {
+            this.stopHeartbeat();
+            if (this.context) {
+                this.context.close();
+            }
+        }
     };
 
     // ============================================
