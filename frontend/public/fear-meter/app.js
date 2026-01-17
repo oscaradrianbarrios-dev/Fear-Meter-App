@@ -996,18 +996,16 @@
         // CHAOS: Jitter increases with BPM
         const jitterAmount = isPanic ? 12 : isCritical ? 6 : isElevated ? 2 : 0.3;
         const jitter = (Math.random() - 0.5) * jitterAmount;
-        const timingJitter = STATE.isPanic ? (Math.random() - 0.5) * 0.15 : 0;
+        const timingJitter = isPanic ? (Math.random() - 0.5) * 0.2 : isCritical ? (Math.random() - 0.5) * 0.1 : 0;
 
         STATE.oscilloscopePhase += speed * 0.02;
 
-        // ECG waveform
-        const strokeColor = STATE.isPanic ? 'rgba(139, 0, 0, 0.95)' : 'rgba(255, 0, 0, 0.85)';
-        const glowColor = STATE.isPanic ? '#8B0000' : '#FF0000';
-        
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = STATE.isPanic ? 2.5 : 1.5;
-        ctx.shadowColor = glowColor;
-        ctx.shadowBlur = STATE.isPanic ? 12 : 4;
+        // ECG waveform - Pure red, more aggressive
+        const strokeOpacity = isPanic ? 1 : isCritical ? 0.95 : 0.85;
+        ctx.strokeStyle = `rgba(255, 0, 0, ${strokeOpacity})`;
+        ctx.lineWidth = isPanic ? 3 : isCritical ? 2.5 : 1.5;
+        ctx.shadowColor = '#FF0000';
+        ctx.shadowBlur = isPanic ? 20 : isCritical ? 12 : 6;
         ctx.beginPath();
 
         for (let x = 0; x < width; x++) {
@@ -1016,26 +1014,30 @@
             let y = 0;
             const cyclePos = ((t + timingJitter) % (Math.PI * 2)) / (Math.PI * 2);
             
+            // ECG waveform shape - more aggressive spikes at high BPM
+            const spikeMultiplier = isPanic ? 1.5 : isCritical ? 1.3 : isElevated ? 1.1 : 1;
+            
             if (cyclePos < 0.1) {
                 y = Math.sin(cyclePos * Math.PI * 10) * 0.2;
             } else if (cyclePos < 0.15) {
                 y = 0;
             } else if (cyclePos < 0.2) {
-                y = -0.1;
+                y = -0.15 * spikeMultiplier;
             } else if (cyclePos < 0.25) {
-                const spikeMultiplier = STATE.isPanic ? 1.3 : 1;
                 y = Math.sin((cyclePos - 0.2) * Math.PI * 20) * spikeMultiplier;
             } else if (cyclePos < 0.3) {
-                y = STATE.isPanic ? -0.3 : -0.2;
+                y = -0.35 * spikeMultiplier;
             } else if (cyclePos < 0.35) {
                 y = 0;
             } else if (cyclePos < 0.5) {
-                y = Math.sin((cyclePos - 0.35) * Math.PI * 6.67) * 0.3;
+                y = Math.sin((cyclePos - 0.35) * Math.PI * 6.67) * 0.35;
             } else {
                 y = 0;
             }
 
-            const pixelNoise = STATE.isPanic ? (Math.random() - 0.5) * 2 : 0;
+            // CHAOS: Pixel noise increases with BPM
+            const noiseAmount = isPanic ? 4 : isCritical ? 2 : isElevated ? 0.5 : 0;
+            const pixelNoise = (Math.random() - 0.5) * noiseAmount;
             const yPos = centerY - (y * amplitude) + jitter + pixelNoise;
             
             if (x === 0) {
