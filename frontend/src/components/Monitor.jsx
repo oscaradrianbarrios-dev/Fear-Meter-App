@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 import Oscilloscope from "./Oscilloscope";
 import DataGrid from "./DataGrid";
 import MainButton from "./MainButton";
@@ -9,6 +8,7 @@ export const Monitor = ({
     signal,
     isActive,
     isPanic,
+    isRecovering,
     onStartStop,
     texts,
     isBlocked,
@@ -22,6 +22,7 @@ export const Monitor = ({
                     bpm={bpm}
                     isActive={isActive}
                     isPanic={isPanic}
+                    isRecovering={isRecovering}
                 />
             </div>
 
@@ -40,6 +41,7 @@ export const Monitor = ({
                 <MainButton
                     isActive={isActive}
                     isPanic={isPanic}
+                    isRecovering={isRecovering}
                     onClick={onStartStop}
                     texts={texts}
                     disabled={isBlocked}
