@@ -1,6 +1,6 @@
 /**
  * FEAR METER — Investor Demo
- * Cinematic 30-Second Experience
+ * Cinematic Business Model Experience
  * © 2026 FEAR METER
  */
 
@@ -8,19 +8,22 @@
     'use strict';
 
     // ============================================
-    // TIMELINE CONFIGURATION
+    // TIMELINE CONFIGURATION (Extended for Business Model)
     // ============================================
     
     const TIMELINE = {
-        TOTAL_DURATION: 30000, // 30 seconds
+        TOTAL_DURATION: 45000, // 45 seconds for full business model
         screens: [
-            { id: 'screen-1', start: 0, end: 3000 },      // Impact (0-3s)
-            { id: 'screen-2', start: 3000, end: 7000 },   // Problem (3-7s)
-            { id: 'screen-3', start: 7000, end: 12000 },  // Solution (7-12s)
-            { id: 'screen-4', start: 12000, end: 18000 }, // Demo (12-18s)
-            { id: 'screen-5', start: 18000, end: 24000 }, // Applications (18-24s)
-            { id: 'screen-6', start: 24000, end: 28000 }, // Business (24-28s)
-            { id: 'screen-7', start: 28000, end: 30000 }, // Closing (28-30s)
+            { id: 'screen-1', start: 0, end: 3000 },       // Impact (0-3s)
+            { id: 'screen-2', start: 3000, end: 7000 },    // Problem (3-7s)
+            { id: 'screen-3', start: 7000, end: 12000 },   // Solution (7-12s)
+            { id: 'screen-4', start: 12000, end: 17000 },  // Demo/Panic (12-17s)
+            { id: 'screen-5', start: 17000, end: 22000 },  // Applications (17-22s)
+            { id: 'screen-6', start: 22000, end: 27000 },  // Layer 1: B2C (22-27s)
+            { id: 'screen-7', start: 27000, end: 32000 },  // Layer 2: Hardware (27-32s)
+            { id: 'screen-8', start: 32000, end: 37000 },  // Layer 3: B2B (32-37s)
+            { id: 'screen-9', start: 37000, end: 41000 },  // Projection (37-41s)
+            { id: 'screen-10', start: 41000, end: 45000 }, // Closing (41-45s)
         ]
     };
 
