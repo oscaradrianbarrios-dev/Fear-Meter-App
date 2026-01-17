@@ -1460,15 +1460,17 @@
     }
 
     // ============================================
-    // UI UPDATES
+    // UI UPDATES - DISTURBING EFFECTS
     // ============================================
     
-    function updateDataDisplay() {
+    function updateDataDisplay(triggerPulse = false) {
         const t = TEXTS[STATE.language];
+        const bpm = STATE.bpm;
+        const stress = STATE.stress;
         
         if (STATE.isActive) {
-            DOM.bpmValue.textContent = STATE.bpm;
-            DOM.stressValue.textContent = `${STATE.stress}%`;
+            DOM.bpmValue.textContent = bpm;
+            DOM.stressValue.textContent = `${stress}%`;
             
             if (STATE.signal === 'CRITICAL') {
                 DOM.signalValue.textContent = t.critical;
@@ -1483,27 +1485,75 @@
             DOM.signalValue.textContent = '---';
         }
         
-        // Update classes
-        const isDataActive = STATE.isActive;
-        const isPanic = STATE.isPanic;
+        // Remove all state classes first
+        const stateClasses = ['active', 'elevated', 'critical', 'panic', 'stress-flicker', 'bpm-pulse'];
         
         [DOM.bpmBlock, DOM.stressBlock, DOM.signalBlock].forEach(block => {
-            block.classList.toggle('active', isDataActive && !isPanic);
-            block.classList.toggle('critical', isPanic);
+            stateClasses.forEach(cls => block.classList.remove(cls));
         });
         
-        [DOM.bpmValue, DOM.stressValue].forEach(value => {
-            value.classList.toggle('active', isDataActive && !isPanic);
-            value.classList.toggle('panic', isPanic);
+        [DOM.bpmValue, DOM.stressValue, DOM.signalValue].forEach(value => {
+            stateClasses.forEach(cls => value.classList.remove(cls));
         });
         
-        DOM.signalValue.classList.remove('unstable', 'critical-signal');
+        if (!STATE.isActive) return;
+        
+        // BPM STATES: Normal < 100 < Elevated < 120 < Critical/Panic
+        const isPanic = STATE.isPanic;
+        const isElevated = bpm > 100 && bpm <= 120;
+        const isCritical = bpm > 120 || isPanic;
+        
+        // BPM Block styling
+        if (isPanic) {
+            DOM.bpmBlock.classList.add('critical');
+            DOM.bpmValue.classList.add('panic');
+        } else if (isCritical) {
+            DOM.bpmBlock.classList.add('critical');
+            DOM.bpmValue.classList.add('elevated');
+        } else if (isElevated) {
+            DOM.bpmBlock.classList.add('elevated');
+            DOM.bpmValue.classList.add('elevated');
+        } else {
+            DOM.bpmBlock.classList.add('active');
+            DOM.bpmValue.classList.add('active');
+        }
+        
+        // BPM PULSE effect - synced with heartbeat
+        if (triggerPulse && STATE.isActive) {
+            const pulseDuration = 60000 / bpm; // Duration based on BPM
+            DOM.bpmValue.style.setProperty('--pulse-duration', `${pulseDuration}ms`);
+            DOM.bpmValue.classList.remove('bpm-pulse');
+            // Force reflow
+            void DOM.bpmValue.offsetWidth;
+            DOM.bpmValue.classList.add('bpm-pulse');
+        }
+        
+        // STRESS styling with FLICKER above 60%
+        if (stress > 80 || isPanic) {
+            DOM.stressBlock.classList.add('critical');
+            DOM.stressValue.classList.add('panic');
+            DOM.stressValue.classList.add('stress-flicker');
+        } else if (stress > 60) {
+            DOM.stressBlock.classList.add('elevated');
+            DOM.stressValue.classList.add('elevated');
+            DOM.stressValue.classList.add('stress-flicker');
+        } else if (stress > 40) {
+            DOM.stressBlock.classList.add('active');
+            DOM.stressValue.classList.add('active');
+        } else {
+            DOM.stressBlock.classList.add('active');
+            DOM.stressValue.classList.add('active');
+        }
+        
+        // SIGNAL styling
+        DOM.signalBlock.classList.add(isPanic ? 'critical' : isCritical ? 'elevated' : 'active');
+        
         if (STATE.signal === 'CRITICAL') {
             DOM.signalValue.classList.add('critical-signal');
         } else if (STATE.signal === 'UNSTABLE') {
             DOM.signalValue.classList.add('unstable');
         }
-        DOM.signalValue.classList.toggle('active', isDataActive);
+        DOM.signalValue.classList.add('active');
     }
 
     function updateMainButton() {
