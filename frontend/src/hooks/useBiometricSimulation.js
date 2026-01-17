@@ -1,20 +1,22 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
-export const useBiometricSimulation = ({ onPanic, isDemo = false }) => {
+export const useBiometricSimulation = ({ onPanicStart, onPanicEnd, isDemo = false }) => {
     const [bpm, setBpm] = useState(72);
     const [stress, setStress] = useState(0);
     const [signal, setSignal] = useState("ACTIVE");
     const [isActive, setIsActive] = useState(false);
     const [isPanic, setIsPanic] = useState(false);
+    const [isRecovering, setIsRecovering] = useState(false);
     
     const intervalRef = useRef(null);
     const baseBpmRef = useRef(72);
     const targetBpmRef = useRef(72);
     const lastPanicRef = useRef(0);
+    const panicActiveRef = useRef(false);
+    const recoveryIntervalRef = useRef(null);
 
     // Calculate stress based on BPM
     const calculateStress = useCallback((currentBpm) => {
-        // Map BPM 60-140 to stress 0-100
         const minBpm = 60;
         const maxBpm = 140;
         const normalized = (currentBpm - minBpm) / (maxBpm - minBpm);
@@ -22,10 +24,36 @@ export const useBiometricSimulation = ({ onPanic, isDemo = false }) => {
     }, []);
 
     // Calculate signal status
-    const calculateSignal = useCallback((currentBpm) => {
-        if (currentBpm > 120) return "CRITICAL";
-        if (currentBpm > 95) return "UNSTABLE";
+    const calculateSignal = useCallback((currentBpm, currentStress) => {
+        if (currentBpm > 110 && currentStress > 75) return "CRITICAL";
+        if (currentBpm > 95 || currentStress > 50) return "UNSTABLE";
         return "ACTIVE";
+    }, []);
+
+    // Gradual BPM recovery after panic
+    const startRecovery = useCallback(() => {
+        setIsRecovering(true);
+        
+        // Gradually reduce target BPM over 3 seconds
+        const recoveryDuration = 3000;
+        const startTime = Date.now();
+        const startBpm = targetBpmRef.current;
+        const targetRecoveryBpm = 85; // Recover to slightly elevated, not baseline
+        
+        recoveryIntervalRef.current = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / recoveryDuration, 1);
+            
+            // Ease out - feels like relief
+            const easeProgress = 1 - Math.pow(1 - progress, 2);
+            targetBpmRef.current = startBpm - ((startBpm - targetRecoveryBpm) * easeProgress);
+            
+            if (progress >= 1) {
+                clearInterval(recoveryIntervalRef.current);
+                recoveryIntervalRef.current = null;
+                setIsRecovering(false);
+            }
+        }, 50);
     }, []);
 
     // Simulate realistic BPM fluctuation
@@ -36,57 +64,63 @@ export const useBiometricSimulation = ({ onPanic, isDemo = false }) => {
         const diff = targetBpmRef.current - baseBpmRef.current;
         baseBpmRef.current += diff * 0.1;
         
-        // Add natural variation
-        const variation = (Math.random() - 0.5) * 4;
+        // Add natural variation - more erratic during panic
+        const variationAmount = isPanic ? 6 : 4;
+        const variation = (Math.random() - 0.5) * variationAmount;
         
         // Demo mode: more aggressive changes
-        if (isDemo) {
-            // Randomly spike more often
-            if (Math.random() < 0.1) {
-                targetBpmRef.current = Math.min(135, targetBpmRef.current + 15);
+        if (isDemo && !isRecovering) {
+            if (Math.random() < 0.12) {
+                targetBpmRef.current = Math.min(138, targetBpmRef.current + 18);
             }
-            // Stress builds faster
-            if (targetBpmRef.current < 100) {
-                targetBpmRef.current += 0.5;
+            if (targetBpmRef.current < 105) {
+                targetBpmRef.current += 0.7;
             }
-        } else {
-            // Normal mode: occasional random events
-            if (Math.random() < 0.02) {
-                // Random spike
-                targetBpmRef.current = Math.min(130, baseBpmRef.current + Math.random() * 20);
+        } else if (!isRecovering) {
+            if (Math.random() < 0.03) {
+                targetBpmRef.current = Math.min(135, baseBpmRef.current + Math.random() * 25);
             }
             
-            // Gradual return to baseline
-            if (targetBpmRef.current > 80 && Math.random() < 0.05) {
-                targetBpmRef.current -= 2;
+            if (targetBpmRef.current > 85 && Math.random() < 0.04 && !isPanic) {
+                targetBpmRef.current -= 1.5;
             }
         }
 
         const newBpm = Math.round(Math.max(60, Math.min(140, baseBpmRef.current + variation)));
+        const newStress = calculateStress(newBpm);
         
         setBpm(newBpm);
-        setStress(calculateStress(newBpm));
-        setSignal(calculateSignal(newBpm));
+        setStress(newStress);
+        setSignal(calculateSignal(newBpm, newStress));
 
-        // Check for panic state
-        const newIsPanic = newBpm > 110;
-        setIsPanic(newIsPanic);
-
-        // Trigger panic callback (with cooldown)
-        if (newIsPanic && now - lastPanicRef.current > 3000) {
+        // PANIC ACTIVATION: BPM > 110 AND STRESS > 75%
+        const shouldPanic = newBpm > 110 && newStress > 75;
+        
+        if (shouldPanic && !panicActiveRef.current && now - lastPanicRef.current > 8000) {
+            // Enter panic
+            panicActiveRef.current = true;
             lastPanicRef.current = now;
-            onPanic?.();
+            setIsPanic(true);
+            onPanicStart?.();
+        } else if (!shouldPanic && panicActiveRef.current) {
+            // Exit panic - gradual recovery
+            panicActiveRef.current = false;
+            setIsPanic(false);
+            onPanicEnd?.();
+            startRecovery();
         }
-    }, [calculateStress, calculateSignal, onPanic, isDemo]);
+    }, [calculateStress, calculateSignal, onPanicStart, onPanicEnd, isDemo, isPanic, isRecovering, startRecovery]);
 
     // Start simulation
     const startSimulation = useCallback(() => {
         setIsActive(true);
+        setIsPanic(false);
+        setIsRecovering(false);
         baseBpmRef.current = 72;
-        targetBpmRef.current = 75;
+        targetBpmRef.current = 78;
         lastPanicRef.current = 0;
+        panicActiveRef.current = false;
         
-        // Run simulation at 100ms intervals
         intervalRef.current = setInterval(simulateBpm, 100);
     }, [simulateBpm]);
 
@@ -94,33 +128,39 @@ export const useBiometricSimulation = ({ onPanic, isDemo = false }) => {
     const stopSimulation = useCallback(() => {
         setIsActive(false);
         setIsPanic(false);
+        setIsRecovering(false);
         setBpm(72);
         setStress(0);
         setSignal("ACTIVE");
+        panicActiveRef.current = false;
         
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
+        if (recoveryIntervalRef.current) {
+            clearInterval(recoveryIntervalRef.current);
+            recoveryIntervalRef.current = null;
+        }
     }, []);
 
     // Handle tap/click to increase stress
     const triggerTap = useCallback(() => {
-        if (!isActive) return;
+        if (!isActive || isRecovering) return;
         
-        // Increase target BPM on tap
-        const increase = isDemo ? 15 : 8;
+        const increase = isDemo ? 18 : 10;
         targetBpmRef.current = Math.min(140, targetBpmRef.current + increase);
-        
-        // Immediate small bump
-        baseBpmRef.current = Math.min(140, baseBpmRef.current + (isDemo ? 5 : 3));
-    }, [isActive, isDemo]);
+        baseBpmRef.current = Math.min(140, baseBpmRef.current + (isDemo ? 6 : 4));
+    }, [isActive, isDemo, isRecovering]);
 
     // Cleanup on unmount
     useEffect(() => {
         return () => {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
+            }
+            if (recoveryIntervalRef.current) {
+                clearInterval(recoveryIntervalRef.current);
             }
         };
     }, []);
@@ -131,6 +171,7 @@ export const useBiometricSimulation = ({ onPanic, isDemo = false }) => {
         signal,
         isActive,
         isPanic,
+        isRecovering,
         startSimulation,
         stopSimulation,
         triggerTap,
