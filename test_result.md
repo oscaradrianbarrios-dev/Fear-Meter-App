@@ -244,10 +244,10 @@ metadata:
 
 test_plan:
   current_focus: 
-    - "Psychological Tension Adjustments"
+    - "Enhanced Panic Mode Sequence"
   stuck_tasks: []
-  test_all: true
-  test_priority: "completed"
+  test_all: false
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
