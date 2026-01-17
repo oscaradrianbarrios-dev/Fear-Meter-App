@@ -360,36 +360,42 @@
     // ============================================
     
     function updateBPM(time) {
-        // BPM progression based on extended timeline
+        // BPM progression based on extended 45s timeline
         if (time < 3000) {
+            // Impact - resting
             STATE.bpm = 72;
             STATE.stress = 0;
         } else if (time < 7000) {
-            // Gradual increase
+            // Problem - gradual tension
             const progress = (time - 3000) / 4000;
             STATE.bpm = 72 + (progress * 15);
             STATE.stress = progress * 45;
         } else if (time < 12000) {
-            // Stable elevated
+            // Solution - stable elevated
             STATE.bpm = 85 + Math.sin(time / 500) * 3;
             STATE.stress = 40 + Math.sin(time / 400) * 5;
-        } else if (time < 18000) {
-            // PANIC
-            const progress = (time - 12000) / 2000;
+        } else if (time < 17000) {
+            // PANIC DEMO
+            const progress = (time - 12000) / 2500;
             if (progress < 1) {
                 STATE.bpm = 85 + (progress * 35);
             } else {
-                STATE.bpm = 120 - ((progress - 1) * 10);
+                STATE.bpm = 120 - ((progress - 1) * 15);
             }
             STATE.stress = 75 + Math.sin(time / 200) * 10;
-        } else if (time < 24000) {
-            // Recovery
-            STATE.bpm = 95 - ((time - 18000) / 6000) * 15;
-            STATE.stress = 60 - ((time - 18000) / 6000) * 20;
+        } else if (time < 22000) {
+            // Applications - recovery
+            const progress = (time - 17000) / 5000;
+            STATE.bpm = 105 - (progress * 20);
+            STATE.stress = 70 - (progress * 25);
+        } else if (time < 37000) {
+            // Business Model screens - calm professional
+            STATE.bpm = 82 + Math.sin(time / 1000) * 4;
+            STATE.stress = 35 + Math.sin(time / 800) * 5;
         } else {
-            // Calm end
-            STATE.bpm = 80 + Math.sin(time / 800) * 3;
-            STATE.stress = 35;
+            // Projection & Closing - confident
+            STATE.bpm = 78 + Math.sin(time / 1200) * 3;
+            STATE.stress = 30;
         }
 
         // Update displays
