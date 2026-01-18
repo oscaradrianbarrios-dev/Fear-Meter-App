@@ -3,118 +3,107 @@
 ## Original Problem Statement
 Crear una aplicación de página única (SPA) llamada "FEAR METER" con estética de "horror biométrico". La interfaz debe ser clínica, minimalista y aterradora, no amigable. 
 
+> **FINAL RULE**: The app must feel like "Something you shouldn't be using alone at night."
+
 ## Product Overview
 FEAR METER es un sistema experimental de monitoreo biométrico de horror que simula la detección del miedo a través de métricas cardíacas y de estrés.
+
+---
+
+## Design Language (Disturbing & Cinematic)
+
+### Global Tone
+- **Background**: Absolute black (#000000)
+- **Primary**: Pure red (#FF0000) 
+- **Danger states only**: Dark red (#8B0000)
+- **Text**: White (#FFFFFF) and Gray (#B0B0B0)
+- **UI**: High contrast, clinical, threatening - NO soft UI, NO friendly animations, NO rounded "fitness" feel
+
+### Typography
+- Font: JetBrains Mono
+- Letter-spacing: 0.15em - 0.35em (aggressive spacing)
+- Numbers: Large, pulsing, aggressive
 
 ---
 
 ## Core Features (All Implemented ✅)
 
 ### 1. Monitor Principal
-- Osciloscopio ECG animado en canvas
-- Panel de datos: BPM, STRESS %, SIGNAL
-- Botón circular START/STOP SESSION
-- Fluctuación realista de datos biométricos
+- Oscilloscope ECG with red glow (more chaotic at high BPM)
+- Sharp-edged data blocks (no border-radius)
+- BPM pulses with heartbeat rhythm
+- STRESS flickers at high values (>60%)
+- SIGNAL shows UNSTABLE/CRITICAL states
 
-### 2. Modo Pánico (Panic Mode)
-- Activación automática: BPM > 110 AND Stress > 75%
-- Efecto de pantalla: flash + blackout
-- Overlay "CRITICAL STRESS DETECTED"
-- Vibración del dispositivo (si disponible)
-- Jitter visual en el osciloscopio
-- Recuperación gradual
+### 2. Micro-Interactions (CRITICAL) ✅ IMPLEMENTED
+- **BPM > 100**: Screen gradually darkens
+- **BPM > 120**: 
+  - Subtle red vignette appears
+  - Oscilloscope becomes more chaotic (higher amplitude, more jitter)
+- **BPM > 125 + Stress > 75% (Panic)**:
+  - UI FREEZES for 1 second
+  - Full RED FLASH
+  - Strong vibration pattern (if supported)
+  - Text shows "CRITICAL STRESS DETECTED"
+  - Sound: panic alarm with dissonant tones
 
-### 3. Fear Sessions (Sesiones de Miedo)
-- Grabación de sesiones completas
-- Persistencia via localStorage
-- Datos guardados: fecha, duración, BPM promedio/máximo, stress máximo
-- Historial de eventos de pánico
+### 3. Fear Sessions
+- Persistent recording via localStorage
+- Data saved: date, duration, avg/max BPM, max stress, panic events
+- Sessions feel like "stored evidence"
 
-### 4. Historial (History)
-- Vista de lista con tarjetas detalladas
-- Vista de gráfico con evolución del miedo
-- Detalle de sesión con mini-gráfico BPM
-- Marcadores de eventos PANIC
-- Análisis técnico por sesión
+### 4. History
+- List + simple line graph views
+- No decorative charts
+- Clinical, evidence-like presentation
 
-### 5. Watch Mode - FULLSCREEN SMARTWATCH ✅
-**Interfaz fullscreen que simula un ecosistema Watch + Smartphone**
+### 5. Watch Mode - Fullscreen Smartwatch
+- Circular display with BPM and pulse arc
+- Heavy focus on BPM + pulse arc
+- Minimal text
+- Looks like a forbidden device
 
-#### Layout
-- Pantalla circular centrada (320px en desktop, responsivo en móvil)
-- Fondo negro absoluto (#000000)
-- Borde rojo tenue pulsante
-- BPM grande al centro (72px)
-- Arco de progreso circular que se llena según BPM
-- Indicador "LIVE FEAR SIGNAL"
+### 6. Menu (Side Hidden)
+- Slides from left ABRUPTLY (120ms slam animation)
+- Sections: Monitor, Watch Mode, History, Language, About/Legal
+- Demo Mode hidden (URL only: /investor-demo/)
 
-#### Sincronización Smartphone ↔ Watch
-- Watch refleja BPM actual en tiempo real
-- Estado de sesión sincronizado (START/STOP)
-- Eventos de pánico reflejados en ambos dispositivos
-- Flash rojo en Watch durante pánico
-- Arco se vuelve sólido durante pánico
-- Mensaje "SESSION SAVED" al finalizar
+### 7. Audio System (Web Audio API)
+- Static burst on session start
+- Rhythmic heartbeat synced with BPM
+- Panic alarm with dissonant tones
 
-### 6. Investor Demo Experience ✅
-**URL: `/investor-demo/`** - Experiencia cinematográfica de 45 segundos con modelo de negocio completo
-
-### 7. Audio System (Web Audio API) ✅
-- Sonido de estática clínica al iniciar sesión
-- Latido rítmico sincronizado con BPM (acelera con BPM alto)
-- Alarma de pánico con tonos disonantes
-
-### 8. PWA - Progressive Web App ✅
-- manifest.json con todos los iconos
-- Service Worker para funcionalidad offline
-- Instalable en dispositivos móviles
+### 8. PWA
+- manifest.json + service worker
+- Installable on mobile devices
 
 ---
 
 ## Technical Stack
-
-### Vanilla JS Version (Production/Export)
-- HTML5 + CSS3 + Vanilla JavaScript
-- Sin dependencias externas
-- Archivos separados: index.html, styles.css, app.js
-- Ready for GitHub Pages o hosting estático
-
----
-
-## Design System
-
-### Color Palette
-```
-Black (Background): #000000
-Primary Red: #FF0000
-Dark Red (Panic): #8B0000
-Secondary Gray: #B0B0B0
-White: #FFFFFF
-```
-
-### Typography
-- Font: JetBrains Mono (Google Fonts)
-- Weights: 400 (regular), 700 (bold)
-- Letter-spacing: 0.1em - 0.3em
+- Pure Vanilla JavaScript (ES6+)
+- HTML5 + CSS3
+- No external dependencies
+- Web Audio API for sound
+- localStorage for persistence
 
 ---
 
-## File Structure (Complete)
+## File Structure
 
 ```
 /app/frontend/public/
 ├── fear-meter/
-│   ├── index.html          - Main HTML with PWA meta tags
-│   ├── styles.css          - Complete design system
-│   ├── app.js              - Logic + Audio Engine
-│   ├── manifest.json       - PWA manifest
-│   ├── sw.js               - Service Worker
-│   └── icons/              - PWA icons (72px to 512px)
+│   ├── index.html
+│   ├── styles.css
+│   ├── app.js
+│   ├── manifest.json
+│   ├── sw.js
+│   └── icons/
 │
 └── investor-demo/
-    ├── index.html          - Investor demo structure
-    ├── demo.css            - Demo styles
-    └── demo.js             - Automated demo timeline
+    ├── index.html
+    ├── demo.css
+    └── demo.js
 ```
 
 ---
@@ -122,49 +111,46 @@ White: #FFFFFF
 ## Bug Fixes (January 2026)
 
 ### ✅ Watch Mode Animation Bug - FIXED
-- **Problem**: `requestAnimationFrame` loop was blocking Playwright's idle detection, causing screenshot timeouts
-- **Solution**: 
-  1. Changed Watch animation from `requestAnimationFrame` to `setInterval(100ms)`
-  2. Added `startOscilloscopeAnimation()` and `stopOscilloscopeAnimation()` functions
-  3. Oscilloscope animation now stops when entering Watch Mode and restarts when exiting
-  4. Removed duplicate `updateWatchMode()` function with incorrect DOM references
+- Changed animation from `requestAnimationFrame` to `setInterval`
+- Oscilloscope stops when leaving Monitor view
+
+### ✅ History View Timeout - FIXED  
+- Added `stopOscilloscopeAnimation()` when switching to History view
 
 ---
 
-## GitHub Export Ready
+## Refinements Applied (January 2026)
 
-The project is ready for "Save to GitHub". The Vanilla JS version at `/fear-meter/` can be deployed to:
-- GitHub Pages
-- Netlify
-- Vercel
-- Any static hosting
-
-No build step required - just upload the files.
+### ✅ Disturbing & Cinematic Refinements
+- Removed all rounded corners from data blocks
+- Menu appears abruptly (120ms slam animation)
+- Screen darkening at BPM > 100
+- Red vignette at BPM > 120
+- Chaotic oscilloscope at high BPM
+- 1 second UI freeze before panic flash
+- BPM pulses with heartbeat rhythm
+- Stress value flickers at high values
 
 ---
 
 ## Pending Tasks (Backlog)
 
-### P1 - Next Priority
+### P1
 - [ ] Traducir Investor Demo al español
 
-### P2 - Low Priority
+### P2
 - [ ] About / Legal page content
-- [ ] Additional languages (PT, FR, DE)
-- [ ] Animated logo for Fear Meter
+- [ ] Animated logo
 
-### Future Enhancements
-- [ ] Real device integration (heart rate monitors via Web Bluetooth)
-- [ ] Export session data to JSON/CSV
-- [ ] Share sessions feature
-- [ ] Leaderboard of "most terrified"
+### Future
+- [ ] Real device integration (Web Bluetooth)
+- [ ] Additional languages
 
 ---
 
 ## Notes
 
-- All biometric data is SIMULATED (mock)
+- All biometric data is SIMULATED
 - No backend required
-- No external APIs
-- Designed for mobile-first (touch interactions)
+- Designed to feel disturbing, not friendly
 - Keyboard shortcuts: SPACE (start/stop), ESC (close menus)
