@@ -2,56 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
     <meta name="description" content="FEAR METER - Experimental Biometric Horror System">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="FEAR METER">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="FEAR METER">
-    <meta name="msapplication-TileColor" content="#000000">
-    <meta name="msapplication-config" content="browserconfig.xml">
     
     <title>FEAR METER</title>
     
-    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100'/><text y='.9em' x='10' font-size='80' fill='%23FF0000'>♥</text></svg>">
-    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 <body>
-    <!-- Vignette Overlay (for high BPM) -->
-    <div id="vignette-overlay"></div>
-    
-    <!-- UI Freeze Overlay -->
-    <div id="ui-frozen" class="ui-frozen hidden"></div>
-    
-    <!-- Panic Overlay -->
-    <div id="panic-overlay" class="panic-overlay hidden"></div>
-    
-    <!-- Critical Alert -->
-    <div id="critical-alert" class="critical-alert hidden">
-        <div class="critical-text" data-text-critical>CRITICAL STRESS DETECTED</div>
+    <!-- Overlays -->
+    <div id="vignette-overlay" class="vignette-overlay"></div>
+    <div id="panic-overlay" class="panic-overlay"></div>
+    <div id="critical-alert" class="critical-alert">
+        <div class="critical-text">CRITICAL STRESS LEVEL</div>
     </div>
 
-    <!-- Main App Container -->
-    <div id="app" class="app-container">
+    <!-- App Container -->
+    <div id="app" class="app">
         <!-- Header -->
         <header class="header">
-            <button id="menu-btn" class="menu-btn" aria-label="Open menu">
+            <button id="menu-btn" class="menu-btn" aria-label="Menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -61,175 +41,104 @@
             <div class="header-title">
                 <span class="title-fear">FEAR</span>
                 <span class="title-meter">METER</span>
+                <span class="title-version">v1.0</span>
             </div>
-            <div class="header-version">v1.0</div>
+            <div class="header-spacer"></div>
         </header>
 
-        <!-- Main Content -->
-        <main id="main-content" class="main-content">
-            <!-- Monitor View (Default) -->
-            <section id="view-monitor" class="view active">
-                <!-- Oscilloscope -->
+        <!-- Views Container -->
+        <main class="main">
+            <!-- Monitor View -->
+            <section id="view-monitor" class="view view-monitor active">
                 <div id="oscilloscope-container" class="oscilloscope-container">
                     <canvas id="oscilloscope"></canvas>
                     <div class="oscilloscope-label">
-                        <div class="ecg-indicator"></div>
+                        <span class="ecg-dot"></span>
                         <span>ECG</span>
                     </div>
-                    <div id="critical-label" class="critical-label hidden">CRITICAL</div>
-                    <div id="stabilizing-label" class="stabilizing-label hidden">STABILIZING...</div>
+                    <div id="critical-label" class="critical-label">CRITICAL</div>
                 </div>
 
-                <!-- Data Grid -->
                 <div class="data-grid">
                     <div class="data-block" id="bpm-block">
-                        <div class="data-label" data-text-bpm>BPM</div>
+                        <div class="data-label">BPM</div>
                         <div class="data-value" id="bpm-value">---</div>
                     </div>
                     <div class="data-block" id="stress-block">
-                        <div class="data-label" data-text-stress>STRESS</div>
+                        <div class="data-label">STRESS</div>
                         <div class="data-value" id="stress-value">---</div>
                     </div>
                     <div class="data-block" id="signal-block">
-                        <div class="data-label" data-text-signal>SIGNAL</div>
-                        <div class="data-value signal" id="signal-value">---</div>
+                        <div class="data-label">SIGNAL</div>
+                        <div class="data-value" id="signal-value">---</div>
                     </div>
                 </div>
 
-                <!-- Main Button -->
                 <div class="button-container">
-                    <button id="main-btn" class="main-button" data-testid="main-button">
-                        <span data-text-start>START SESSION</span>
+                    <button id="main-btn" class="main-btn">
+                        <span id="main-btn-text">START SESSION</span>
                     </button>
                 </div>
             </section>
 
-            <!-- Watch Mode View - FULLSCREEN SMARTWATCH -->
-            <section id="view-watch" class="view watch-fullscreen">
-                <!-- Watch Face Container -->
-                <div class="watch-face-wrapper">
-                    <div class="watch-face" id="watch-face">
-                        <!-- Outer Ring (pulsing border) -->
-                        <div class="watch-ring" id="watch-ring"></div>
-                        
-                        <!-- Canvas for progress arc -->
+            <!-- Watch View -->
+            <section id="view-watch" class="view view-watch">
+                <div class="watch-container">
+                    <div class="watch-face">
                         <canvas id="watch-canvas"></canvas>
-                        
-                        <!-- Center Content -->
-                        <div class="watch-center-content">
-                            <!-- Session Status Indicator -->
-                            <div class="watch-session-status" id="watch-session-status">
-                                <div class="session-dot" id="session-dot"></div>
-                                <span id="session-status-text">STANDBY</span>
+                        <div class="watch-content">
+                            <div class="watch-status">
+                                <span class="watch-dot"></span>
+                                <span id="watch-status-text">STANDBY</span>
                             </div>
-                            
-                            <!-- BPM Display -->
-                            <div class="watch-bpm-display">
-                                <div class="watch-bpm-value" id="watch-bpm">---</div>
-                                <div class="watch-bpm-label">BPM</div>
-                            </div>
-                            
-                            <!-- Live Signal Indicator -->
-                            <div class="watch-signal" id="watch-signal">
-                                <div class="signal-pulse" id="signal-pulse"></div>
-                                <span>LIVE FEAR SIGNAL</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Panic Flash Overlay (inside watch) -->
-                        <div class="watch-panic-flash" id="watch-panic-flash"></div>
-                        
-                        <!-- Session Saved Message -->
-                        <div class="watch-message" id="watch-message">
-                            <span id="watch-message-text">SESSION SAVED</span>
-                        </div>
-                        
-                        <!-- Demo Mode Indicator -->
-                        <div class="watch-demo-indicator" id="watch-demo-indicator">
-                            <span>DEMO DATA — SIMULATED</span>
+                            <div class="watch-bpm" id="watch-bpm">---</div>
+                            <div class="watch-label">BPM</div>
+                            <div class="watch-signal">LIVE FEAR SIGNAL</div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Watch Controls (below watch face) -->
-                <div class="watch-controls">
-                    <button class="watch-control-btn" id="watch-start-btn">
-                        <div class="control-icon" id="control-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
-                        </div>
-                        <span id="watch-control-text">START</span>
-                    </button>
-                    <button class="watch-control-btn secondary" id="watch-exit-btn">
-                        <span>EXIT</span>
-                    </button>
-                </div>
-                
-                <!-- Connection Status -->
-                <div class="watch-connection" id="watch-connection">
-                    <div class="connection-icon">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-                            <circle cx="12" cy="20" r="1"></circle>
-                        </svg>
+                    <div class="watch-buttons">
+                        <button id="watch-start-btn" class="watch-btn">START</button>
+                        <button id="watch-exit-btn" class="watch-btn secondary">EXIT</button>
                     </div>
-                    <span>SYNCED WITH SMARTPHONE</span>
+                    <div class="watch-sync">SYNCED WITH SMARTPHONE</div>
                 </div>
             </section>
 
             <!-- History View -->
-            <section id="view-history" class="view">
+            <section id="view-history" class="view view-history">
                 <div class="history-header">
-                    <div class="view-toggle">
-                        <button id="btn-list-view" class="toggle-btn active">LIST</button>
-                        <button id="btn-graph-view" class="toggle-btn">GRAPH</button>
+                    <h2 class="history-title">FEAR SESSIONS</h2>
+                    <div class="history-tabs">
+                        <button class="tab-btn active" data-tab="list">LIST</button>
+                        <button class="tab-btn" data-tab="graph">GRAPH</button>
                     </div>
-                    <button id="btn-clear-history" class="clear-btn" title="Clear history">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 6h18"></path>
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </div>
+                <div id="history-content" class="history-content">
+                    <div class="history-empty">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                         </svg>
-                    </button>
-                </div>
-                <div id="history-list" class="history-list"></div>
-                <div id="history-graph" class="history-graph hidden">
-                    <div class="graph-title">FEAR EVOLUTION</div>
-                    <div class="graph-container">
-                        <svg id="history-svg" viewBox="0 0 300 150"></svg>
+                        <p>NO SESSIONS RECORDED</p>
                     </div>
-                    <div class="graph-info" id="graph-info"></div>
                 </div>
-                <div id="history-empty" class="history-empty">
-                    <div class="empty-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                        </svg>
-                    </div>
-                    <span data-text-no-sessions>NO SESSIONS RECORDED</span>
-                </div>
-                <!-- Session Detail Modal -->
-                <div id="session-detail" class="session-detail hidden"></div>
             </section>
         </main>
 
         <!-- Footer -->
         <footer class="footer">
-            <p class="footer-text" data-text-footer>© 2026 FEAR METER</p>
-            <p class="footer-sub" data-text-footer-sub>Experimental Biometric Horror System</p>
+            <span>© 2026 FEAR METER</span>
         </footer>
     </div>
 
+    <!-- Menu Overlay -->
+    <div id="menu-overlay" class="menu-overlay"></div>
+    
     <!-- Side Menu -->
-    <div id="menu-overlay" class="menu-overlay hidden"></div>
     <nav id="side-menu" class="side-menu">
         <div class="menu-header">
-            <span>SYSTEM ACCESS</span>
+            <span class="menu-title">SYSTEM ACCESS</span>
             <button id="menu-close" class="menu-close">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -237,101 +146,51 @@
         </div>
         <div class="menu-items">
             <button class="menu-item active" data-view="monitor">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
                 </svg>
-                <span data-text-monitor>Monitor</span>
+                <span>Monitor</span>
             </button>
             <button class="menu-item" data-view="watch">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="7"></circle>
                     <polyline points="12 9 12 12 13.5 13.5"></polyline>
-                    <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path>
+                    <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path>
                 </svg>
-                <span data-text-watch>Watch Mode</span>
+                <span>Watch Mode</span>
             </button>
             <button class="menu-item" data-view="history">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                 </svg>
-                <span data-text-history>History</span>
+                <span>History</span>
+            </button>
+            <div class="menu-divider"></div>
+            <div class="menu-language">
+                <div class="lang-label">LANGUAGE</div>
+                <div class="lang-options">
+                    <button class="lang-btn active" data-lang="EN">English</button>
+                    <button class="lang-btn" data-lang="ES">Español</button>
+                </div>
+            </div>
+            <div class="menu-divider"></div>
+            <button class="menu-item" data-view="about">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>About / Legal</span>
             </button>
         </div>
-        <div class="menu-divider"></div>
-        <div class="menu-language">
-            <div class="language-header">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                <span data-text-language>Language</span>
-            </div>
-            <div class="language-options">
-                <button class="lang-btn active" data-lang="EN">🇺🇸 English</button>
-                <button class="lang-btn" data-lang="ES">🇪🇸 Español</button>
-            </div>
-        </div>
-        <div class="menu-divider"></div>
-        <button class="menu-item about-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            <span data-text-about>About / Legal</span>
-        </button>
         <div class="menu-footer">
-            <div class="menu-footer-version">FEAR METER v1.0</div>
-            <div class="menu-footer-access">RESTRICTED ACCESS</div>
+            <div class="menu-version">FEAR METER v1.0</div>
+            <div class="menu-access">RESTRICTED ACCESS</div>
         </div>
     </nav>
 
-    <script src="app.js"></script>
-    
-    <!-- PWA Service Worker Registration -->
-    <script>
-        // Register Service Worker for PWA functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
-                        console.log('%c♥ FEAR METER PWA Ready', 'color: #FF0000; font-weight: bold');
-                        console.log('Service Worker registered:', registration.scope);
-                        
-                        // Check for updates
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('New version available! Refresh to update.');
-                                }
-                            });
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('Service Worker registration failed:', error);
-                    });
-            });
-        }
-        
-        // PWA Install prompt handler
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            console.log('%c📱 FEAR METER can be installed as an app!', 'color: #FF0000');
-            
-            // You could show a custom install button here
-            // For now, the browser's install prompt will be available
-        });
-        
-        // Track successful installation
-        window.addEventListener('appinstalled', () => {
-            console.log('%c✓ FEAR METER installed successfully!', 'color: #FF0000; font-weight: bold');
-            deferredPrompt = null;
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
