@@ -1905,6 +1905,16 @@
         // Exit watch fullscreen if active
         STATE.isWatchFullscreen = false;
         
+        // Stop oscilloscope when leaving monitor
+        if (viewName !== 'monitor') {
+            stopOscilloscopeAnimation();
+        } else {
+            startOscilloscopeAnimation();
+        }
+        
+        // Update current view
+        STATE.currentView = viewName;
+        
         // Update view visibility
         DOM.viewMonitor.classList.toggle('active', viewName === 'monitor');
         DOM.viewWatch.classList.remove('active');
