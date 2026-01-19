@@ -119,62 +119,42 @@ export const SideMenu = ({
                         <button
                             key={item.id}
                             onClick={() => onViewChange(item.id)}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200"
+                            className="w-full flex items-center gap-3 px-4 py-3 text-left"
                             style={{ 
-                                color: currentView === item.id ? "#FF0000" : "#B0B0B0",
-                                backgroundColor: currentView === item.id ? "rgba(255, 0, 0, 0.05)" : "transparent",
-                                borderLeft: currentView === item.id ? "2px solid rgba(255, 0, 0, 0.6)" : "2px solid transparent",
+                                color: currentView === item.id ? "#8B0000" : "rgba(139, 0, 0, 0.5)",
+                                backgroundColor: currentView === item.id ? "rgba(139, 0, 0, 0.03)" : "transparent",
+                                borderLeft: currentView === item.id ? "1px solid rgba(139, 0, 0, 0.4)" : "1px solid transparent",
                                 opacity: itemsReady ? 1 : 0,
                                 transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                                transition: `all 200ms ease-out ${index * 50}ms`,
-                            }}
-                            onMouseEnter={(e) => {
-                                if (currentView !== item.id) {
-                                    e.currentTarget.style.color = "#FF0000";
-                                    e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.03)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (currentView !== item.id) {
-                                    e.currentTarget.style.color = "#B0B0B0";
-                                    e.currentTarget.style.backgroundColor = "transparent";
-                                }
+                                transition: `all 250ms ease-out ${index * 60}ms`,
                             }}
                         >
                             <item.icon className="w-4 h-4" />
-                            <span className="text-xs tracking-[0.15em]">{item.label}</span>
+                            <span className="text-[11px] tracking-[0.15em]">{item.label}</span>
                         </button>
                     ))}
                 </nav>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
 
                 {/* Language Selection */}
                 <button
                     onClick={handleLanguageSelectorOpen}
-                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                    className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "#B0B0B0",
+                        color: "rgba(139, 0, 0, 0.5)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 200ms ease-out 200ms",
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#FF0000";
-                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.03)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#B0B0B0";
-                        e.currentTarget.style.backgroundColor = "transparent";
+                        transition: "all 250ms ease-out 200ms",
                     }}
                     data-testid="language-menu-button"
                 >
                     <Globe className="w-4 h-4" />
-                    <span className="text-xs tracking-[0.15em]">{texts.language}</span>
+                    <span className="text-[11px] tracking-[0.15em]">{texts.language}</span>
                     <span 
-                        className="ml-auto text-[10px] tracking-wider"
-                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                        className="ml-auto text-[9px] tracking-wider"
+                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
                     >
                         {currentLangInfo.nativeName}
                     </span>
