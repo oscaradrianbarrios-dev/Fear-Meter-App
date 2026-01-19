@@ -84,8 +84,61 @@ export const useNightmareProtocol = () => {
     const BPM_SPIKE_THRESHOLD = thresholds.spike;
     const BPM_SEVERE_THRESHOLD = thresholds.severe;
     const BPM_CRITICAL_THRESHOLD = thresholds.critical;
-    const MIN_EVENT_DURATION = 5000;     // Minimum 5 seconds for event
+    const MIN_EVENT_DURATION = thresholds.minDuration;
     const MOVEMENT_THRESHOLD = 1.0;      // Very low threshold for sleep
+    
+    // Calculate statistics from events
+    const calculateStatistics = useCallback((eventList) => {
+        if (!eventList || eventList.length === 0) {
+            return null;
+        }
+        
+        const totalEvents = eventList.length;
+        const avgIntensity = Math.round(eventList.reduce((sum, e) => sum + e.intensity, 0) / totalEvents);
+        const avgDuration = Math.round(eventList.reduce((sum, e) => sum + e.duration, 0) / totalEvents);
+        const maxPeakBpm = Math.max(...eventList.map(e => e.peakBpm));
+        const avgPeakBpm = Math.round(eventList.reduce((sum, e) => sum + e.peakBpm, 0) / totalEvents);
+        
+        // Count by severity
+        const severityCounts = {
+            [EVENT_SEVERITY.MINOR]: eventList.filter(e => e.severity === EVENT_SEVERITY.MINOR).length,
+            [EVENT_SEVERITY.MODERATE]: eventList.filter(e => e.severity === EVENT_SEVERITY.MODERATE).length,
+            [EVENT_SEVERITY.SEVERE]: eventList.filter(e => e.severity === EVENT_SEVERITY.SEVERE).length,
+            [EVENT_SEVERITY.CRITICAL]: eventList.filter(e => e.severity === EVENT_SEVERITY.CRITICAL).length,
+        };
+        
+        // Get events by day for trend
+        const eventsByDay = {};
+        eventList.forEach(e => {
+            const day = new Date(e.timestamp).toLocaleDateString();
+            eventsByDay[day] = (eventsByDay[day] || 0) + 1;
+        });
+        
+        // Most active hours
+        const eventsByHour = {};
+        eventList.forEach(e => {
+            const hour = new Date(e.timestamp).getHours();
+            eventsByHour[hour] = (eventsByHour[hour] || 0) + 1;
+        });
+        const peakHour = Object.entries(eventsByHour).sort((a, b) => b[1] - a[1])[0];
+        
+        return {
+            totalEvents,
+            avgIntensity,
+            avgDuration,
+            maxPeakBpm,
+            avgPeakBpm,
+            severityCounts,
+            eventsByDay,
+            peakHour: peakHour ? parseInt(peakHour[0]) : null,
+            peakHourCount: peakHour ? peakHour[1] : 0,
+        };
+    }, []);
+    
+    // Update statistics when events change
+    useEffect(() => {
+        setStatistics(calculateStatistics(events));
+    }, [events, calculateStatistics]);
     
     // Initialize motion detection for sleep monitoring
     const initMotionDetection = useCallback(() => {
