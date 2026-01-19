@@ -201,6 +201,7 @@ export const FearMeterApp = () => {
             history: "Historial",
             language: "Idioma",
             about: "Acerca de / Legal",
+            calibration: "Calibración",
             startSession: "INICIAR SESIÓN",
             stopSession: "DETENER SESIÓN",
             bpm: "BPM",
