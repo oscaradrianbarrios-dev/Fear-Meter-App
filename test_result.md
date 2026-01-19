@@ -285,7 +285,8 @@ metadata:
 test_plan:
   current_focus:
     - "Calibration Protocol System"
-  stuck_tasks: []
+  stuck_tasks:
+    - "Calibration Protocol System"
   test_all: false
   test_priority: "high_first"
 
