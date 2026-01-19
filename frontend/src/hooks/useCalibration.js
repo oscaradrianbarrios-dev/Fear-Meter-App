@@ -200,6 +200,11 @@ export const useCalibration = () => {
     
     // Start calibration process
     const startCalibration = useCallback(() => {
+        // Clear any existing interval
+        if (calibrationIntervalRef.current) {
+            clearInterval(calibrationIntervalRef.current);
+        }
+        
         setCalibrationState(CALIBRATION_STATE.IN_PROGRESS);
         setProgress(0);
         bpmSamplesRef.current = [];
@@ -208,16 +213,14 @@ export const useCalibration = () => {
         
         initMotionDetection();
         
-        let elapsed = 0;
-        
         // Generate simulated resting BPM during calibration
         // This simulates what a real biometric sensor would read at rest
         let simulatedBpm = 68 + Math.random() * 8; // Start between 68-76
+        const startTime = Date.now();
         
-        calibrationIntervalRef.current = setInterval(() => {
-            elapsed += 0.1;
+        const runCalibration = () => {
+            const elapsed = (Date.now() - startTime) / 1000; // Convert to seconds
             const progressPercent = Math.min((elapsed / CALIBRATION_DURATION) * 100, 100);
-            setProgress(progressPercent);
             
             // Generate realistic resting BPM samples during calibration
             // Small natural variation like a real heartbeat at rest
@@ -229,10 +232,15 @@ export const useCalibration = () => {
             // Add the sample to our collection
             bpmSamplesRef.current.push(Math.round(simulatedBpm));
             
+            setProgress(progressPercent);
+            
             if (elapsed >= CALIBRATION_DURATION) {
+                clearInterval(calibrationIntervalRef.current);
                 completeCalibration();
             }
-        }, 100);
+        };
+        
+        calibrationIntervalRef.current = setInterval(runCalibration, 100);
     }, [initMotionDetection, completeCalibration]);
     
     // Add BPM sample during calibration
