@@ -271,6 +271,7 @@ export const FearMeterApp = () => {
                     isCalibrated={isCalibrated}
                     isActive={isActive}
                     language={language}
+                    movementIntensity={movementIntensity}
                 />
             )}
 
