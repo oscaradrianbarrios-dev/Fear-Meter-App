@@ -268,6 +268,19 @@ frontend:
         agent: "main"
         comment: "NEW FEATURE - Calibration system implemented with: 1) CalibrationProtocol.jsx screen (intro/calibrating/complete phases), 2) useCalibration.js hook for baseline acquisition and response classification, 3) ResponseIndicator.jsx for showing EXERCISE/FEAR/STRESS/ANXIETY detection, 4) Integration with useBiometricSimulation.js for calibration-aware panic triggering, 5) Menu option added to SideMenu.jsx"
       - working: true
+
+  - task: "Nightmare Protocol System"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/hooks/useNightmareProtocol.js, /app/frontend/src/components/NightmareProtocol.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ NIGHTMARE PROTOCOL IMPLEMENTED - Complete nocturnal fear monitoring system: 1) useNightmareProtocol.js hook with automatic nighttime detection (22:00-07:00), BPM spike detection, event recording with severity levels (MINOR/MODERATE/SEVERE/CRITICAL). 2) NightmareProtocol.jsx with inactive/active/log views, dark minimal interface (#8B0000 red), silent monitoring. 3) Event storage in localStorage with 30-day retention. 4) Menu integration via SideMenu.jsx. 5) Route /nightmare added. 6) Bilingual support EN/ES with localStorage persistence. VERIFIED: Menu shows 'Nightmare Protocol', inactive view shows instructions, active view shows BPM/baseline/events counter, standby mode when not nighttime, log view shows recorded events."
+
         agent: "main"
         comment: "✅ ALL IMPROVEMENTS IMPLEMENTED AND VERIFIED - 1) Duration reduced to 30 SECONDS with updated UI text, 2) localStorage persistence with 24-hour expiration working, 3) ExpirationWarning component created for notifications, 4) 'VALID FOR 24 HOURS' text shown on completion screen, 5) ACTIVE badge shown in menu when calibrated, 6) ResponseIndicator shows 'MONITORING...' when calibrated (NOT 'CALIBRATION REQUIRED'), 7) Movement detection thresholds improved (LOW=1.5, MEDIUM=3.5, HIGH=7.0). VERIFIED via screenshots: Calibration completes successfully in 30 seconds, shows BASE BPM/STRESS values, localStorage saves data correctly, indicator shows correct status during session."
 
