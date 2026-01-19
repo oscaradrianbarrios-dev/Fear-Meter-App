@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { CALIBRATION_STATE } from "@/hooks/useCalibration";
 
 export const CalibrationProtocol = ({
@@ -11,9 +11,15 @@ export const CalibrationProtocol = ({
     onCancel,
     language = "EN",
 }) => {
-    const [phase, setPhase] = useState("intro"); // intro, calibrating, complete
     const [showData, setShowData] = useState(false);
     const [glitchText, setGlitchText] = useState(false);
+    
+    // Derive phase from calibrationState instead of using setState in effect
+    const phase = useMemo(() => {
+        if (calibrationState === CALIBRATION_STATE.IN_PROGRESS) return "calibrating";
+        if (calibrationState === CALIBRATION_STATE.COMPLETE) return "complete";
+        return "intro";
+    }, [calibrationState]);
     
     const texts = {
         EN: {
