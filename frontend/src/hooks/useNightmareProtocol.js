@@ -243,8 +243,9 @@ export const useNightmareProtocol = () => {
     }, [baselineBpm, isMoving]);
     
     // Start nightmare protocol monitoring
-    const startProtocol = useCallback(() => {
+    const startProtocol = useCallback((forceNight = false) => {
         setIsActive(true);
+        setForceNightMode(forceNight);
         setSessionStartTime(Date.now());
         setTotalEventsTonight(0);
         setBaselineBpm(62); // Sleeping baseline
@@ -253,8 +254,8 @@ export const useNightmareProtocol = () => {
         
         initMotionDetection();
         
-        // Check if it's nighttime
-        if (isNighttime()) {
+        // Check if it's nighttime or forced
+        if (isNighttime(forceNight)) {
             setProtocolState(NIGHTMARE_STATE.MONITORING);
         } else {
             setProtocolState(NIGHTMARE_STATE.STANDBY);
@@ -264,6 +265,7 @@ export const useNightmareProtocol = () => {
     // Stop nightmare protocol
     const stopProtocol = useCallback(() => {
         setIsActive(false);
+        setForceNightMode(false);
         setProtocolState(NIGHTMARE_STATE.INACTIVE);
         setCurrentEvent(null);
         setSessionStartTime(null);
@@ -275,6 +277,11 @@ export const useNightmareProtocol = () => {
         
         cleanupMotionDetection();
     }, [cleanupMotionDetection]);
+    
+    // Update thresholds
+    const updateThresholds = useCallback((newThresholds) => {
+        setThresholds(prev => ({ ...prev, ...newThresholds }));
+    }, []);
     
     // Clear nightmare log
     const clearLog = useCallback(() => {
