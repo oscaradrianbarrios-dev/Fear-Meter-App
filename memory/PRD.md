@@ -1,103 +1,82 @@
 # FEAR METER - Product Requirements Document
 
 ## Original Problem Statement
-Crear una aplicación de página única (SPA) llamada "FEAR METER" con estética de "horror biométrico". La interfaz debe ser clínica, minimalista y aterradora, no amigable. 
+Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico clínico". La interfaz debe ser seria, fría, clínica e incómoda - no amigable ni divertida.
 
 > **FINAL RULE**: The app must feel like "Something you shouldn't be using alone at night."
 
-## Product Overview
-FEAR METER es un sistema experimental de monitoreo biométrico de horror que simula la detección del miedo a través de métricas cardíacas y de estrés.
-
 ---
 
-## Design Language (Disturbing & Cinematic)
+## Design Language (Clinical Horror)
 
-### Global Tone
+### Color Palette (Updated December 2025)
 - **Background**: Absolute black (#000000)
-- **Primary**: Pure red (#FF0000) - Critical states only
-- **Secondary**: Dark red (#8B0000) - UI elements, menu items
+- **Clinical Red**: #8E0E1C (primary UI elements)
+- **Clinical Red Accent**: #B11226 (highlights)
+- **Critical Red**: #FF0000 (ONLY for critical states)
 - **Text**: Gray (#B0B0B0) and muted variations
-- **UI**: High contrast, clinical, threatening - NO soft UI, NO friendly animations
 
 ### Typography
 - Font: JetBrains Mono
-- Letter-spacing: 0.15em - 0.35em (aggressive spacing)
-- Numbers: Large, pulsing, aggressive
+- Letter-spacing: 0.15em - 0.35em
+- Minimal, medical, modern
 
 ---
 
 ## Core Features
 
 ### ✅ 1. Monitor Principal
-- Oscilloscope ECG with biological imperfections (not perfect/symmetrical)
-- Sharp-edged data blocks (no border-radius)
+- Biological ECG oscilloscope with imperfections
+- Clinical messages: "Signal unstable", "Biometric pattern altered"
+- Sharp-edged data blocks
 - BPM pulses with heartbeat rhythm
-- Clinical messages: "Signal unstable", "Biometric pattern altered", "Emotional anomaly detected"
 
-### ✅ 2. Calibration System V2
+### ✅ 2. Clinical Audio System (NEW)
+- Hospital monitor-style beep sounds
+- Progressive activation based on BPM:
+  - Normal (≤100): Silence
+  - Elevated (100-120): Beep every 2.5s
+  - Critical (>120): Frequent beeps + vibration
+- Toggle: Sound ON/OFF in menu
+- Low volume, no jumpscares
+
+### ✅ 3. Calibration Mode
 - Biometric baseline acquisition
-- Persistence via localStorage
-- Differentiates between exercise, stress, and fear
-- Expiration warnings (24 hours validity)
+- Options: Rest, Physical activity, Emotional stress, Real fear
+- Movement detection → excludes from Fear Score
+- Messages: "Running detected — Fear not counted"
 
-### ✅ 3. Nightmare Protocol (IMPROVED - December 2025)
-- Concept: "The system watches even when you sleep"
-- Activation from side menu
-- Pre-activation: "PASSIVE BIOMETRIC MONITORING"
-- Active state: "NIGHTMARE MODE ACTIVE" (small red text, minimal UI)
-- BPM fluctuates slowly with micro random spikes
-- Critical event detection: BPM > 120 for 8+ seconds triggers:
-  - Long device vibration (navigator.vibrate)
-  - Brief red flash (100ms)
-  - Text: "NIGHTMARE DETECTED"
-  - Returns to black after 3 seconds
-- Summary on deactivation: Night events detected, Peak BPM, Duration
-- No sounds, no flashy animations, clinical and cold
+### ✅ 4. Nightmare Protocol
+- "Nighttime Fear Analysis (Passive)"
+- BPM > 120 for 8+ seconds triggers detection
+- Events: "Possible Nightmare Event — 03:12 AM"
+- Disclaimer: "Passive analysis — not medical diagnosis"
 
-### ✅ 4. Investor Demo Mode
-- Self-running scripted sequence
-- Accessible via `/investor-demo` or `/investor`
-- Designed for presentations
+### ✅ 5. Fear Library (NEW)
+- **Movies**: Horror films with Avg BPM Spike, Fear Level (LOW/MODERATE/HIGH/EXTREME)
+- **Games**: Peak BPM, Session duration, Peak Fear Moment
+- **Attractions**: Haunted houses with Fear Intensity bars
+- **Ranking**: Global Fear Index
+- Disclaimer: "Community-based simulated data for demo & testing purposes"
 
-### ✅ 5. Psychological Horror UX (IMPROVED - December 2025)
-- Reduced decorative animations (animate only on critical states)
-- Visual rhythm: BPM visible but not always animated
-- Oscilloscope with irregular heartbeats (not "perfect")
-- Emotional states:
-  - NORMAL → stable interface
-  - ELEVATED → darker red (#8B0000)
-  - CRITICAL → pure red (#FF0000) + micro flicker
-- Clinical messages replacing generic text
+### ✅ 6. Legal Disclaimer (NEW)
+- Modal on first visit
+- "NOT a medical device"
+- "For entertainment & experimental analysis only"
+- "All biometric data is simulated"
+- Persists to localStorage after acceptance
 
-### ✅ 6. Multilingual Language Selector
-- 9 languages: English, Español, Português, Italiano, 日本語, 中文, Deutsch, Русский, Français
-- Located in side menu
-- Vertical list with single selection
-- Styling: Black background, gray text, red selected with underline and glow
+### ✅ 7. Language Selector
+- 9 languages supported
 - Persists to localStorage
-- Updates UI immediately without page reload
 
-### ✅ 7. Smartwatch Mode
-- Concept: "The watch doesn't show data: it watches."
-- Circular fullscreen simulation
-- Biometric ring: Red arc fills based on BPM
-- Ring vibrates visually when BPM > 110
-- Central BPM: Large number, JetBrains Mono bold
-- Status: STABLE / ELEVATED / CRITICAL
-- Device vibration on CRITICAL state
+### ✅ 8. Smartwatch Mode
+- Circular display with biometric ring
+- STABLE/ELEVATED/CRITICAL states
 
-### ✅ 8. Side Menu (IMPROVED - December 2025)
-- Slow appearance (300ms) - more unsettling
-- Absolute black background
-- Muted dark red text (rgba(139, 0, 0, x))
-- Items: Monitor, Watch Mode, History, Nightmare Protocol, Language, About / Legal
-- No hover effects (cleaner, colder)
-
-### ✅ 9. History View
-- Clinical records style
-- Date + Duration + Peak BPM
-- No color graphs
-- Only red/white text on black
+### ✅ 9. Demo/Simulation Mode
+- Hidden in menu for investors
+- Simulates: Movie, Game, Nightmare scenarios
 
 ---
 
@@ -105,7 +84,7 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - React 18 with Vite
 - Tailwind CSS
 - React Router DOM
-- Web Audio API for sound
+- Web Audio API (clinical beeps)
 - localStorage for persistence
 
 ---
@@ -117,33 +96,34 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 ├── components/
 │   ├── CalibrationProtocol.jsx
 │   ├── CriticalAlert.jsx
-│   ├── DataGrid.jsx
-│   ├── DemoMode.jsx
-│   ├── ExpirationWarning.jsx
-│   ├── FearMeterApp.jsx (main app)
+│   ├── Disclaimer.jsx (NEW)
+│   ├── FearLibrary.jsx (NEW)
+│   ├── FearMeterApp.jsx
 │   ├── Header.jsx
 │   ├── History.jsx
 │   ├── InvestorDemo.jsx
 │   ├── LanguageSelector.jsx
-│   ├── MainButton.jsx
 │   ├── Monitor.jsx
-│   ├── NightmareProtocol.jsx (IMPROVED)
-│   ├── Oscilloscope.jsx (IMPROVED - biological)
+│   ├── NightmareProtocol.jsx
+│   ├── Oscilloscope.jsx
 │   ├── PanicOverlay.jsx
-│   ├── ResponseIndicator.jsx (clinical messages)
-│   ├── SideMenu.jsx (IMPROVED - 300ms, dark red)
+│   ├── ResponseIndicator.jsx
+│   ├── SideMenu.jsx
+│   ├── SoundToggle.jsx (NEW)
 │   └── WatchMode.jsx
 ├── contexts/
-│   └── LanguageContext.jsx
+│   ├── LanguageContext.jsx
+│   └── SettingsContext.jsx (NEW)
 ├── hooks/
 │   ├── useCalibration.js
 │   ├── useBiometricSimulation.js
+│   ├── useClinicalAudio.js (NEW)
 │   ├── useSessionManager.js
-│   └── useNightmareProtocol.js (IMPROVED)
+│   └── useNightmareProtocol.js
 ├── i18n/
-│   └── translations.js (9 languages)
+│   └── translations.js
 ├── styles/
-│   └── horror-ux.css
+│   └── horror-ux.css (updated with CSS variables)
 └── App.js
 ```
 
@@ -153,47 +133,42 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - `/` - Main Fear Meter app
 - `/demo` - Demo mode
 - `/nightmare` - Nightmare Protocol
-- `/investor` or `/investor-demo` - Investor Demo Mode
+- `/investor` or `/investor-demo` - Investor Demo
+- `/library` - Fear Library (NEW)
 
 ---
 
 ## Completed Work (December 2025)
 
-### Latest Session
-1. **Language Selector** - COMPLETED
-   - React Context for global state
-   - 9 languages working
-   - localStorage persistence
+### FASE 1: Estética + Audio ✅
+1. Nueva paleta de colores clínicos (#8E0E1C, #B11226)
+2. Sistema de audio clínico (beeps de monitor hospitalario)
+3. Toggle Sound ON/OFF en menú
 
-2. **Nightmare Protocol Improvements** - COMPLETED
-   - Minimalist UI
-   - BPM > 120 for 8+ seconds triggers detection
-   - Vibration and flash effects
-   - Summary view on deactivation
+### FASE 2: Fear Library + Disclaimer ✅
+4. Fear Library con Movies/Games/Attractions/Ranking
+5. Legal Disclaimer modal en primera visita
+6. Todos los datos marcados como SIMULADOS
 
-3. **Psychological Horror UX** - COMPLETED
-   - Biological oscilloscope with imperfections
-   - Slower menu transitions (300ms)
-   - Dark red color scheme (#8B0000)
-   - Clinical messages
-
-4. **Smartwatch Mode** - COMPLETED
-   - Circular display with biometric ring
-   - STABLE/ELEVATED/CRITICAL states
+### Previously Completed
+- Language Selector (9 languages)
+- Nightmare Protocol improvements
+- Smartwatch Mode
+- Calibration System V2
+- Psychological Horror UX
 
 ---
 
 ## Testing Status
 - **All features tested**: 100% pass rate
-- **Test report**: `/app/test_reports/iteration_2.json`
+- **Test reports**: `/app/test_reports/iteration_3.json`
 
 ---
 
 ## Notes
 
-- All biometric data is SIMULATED (MOCKED)
-- No backend required
-- Designed to feel disturbing, not friendly
+- **ALL DATA IS SIMULATED** - No real biometric measurements
+- **NOT A MEDICAL DEVICE** - Entertainment only
 - User's preferred language: Spanish
 
 ---
@@ -201,12 +176,13 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 ## Future/Backlog Tasks
 
 ### P1
-- [ ] Traducir Investor Demo al español
+- [ ] Traducir textos de Fear Library a todos los idiomas
+- [ ] Mejorar Demo Mode para inversores
 
 ### P2
-- [ ] About / Legal page content
-- [ ] Additional clinical messages in all languages
+- [ ] About / Legal page completa
+- [ ] Más películas/juegos en la biblioteca
 
 ### Future
 - [ ] Real device integration (Web Bluetooth)
-- [ ] Sound effects (minimal, clinical)
+- [ ] Community-submitted fear data
