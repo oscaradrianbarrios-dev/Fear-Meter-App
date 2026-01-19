@@ -13,7 +13,9 @@ import ExpirationWarning from "./ExpirationWarning";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useCalibration, CALIBRATION_STATE } from "@/hooks/useCalibration";
+import { useClinicalAudio } from "@/hooks/useClinicalAudio";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSettings } from "@/contexts/SettingsContext";
 
 export const FearMeterApp = () => {
     const navigate = useNavigate();
