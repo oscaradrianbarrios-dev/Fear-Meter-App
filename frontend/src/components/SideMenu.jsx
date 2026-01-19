@@ -69,15 +69,16 @@ export const SideMenu = ({
         <>
             {/* Overlay - fade from absolute black */}
             <div 
-                className={`fixed inset-0 z-50 transition-opacity duration-250`}
+                className="fixed inset-0 z-50"
                 style={{ 
-                    backgroundColor: "rgba(0, 0, 0, 0.95)",
+                    backgroundColor: "rgba(0, 0, 0, 0.97)",
                     opacity: isOpen ? 1 : 0,
+                    transition: "opacity 300ms ease-out",
                 }}
                 onClick={onClose}
             />
             
-            {/* Menu Panel - slide from LEFT */}
+            {/* Menu Panel - slow slide from LEFT */}
             <div 
                 ref={menuRef}
                 className="fixed top-0 left-0 h-full w-64 z-50"
