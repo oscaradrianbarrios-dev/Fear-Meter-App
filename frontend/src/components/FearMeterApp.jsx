@@ -35,6 +35,7 @@ export const FearMeterApp = () => {
         baselineStress,
         responseType,
         isCalibrated,
+        movementIntensity,
         startCalibration,
         addBpmSample,
         classifyResponse,
