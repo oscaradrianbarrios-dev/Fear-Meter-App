@@ -13,11 +13,31 @@ export const Monitor = ({
     texts,
     isBlocked,
     isDemo = false,
+    isCalibrated = false,
+    responseType,
 }) => {
+    // Determine if high BPM for red flicker effect
+    const isHighBpm = bpm > 95;
+    const isCriticalBpm = bpm > 110;
+    
     return (
-        <div className="flex-1 flex flex-col gap-6 py-4">
+        <div 
+            className={`flex-1 flex flex-col py-4 relative ${isHighBpm ? 'fear-red-flicker' : ''}`}
+            style={{ 
+                gap: '23px', // Asymmetric gap
+                marginLeft: '3px', // Subtle asymmetry
+            }}
+        >
+            {/* Subtle watching indicator */}
+            {isActive && (
+                <div 
+                    className="absolute top-2 right-3 fear-observer-dot"
+                    title="Recording..."
+                />
+            )}
+            
             {/* Oscilloscope Section */}
-            <div className="flex-shrink-0">
+            <div className={`flex-shrink-0 ${isCriticalBpm ? 'fear-micro-shake' : ''}`}>
                 <Oscilloscope
                     bpm={bpm}
                     isActive={isActive}
@@ -37,7 +57,10 @@ export const Monitor = ({
             />
 
             {/* Main Button */}
-            <div className="flex-1 flex items-center justify-center min-h-[140px]">
+            <div 
+                className="flex-1 flex items-center justify-center min-h-[140px]"
+                style={{ marginRight: '2px' }} // Subtle asymmetry
+            >
                 <MainButton
                     isActive={isActive}
                     isPanic={isPanic}
