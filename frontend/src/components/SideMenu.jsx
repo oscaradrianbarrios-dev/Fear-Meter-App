@@ -1,7 +1,8 @@
-import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon } from "lucide-react";
+import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon, BookOpen } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LanguageSelector from "./LanguageSelector";
+import SoundToggle from "./SoundToggle";
 import { LANGUAGES } from "@/i18n/translations";
 
 export const SideMenu = ({
