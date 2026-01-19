@@ -209,10 +209,25 @@ export const useCalibration = () => {
         initMotionDetection();
         
         let elapsed = 0;
+        
+        // Generate simulated resting BPM during calibration
+        // This simulates what a real biometric sensor would read at rest
+        let simulatedBpm = 68 + Math.random() * 8; // Start between 68-76
+        
         calibrationIntervalRef.current = setInterval(() => {
             elapsed += 0.1;
             const progressPercent = Math.min((elapsed / CALIBRATION_DURATION) * 100, 100);
             setProgress(progressPercent);
+            
+            // Generate realistic resting BPM samples during calibration
+            // Small natural variation like a real heartbeat at rest
+            const variation = (Math.random() - 0.5) * 3; // ±1.5 BPM variation
+            simulatedBpm += (72 - simulatedBpm) * 0.02; // Drift towards 72
+            simulatedBpm += variation;
+            simulatedBpm = Math.max(60, Math.min(85, simulatedBpm)); // Keep in resting range
+            
+            // Add the sample to our collection
+            bpmSamplesRef.current.push(Math.round(simulatedBpm));
             
             if (elapsed >= CALIBRATION_DURATION) {
                 completeCalibration();
