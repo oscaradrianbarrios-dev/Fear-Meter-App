@@ -216,20 +216,12 @@ export const SideMenu = ({
 
                 {/* About */}
                 <button
-                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                    className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "#B0B0B0",
+                        color: "rgba(139, 0, 0, 0.4)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 200ms ease-out 320ms",
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#FF0000";
-                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.03)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#B0B0B0";
-                        e.currentTarget.style.backgroundColor = "transparent";
+                        transition: "all 250ms ease-out 320ms",
                     }}
                 >
                     <Info className="w-4 h-4" />
