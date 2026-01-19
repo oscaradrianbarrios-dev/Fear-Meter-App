@@ -174,19 +174,15 @@ export const SideMenu = ({
                         transition: "all 250ms ease-out 240ms",
                     }}
                 >
-                        e.currentTarget.style.color = isCalibrated ? "rgba(255, 0, 0, 0.6)" : "#FF0000";
-                        e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                >
                     <Target className="w-4 h-4" />
-                    <span className="text-xs tracking-[0.15em]">{texts.calibration || "Calibration"}</span>
+                    <span className="text-[11px] tracking-[0.15em]">{texts.calibration || "Calibration"}</span>
                     {isCalibrated && (
                         <span 
-                            className="ml-auto text-[8px] tracking-[0.1em] px-1.5 py-0.5"
+                            className="ml-auto text-[7px] tracking-[0.1em] px-1.5 py-0.5"
                             style={{ 
-                                backgroundColor: "rgba(255, 0, 0, 0.1)",
-                                color: "rgba(255, 0, 0, 0.5)",
-                                border: "1px solid rgba(255, 0, 0, 0.15)",
+                                backgroundColor: "rgba(139, 0, 0, 0.05)",
+                                color: "rgba(139, 0, 0, 0.4)",
+                                border: "1px solid rgba(139, 0, 0, 0.1)",
                             }}
                         >
                             ACTIVE
