@@ -67,6 +67,7 @@ export const CalibrationProtocol = ({
             recalibrate: "RECALIBRAR",
             movementWarning: "MOVIMIENTO DETECTADO — QUIETO",
             dataCorrupted: "RIESGO DE CORRUPCIÓN DE DATOS",
+            validFor: "VÁLIDO POR 24 HORAS",
         },
     };
     
