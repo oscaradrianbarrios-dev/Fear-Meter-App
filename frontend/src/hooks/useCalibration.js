@@ -349,9 +349,17 @@ export const useCalibration = () => {
     }, [cleanupMotionDetection]);
     
     // Initialize motion detection on mount if already calibrated
+    // Using ref to track initialization to avoid multiple calls
+    const motionInitializedRef = useRef(false);
+    
     useEffect(() => {
-        if (calibrationState === CALIBRATION_STATE.COMPLETE) {
-            initMotionDetection();
+        if (calibrationState === CALIBRATION_STATE.COMPLETE && !motionInitializedRef.current) {
+            motionInitializedRef.current = true;
+            // Defer motion detection initialization
+            const timeoutId = setTimeout(() => {
+                initMotionDetection();
+            }, 100);
+            return () => clearTimeout(timeoutId);
         }
         
         return () => {
