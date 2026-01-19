@@ -114,9 +114,15 @@ export const useBiometricSimulation = ({
         setBpm(newBpm);
         setStress(newStress);
         setSignal(calculateSignal(newBpm, newStress));
+        
+        // Notify calibration hook of BPM updates
+        onBpmUpdate?.(newBpm);
 
-        // PANIC ACTIVATION: BPM > 110 AND STRESS > 75%
-        const shouldPanic = newBpm > 110 && newStress > 75;
+        // PANIC ACTIVATION: Use external check if provided (calibration), otherwise default logic
+        // This allows the calibration system to prevent panic during exercise
+        const shouldPanic = externalPanicCheck 
+            ? externalPanicCheck(newBpm, newStress)
+            : (newBpm > 110 && newStress > 75);
         
         if (shouldPanic && !panicActiveRef.current && now - lastPanicRef.current > 8000) {
             // Enter panic
