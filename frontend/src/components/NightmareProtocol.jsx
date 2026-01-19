@@ -222,7 +222,7 @@ export const NightmareProtocol = () => {
             
             {/* Activate Button */}
             <button
-                onClick={startProtocol}
+                onClick={() => startProtocol(false)}
                 className="py-3 px-8 text-[10px] tracking-[0.25em] transition-all duration-300"
                 style={{ 
                     backgroundColor: "#8B0000",
@@ -237,6 +237,27 @@ export const NightmareProtocol = () => {
                 }}
             >
                 {t.activate}
+            </button>
+            
+            {/* Test Mode Button */}
+            <button
+                onClick={() => startProtocol(true)}
+                className="mt-4 py-2 px-6 text-[9px] tracking-[0.2em] transition-all duration-200"
+                style={{ 
+                    backgroundColor: "transparent",
+                    color: "rgba(139, 0, 0, 0.4)",
+                    border: "1px solid rgba(139, 0, 0, 0.2)",
+                }}
+                onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "rgba(139, 0, 0, 0.7)";
+                    e.currentTarget.style.borderColor = "rgba(139, 0, 0, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "rgba(139, 0, 0, 0.4)";
+                    e.currentTarget.style.borderColor = "rgba(139, 0, 0, 0.2)";
+                }}
+            >
+                {t.activateTest}
             </button>
         </div>
     );
