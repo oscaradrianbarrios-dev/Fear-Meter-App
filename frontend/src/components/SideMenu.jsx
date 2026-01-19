@@ -169,6 +169,44 @@ export const SideMenu = ({
                 {/* Divider */}
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
 
+                {/* Calibration Option */}
+                <button
+                    onClick={onCalibrationOpen}
+                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                    style={{ 
+                        color: isCalibrated ? "rgba(255, 0, 0, 0.6)" : "#FF0000",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 200ms ease-out 240ms",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#FF0000";
+                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.03)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = isCalibrated ? "rgba(255, 0, 0, 0.6)" : "#FF0000";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                >
+                    <Target className="w-4 h-4" />
+                    <span className="text-xs tracking-[0.15em]">{texts.calibration || "Calibration"}</span>
+                    {isCalibrated && (
+                        <span 
+                            className="ml-auto text-[8px] tracking-[0.1em] px-1.5 py-0.5"
+                            style={{ 
+                                backgroundColor: "rgba(255, 0, 0, 0.1)",
+                                color: "rgba(255, 0, 0, 0.5)",
+                                border: "1px solid rgba(255, 0, 0, 0.15)",
+                            }}
+                        >
+                            ACTIVE
+                        </span>
+                    )}
+                </button>
+
+                {/* Divider */}
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+
                 {/* About */}
                 <button
                     className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
@@ -176,7 +214,7 @@ export const SideMenu = ({
                         color: "#B0B0B0",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 200ms ease-out 250ms",
+                        transition: "all 200ms ease-out 280ms",
                     }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.color = "#FF0000";
