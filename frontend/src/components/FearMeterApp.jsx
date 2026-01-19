@@ -173,57 +173,6 @@ export const FearMeterApp = () => {
         }
     }, [isBlocked]);
 
-    const texts = {
-        EN: {
-            monitor: "Monitor",
-            watchMode: "Watch Mode",
-            history: "History",
-            language: "Language",
-            about: "About / Legal",
-            calibration: "Calibration",
-            nightmare: "Nightmare Protocol",
-            startSession: "START SESSION",
-            stopSession: "STOP SESSION",
-            bpm: "BPM",
-            stress: "STRESS",
-            signal: "SIGNAL",
-            active: "ACTIVE",
-            unstable: "UNSTABLE",
-            critical: "CRITICAL",
-            criticalAlert: "CRITICAL STRESS DETECTED",
-            noSessions: "NO SESSIONS RECORDED",
-            maxBpm: "MAX BPM",
-            maxStress: "MAX STRESS",
-            footer: "© 2026 FEAR METER",
-            footerSub: "Experimental Biometric Horror System",
-        },
-        ES: {
-            monitor: "Monitor",
-            watchMode: "Modo Reloj",
-            history: "Historial",
-            language: "Idioma",
-            about: "Acerca de / Legal",
-            calibration: "Calibración",
-            nightmare: "Protocolo Pesadilla",
-            startSession: "INICIAR SESIÓN",
-            stopSession: "DETENER SESIÓN",
-            bpm: "BPM",
-            stress: "ESTRÉS",
-            signal: "SEÑAL",
-            active: "ACTIVO",
-            unstable: "INESTABLE",
-            critical: "CRÍTICO",
-            criticalAlert: "ESTRÉS CRÍTICO DETECTADO",
-            noSessions: "SIN SESIONES REGISTRADAS",
-            maxBpm: "BPM MÁX",
-            maxStress: "ESTRÉS MÁX",
-            footer: "© 2026 FEAR METER",
-            footerSub: "Sistema Biométrico de Horror Experimental",
-        },
-    };
-
-    const t = texts[language];
-
     return (
         <div 
             ref={containerRef}
