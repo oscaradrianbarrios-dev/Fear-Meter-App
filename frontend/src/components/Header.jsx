@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import { useRef, useCallback, useState, useEffect } from "react";
+import { AudioControl } from "./SoundToggle";
 
 export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => {
     const longPressRef = useRef(null);
@@ -36,21 +37,23 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
 
     return (
         <header 
-            className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between fear-bg-unease"
+            className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between"
             style={{
                 backgroundColor: "#000000",
-                borderBottom: "1px solid rgba(255, 0, 0, 0.08)",
-                marginLeft: '1px', // Subtle asymmetry
+                borderBottom: "1px solid rgba(255, 0, 0, 0.25)",
+                boxShadow: "0 2px 10px rgba(255, 0, 0, 0.1)",
             }}
         >
             {/* Menu button - LEFT side */}
             <button
                 onClick={onMenuOpen}
-                className="p-2 transition-colors duration-200"
-                style={{ color: "rgba(255, 0, 0, 0.4)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.7)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.4)"}
+                className="p-2 transition-all duration-200"
+                style={{ 
+                    color: "#FF0000",
+                    textShadow: "0 0 8px rgba(255, 0, 0, 0.4)",
+                }}
                 aria-label="Open menu"
+                data-testid="menu-button"
             >
                 <Menu className="w-5 h-5" />
             </button>
@@ -65,41 +68,51 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                 onTouchEnd={handleLogoTouchEnd}
             >
                 <div 
-                    className="w-1.5 h-1.5 rounded-full fear-watching"
-                    style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }}
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ 
+                        backgroundColor: "#FF0000",
+                        boxShadow: "0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5)",
+                    }}
                 />
                 <h1 
-                    className="font-bold text-xs tracking-[0.25em] uppercase"
-                    style={{ color: "rgba(255, 0, 0, 0.65)" }}
+                    className="font-bold text-sm tracking-[0.25em] uppercase"
+                    style={{ 
+                        color: "#FF0000",
+                        textShadow: "0 0 10px rgba(255, 0, 0, 0.5)",
+                    }}
                 >
-                    FEAR METER{" "}
-                    <span 
-                        className="font-normal"
-                        style={{ color: "rgba(176, 176, 176, 0.3)" }}
-                    >
-                        v1.0
-                    </span>
+                    FEAR METER
                 </h1>
             </div>
 
-            {/* Watching indicator - appears randomly */}
-            <div 
-                className="w-9 flex items-center justify-end transition-opacity duration-1000"
-                style={{ opacity: showWatching ? 1 : 0 }}
-            >
-                <span 
-                    className="text-[7px] tracking-[0.15em]"
-                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
-                >
-                    REC
-                </span>
+            {/* Audio control - RIGHT side */}
+            <div className="flex items-center gap-2">
+                {/* Watching indicator - appears randomly */}
                 <div 
-                    className="w-1 h-1 rounded-full ml-1"
-                    style={{ 
-                        backgroundColor: "rgba(255, 0, 0, 0.4)",
-                        animation: showWatching ? "watching-pulse 1s ease-in-out infinite" : "none",
-                    }}
-                />
+                    className="flex items-center transition-opacity duration-1000 mr-1"
+                    style={{ opacity: showWatching ? 1 : 0 }}
+                >
+                    <span 
+                        className="text-[8px] tracking-[0.15em]"
+                        style={{ 
+                            color: "#FF0000",
+                            textShadow: "0 0 5px rgba(255, 0, 0, 0.5)",
+                        }}
+                    >
+                        REC
+                    </span>
+                    <div 
+                        className="w-1.5 h-1.5 rounded-full ml-1"
+                        style={{ 
+                            backgroundColor: "#FF0000",
+                            boxShadow: "0 0 8px #FF0000",
+                            animation: showWatching ? "pulse 1s ease-in-out infinite" : "none",
+                        }}
+                    />
+                </div>
+                
+                {/* Audio control button */}
+                <AudioControl />
             </div>
         </header>
     );
