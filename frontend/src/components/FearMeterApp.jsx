@@ -18,7 +18,13 @@ export const FearMeterApp = () => {
     const navigate = useNavigate();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
-    const [language, setLanguage] = useState("EN");
+    const [language, setLanguage] = useState(() => {
+        try {
+            return localStorage.getItem("fear_meter_language") || "EN";
+        } catch {
+            return "EN";
+        }
+    });
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
     const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
