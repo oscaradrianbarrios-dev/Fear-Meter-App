@@ -6,6 +6,7 @@ export const ResponseIndicator = ({
     isCalibrated,
     isActive,
     language = "EN",
+    movementIntensity = 0,
 }) => {
     const [flashing, setFlashing] = useState(false);
     const prevResponseRef = useRef(responseType);
@@ -24,6 +25,8 @@ export const ResponseIndicator = ({
             [RESPONSE_TYPE.ANXIETY]: "ANXIETY PATTERN IDENTIFIED",
             notCalibrated: "CALIBRATION REQUIRED",
             inactive: "SESSION INACTIVE",
+            calibrated: "CALIBRATED",
+            panicSuppressed: "PANIC SUPPRESSED — EXERCISE MODE",
         },
         ES: {
             [RESPONSE_TYPE.NONE]: "MONITOREANDO...",
@@ -33,6 +36,8 @@ export const ResponseIndicator = ({
             [RESPONSE_TYPE.ANXIETY]: "PATRÓN DE ANSIEDAD IDENTIFICADO",
             notCalibrated: "CALIBRACIÓN REQUERIDA",
             inactive: "SESIÓN INACTIVA",
+            calibrated: "CALIBRADO",
+            panicSuppressed: "PÁNICO SUPRIMIDO — MODO EJERCICIO",
         },
     };
     
