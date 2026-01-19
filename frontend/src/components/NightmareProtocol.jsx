@@ -291,7 +291,7 @@ export const NightmareProtocol = () => {
                         style={{ color: getStatusColor() }}
                     >
                         {protocolState === NIGHTMARE_STATE.STANDBY && t.standby}
-                        {protocolState === NIGHTMARE_STATE.MONITORING && t.monitoring}
+                        {protocolState === NIGHTMARE_STATE.MONITORING && (forceNightMode ? t.monitoringTest : t.monitoring)}
                         {protocolState === NIGHTMARE_STATE.EVENT_DETECTED && t.eventDetected}
                     </span>
                 </div>
