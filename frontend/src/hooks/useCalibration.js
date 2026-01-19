@@ -379,6 +379,9 @@ export const useCalibration = () => {
         setIsMoving(false);
         setResponseType(RESPONSE_TYPE.NONE);
         setMovementIntensity(0);
+        setExpirationWarning(false);
+        setHoursUntilExpiration(null);
+        setIsCalibrating(false);
         bpmSamplesRef.current = [];
         movementHistoryRef.current = [];
         bpmVarianceRef.current = [];
@@ -386,6 +389,41 @@ export const useCalibration = () => {
         // Clear from localStorage
         clearCalibrationFromStorage();
     }, [cleanupMotionDetection]);
+    
+    // Check expiration status periodically
+    useEffect(() => {
+        if (calibrationState !== CALIBRATION_STATE.COMPLETE) {
+            setExpirationWarning(false);
+            setHoursUntilExpiration(null);
+            return;
+        }
+        
+        const checkExpiration = () => {
+            const stored = loadCalibrationFromStorage();
+            if (stored && stored.expiresAt) {
+                const now = Date.now();
+                const hoursLeft = (stored.expiresAt - now) / (1000 * 60 * 60);
+                
+                if (hoursLeft <= 0) {
+                    // Expired - reset calibration
+                    resetCalibration();
+                } else if (hoursLeft <= EXPIRATION_WARNING_HOURS) {
+                    // About to expire - show warning
+                    setExpirationWarning(true);
+                    setHoursUntilExpiration(Math.ceil(hoursLeft));
+                } else {
+                    setExpirationWarning(false);
+                    setHoursUntilExpiration(Math.ceil(hoursLeft));
+                }
+            }
+        };
+        
+        // Check immediately and then every minute
+        checkExpiration();
+        const intervalId = setInterval(checkExpiration, 60000);
+        
+        return () => clearInterval(intervalId);
+    }, [calibrationState, resetCalibration]);
     
     // Initialize motion detection on mount if already calibrated
     // Using ref to track initialization to avoid multiple calls
