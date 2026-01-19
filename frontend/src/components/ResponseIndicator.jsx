@@ -38,18 +38,15 @@ export const ResponseIndicator = ({
     
     const t = texts[language];
     
-    // Show indicator when response changes
+    // Flash effect when response type changes
     useEffect(() => {
-        if (isActive && responseType !== RESPONSE_TYPE.NONE) {
-            setVisible(true);
+        if (responseType !== prevResponseRef.current && responseType !== RESPONSE_TYPE.NONE) {
             setFlashing(true);
-            
-            // Stop flashing after 2 seconds
-            const flashTimeout = setTimeout(() => setFlashing(false), 2000);
-            
-            return () => clearTimeout(flashTimeout);
+            const timer = setTimeout(() => setFlashing(false), 2000);
+            prevResponseRef.current = responseType;
+            return () => clearTimeout(timer);
         }
-    }, [responseType, isActive]);
+    }, [responseType]);
     
     // Get display text
     const getDisplayText = () => {
