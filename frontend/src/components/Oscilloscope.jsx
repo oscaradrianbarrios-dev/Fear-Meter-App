@@ -59,12 +59,12 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, width, height);
 
-            // Draw grid lines - very subtle
-            const gridOpacity = isPanic ? 0.02 : 0.04;
+            // Draw grid lines - brighter red
+            const gridOpacity = isPanic ? 0.08 : 0.12;
             ctx.strokeStyle = `rgba(255, 0, 0, ${gridOpacity})`;
             ctx.lineWidth = 1;
             
-            // Horizontal grid lines - asymmetric spacing
+            // Horizontal grid lines
             const gridSpacings = [0.18, 0.35, 0.5, 0.68, 0.85];
             gridSpacings.forEach(ratio => {
                 ctx.beginPath();
@@ -73,7 +73,7 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 ctx.stroke();
             });
 
-            // Vertical grid lines - irregular
+            // Vertical grid lines
             for (let i = 0; i < 7; i++) {
                 const x = width * (0.12 + (i * 0.13) + (i % 2 === 0 ? 0.01 : -0.01));
                 ctx.beginPath();
@@ -82,11 +82,13 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 ctx.stroke();
             }
 
-            // Inactive state - flat line with slight drift
+            // Inactive state - flat line with glow
             if (!isActive) {
                 const drift = Math.sin(now * 0.001) * 1;
-                ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = "#FF0000";
+                ctx.lineWidth = 2;
+                ctx.shadowColor = "#FF0000";
+                ctx.shadowBlur = 8;
                 ctx.beginPath();
                 ctx.moveTo(0, centerY + drift);
                 ctx.lineTo(width, centerY + drift);
