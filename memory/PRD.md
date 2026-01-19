@@ -14,10 +14,10 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 
 ### Global Tone
 - **Background**: Absolute black (#000000)
-- **Primary**: Pure red (#FF0000) 
-- **Danger states only**: Dark red (#8B0000)
-- **Text**: White (#FFFFFF) and Gray (#B0B0B0)
-- **UI**: High contrast, clinical, threatening - NO soft UI, NO friendly animations, NO rounded "fitness" feel
+- **Primary**: Pure red (#FF0000) - Critical states only
+- **Secondary**: Dark red (#8B0000) - UI elements, menu items
+- **Text**: Gray (#B0B0B0) and muted variations
+- **UI**: High contrast, clinical, threatening - NO soft UI, NO friendly animations
 
 ### Typography
 - Font: JetBrains Mono
@@ -29,11 +29,10 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 ## Core Features
 
 ### ✅ 1. Monitor Principal
-- Oscilloscope ECG with red glow (more chaotic at high BPM)
+- Oscilloscope ECG with biological imperfections (not perfect/symmetrical)
 - Sharp-edged data blocks (no border-radius)
 - BPM pulses with heartbeat rhythm
-- STRESS flickers at high values (>60%)
-- SIGNAL shows UNSTABLE/CRITICAL states
+- Clinical messages: "Signal unstable", "Biometric pattern altered", "Emotional anomaly detected"
 
 ### ✅ 2. Calibration System V2
 - Biometric baseline acquisition
@@ -41,48 +40,64 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 - Differentiates between exercise, stress, and fear
 - Expiration warnings (24 hours validity)
 
-### ✅ 3. Nightmare Protocol
-- Nocturnal fear monitoring mode
-- Separate UI for sleep detection
-- Event log with timestamps
-- Test mode for demonstrations
+### ✅ 3. Nightmare Protocol (IMPROVED - December 2025)
+- Concept: "The system watches even when you sleep"
+- Activation from side menu
+- Pre-activation: "PASSIVE BIOMETRIC MONITORING"
+- Active state: "NIGHTMARE MODE ACTIVE" (small red text, minimal UI)
+- BPM fluctuates slowly with micro random spikes
+- Critical event detection: BPM > 120 for 8+ seconds triggers:
+  - Long device vibration (navigator.vibrate)
+  - Brief red flash (100ms)
+  - Text: "NIGHTMARE DETECTED"
+  - Returns to black after 3 seconds
+- Summary on deactivation: Night events detected, Peak BPM, Duration
+- No sounds, no flashy animations, clinical and cold
 
 ### ✅ 4. Investor Demo Mode
 - Self-running scripted sequence
 - Accessible via `/investor-demo` or `/investor`
 - Designed for presentations
 
-### ✅ 5. Psychological Horror UX
-- Unsettling micro-interactions
-- Clinical messaging
-- Asymmetric layout
-- Breathing data animations
-- Red flickering effects
+### ✅ 5. Psychological Horror UX (IMPROVED - December 2025)
+- Reduced decorative animations (animate only on critical states)
+- Visual rhythm: BPM visible but not always animated
+- Oscilloscope with irregular heartbeats (not "perfect")
+- Emotional states:
+  - NORMAL → stable interface
+  - ELEVATED → darker red (#8B0000)
+  - CRITICAL → pure red (#FF0000) + micro flicker
+- Clinical messages replacing generic text
 
-### ✅ 6. Multilingual Language Selector (NEW - December 2025)
+### ✅ 6. Multilingual Language Selector
 - 9 languages: English, Español, Português, Italiano, 日本語, 中文, Deutsch, Русский, Français
-- Located in side menu under "Language" section
+- Located in side menu
 - Vertical list with single selection
-- Styling: Black background (#000000), Gray text (#B0B0B0), Red selected (#FF0000) with underline and glow
+- Styling: Black background, gray text, red selected with underline and glow
 - Persists to localStorage
 - Updates UI immediately without page reload
-- Uses React Context for global state management
 
-### ✅ 7. Redesigned Smartwatch Mode (NEW - December 2025)
+### ✅ 7. Smartwatch Mode
 - Concept: "The watch doesn't show data: it watches."
 - Circular fullscreen simulation
-- No decorative borders
-- Biometric ring: Red arc (#FF0000) fills based on BPM
+- Biometric ring: Red arc fills based on BPM
 - Ring vibrates visually when BPM > 110
-- Subtle red glow only on peaks
-- Central BPM: Large number, JetBrains Mono bold, pure red
-- Status: STABLE / ELEVATED / CRITICAL (auto-changes based on BPM)
-- Interactions:
-  - Short tap: Micro red flash
-  - BPM > 120: Device vibration (navigator.vibrate), CRITICAL status
-- Heartbeat animation synced with BPM
-- No buttons, no unnecessary graphics
-- Smooth transitions, no aggressive gaming animations
+- Central BPM: Large number, JetBrains Mono bold
+- Status: STABLE / ELEVATED / CRITICAL
+- Device vibration on CRITICAL state
+
+### ✅ 8. Side Menu (IMPROVED - December 2025)
+- Slow appearance (300ms) - more unsettling
+- Absolute black background
+- Muted dark red text (rgba(139, 0, 0, x))
+- Items: Monitor, Watch Mode, History, Nightmare Protocol, Language, About / Legal
+- No hover effects (cleaner, colder)
+
+### ✅ 9. History View
+- Clinical records style
+- Date + Duration + Peak BPM
+- No color graphs
+- Only red/white text on black
 
 ---
 
@@ -109,22 +124,22 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 │   ├── Header.jsx
 │   ├── History.jsx
 │   ├── InvestorDemo.jsx
-│   ├── LanguageSelector.jsx (NEW)
+│   ├── LanguageSelector.jsx
 │   ├── MainButton.jsx
 │   ├── Monitor.jsx
-│   ├── NightmareProtocol.jsx
-│   ├── Oscilloscope.jsx
+│   ├── NightmareProtocol.jsx (IMPROVED)
+│   ├── Oscilloscope.jsx (IMPROVED - biological)
 │   ├── PanicOverlay.jsx
-│   ├── ResponseIndicator.jsx
-│   ├── SideMenu.jsx
-│   └── WatchMode.jsx (REDESIGNED)
+│   ├── ResponseIndicator.jsx (clinical messages)
+│   ├── SideMenu.jsx (IMPROVED - 300ms, dark red)
+│   └── WatchMode.jsx
 ├── contexts/
-│   └── LanguageContext.jsx (NEW)
+│   └── LanguageContext.jsx
 ├── hooks/
 │   ├── useCalibration.js
 │   ├── useBiometricSimulation.js
 │   ├── useSessionManager.js
-│   └── useNightmareProtocol.js
+│   └── useNightmareProtocol.js (IMPROVED)
 ├── i18n/
 │   └── translations.js (9 languages)
 ├── styles/
@@ -144,28 +159,33 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 
 ## Completed Work (December 2025)
 
-### Session Updates
-1. **Multilingual Language Selector** - COMPLETED
-   - Created LanguageContext for global state management
-   - Implemented LanguageSelector modal with 9 languages
-   - Updated SideMenu to open language selector
-   - All UI strings translated in translations.js
-   - Persists to localStorage under 'fear_meter_language'
+### Latest Session
+1. **Language Selector** - COMPLETED
+   - React Context for global state
+   - 9 languages working
+   - localStorage persistence
 
-2. **Smartwatch Mode Redesign** - COMPLETED
-   - Circular fullscreen simulation
-   - Biometric ring with visual vibration effect
-   - STABLE/ELEVATED/CRITICAL status based on BPM thresholds
-   - Heartbeat animation synced to BPM
-   - Device vibration on CRITICAL state
-   - Minimal, watching aesthetic
+2. **Nightmare Protocol Improvements** - COMPLETED
+   - Minimalist UI
+   - BPM > 120 for 8+ seconds triggers detection
+   - Vibration and flash effects
+   - Summary view on deactivation
+
+3. **Psychological Horror UX** - COMPLETED
+   - Biological oscilloscope with imperfections
+   - Slower menu transitions (300ms)
+   - Dark red color scheme (#8B0000)
+   - Clinical messages
+
+4. **Smartwatch Mode** - COMPLETED
+   - Circular display with biometric ring
+   - STABLE/ELEVATED/CRITICAL states
 
 ---
 
 ## Testing Status
 - **All features tested**: 100% pass rate
-- **Language Selector**: All 9 languages work, persistence verified
-- **Watch Mode**: Circular interface, status changes, biometric ring confirmed
+- **Test report**: `/app/test_reports/iteration_2.json`
 
 ---
 
@@ -185,8 +205,8 @@ FEAR METER es un sistema experimental de monitoreo biométrico de horror que sim
 
 ### P2
 - [ ] About / Legal page content
-- [ ] Animated logo
+- [ ] Additional clinical messages in all languages
 
 ### Future
 - [ ] Real device integration (Web Bluetooth)
-- [ ] Additional sound effects
+- [ ] Sound effects (minimal, clinical)
