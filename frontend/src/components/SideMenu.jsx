@@ -191,7 +191,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
 
                 {/* Nightmare Protocol */}
                 <button
@@ -220,7 +220,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
 
                 {/* About */}
                 <button
@@ -247,7 +247,7 @@ export const SideMenu = ({
                 {/* Demo Mode Option - Hidden by default */}
                 {showDemoOption && (
                     <>
-                        <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+                        <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
                         <button
                             onClick={onDemoActivate}
                             className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
@@ -276,7 +276,7 @@ export const SideMenu = ({
                 <div 
                     className="absolute bottom-0 left-0 right-0 p-4"
                     style={{ 
-                        borderTop: "1px solid rgba(255, 0, 0, 0.08)",
+                        borderTop: "1px solid rgba(139, 0, 0, 0.05)",
                         opacity: itemsReady ? 1 : 0,
                         transition: "opacity 200ms ease-out 350ms",
                     }}
