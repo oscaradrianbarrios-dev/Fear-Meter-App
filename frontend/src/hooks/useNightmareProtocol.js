@@ -296,11 +296,11 @@ export const useNightmareProtocol = () => {
         let peakBpmDuringEvent = 0;
         
         const monitor = () => {
-            // Check nighttime status
-            const nighttime = isNighttime();
+            // Check nighttime status (respect forceNightMode)
+            const nighttime = isNighttime(forceNightMode);
             if (nighttime && protocolState === NIGHTMARE_STATE.STANDBY) {
                 setProtocolState(NIGHTMARE_STATE.MONITORING);
-            } else if (!nighttime && protocolState === NIGHTMARE_STATE.MONITORING) {
+            } else if (!nighttime && protocolState === NIGHTMARE_STATE.MONITORING && !forceNightMode) {
                 setProtocolState(NIGHTMARE_STATE.STANDBY);
             }
             
