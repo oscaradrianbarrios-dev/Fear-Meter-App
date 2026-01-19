@@ -11,25 +11,12 @@ export const DataGrid = ({
     const [showData, setShowData] = useState(false);
     const [revealPhase, setRevealPhase] = useState(0);
 
-    // Clinical system messages based on state
-    const systemMessages = useMemo(() => ({
-        monitoring: "MONITORING SUBJECT",
-        elevated: "FEAR PATTERN IDENTIFIED",
-        high: "STRESS RESPONSE DETECTED",
-        critical: "NO ESCAPE RESPONSE",
-        recording: "DATA CONTINUES RECORDING",
-    }), []);
-
     // Staged reveal for psychological effect
     useEffect(() => {
         if (isActive && !showData) {
-            // Phase 1: Show placeholders (100ms)
             const timer1 = setTimeout(() => setRevealPhase(1), 100);
-            // Phase 2: Reveal BPM (250ms)
             const timer2 = setTimeout(() => setRevealPhase(2), 250);
-            // Phase 3: Reveal Stress (400ms)
             const timer3 = setTimeout(() => setRevealPhase(3), 400);
-            // Phase 4: Reveal Signal (550ms)
             const timer4 = setTimeout(() => {
                 setRevealPhase(4);
                 setShowData(true);
@@ -54,52 +41,42 @@ export const DataGrid = ({
         return texts.active;
     };
 
-    const getSignalClass = () => {
-        if (!isActive || revealPhase < 4) return "text-fear-gray/40";
-        if (signal === "CRITICAL") return "text-fear-red text-glow-red-intense fear-micro-shake";
-        if (signal === "UNSTABLE") return "text-fear-red/70";
-        return "text-fear-red/90";
-    };
-
-    // Determine breathing speed based on BPM
-    const getBpmBreathingClass = () => {
-        if (!isActive || !showData) return "";
-        if (bpm > 100) return "fear-data-breathe-fast";
-        return "fear-data-breathe";
-    };
-
     return (
         <div 
-            className="grid grid-cols-3 fear-uncomfortable-grid"
-            style={{ 
-                gap: '11px 13px', // Asymmetric
-                marginLeft: '1px',
-            }}
+            className="grid grid-cols-3"
+            style={{ gap: '12px' }}
         >
             {/* BPM Block */}
             <div 
-                className={`data-block p-3 rounded micro-tremor fear-border-flicker ${
-                    isActive && showData ? (isPanic ? "critical" : "active") : ""
-                }`}
-                style={{ marginTop: '2px' }} // Subtle misalignment
+                className="p-4"
+                style={{ 
+                    backgroundColor: "rgba(0, 0, 0, 0.9)",
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    boxShadow: isPanic && showData 
+                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
+                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                }}
             >
                 <div 
-                    className="text-[10px] tracking-[0.2em] uppercase mb-1 fear-text-reveal-delay-1"
-                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                    className="text-[10px] tracking-[0.2em] uppercase mb-2"
+                    style={{ 
+                        color: "#FF0000",
+                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                    }}
                 >
                     {texts.bpm}
                 </div>
                 <div 
-                    className={`text-2xl font-bold transition-all duration-500 ${getBpmBreathingClass()} ${
-                        isPanic && showData
-                            ? "text-fear-red text-glow-red-intense fear-micro-shake" 
-                            : isActive && revealPhase >= 2
-                                ? "text-fear-red/90 text-glow-red" 
-                                : "text-fear-gray/40"
-                    }`}
+                    className="text-3xl font-bold font-mono"
                     style={{ 
-                        opacity: revealPhase >= 2 ? 1 : 0.3,
-                        transition: 'opacity 0.3s ease-out',
+                        color: isActive && revealPhase >= 2 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        textShadow: isActive && revealPhase >= 2 
+                            ? isPanic 
+                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
+                                : "0 0 15px rgba(255, 0, 0, 0.6)"
+                            : "none",
+                        opacity: revealPhase >= 2 ? 1 : 0.4,
+                        transition: 'all 0.3s ease-out',
                     }}
                 >
                     {isActive && revealPhase >= 2 ? bpm : "---"}
@@ -108,29 +85,35 @@ export const DataGrid = ({
 
             {/* Stress Block */}
             <div 
-                className={`data-block p-3 rounded micro-tremor fear-border-flicker ${
-                    isActive && showData ? (isPanic ? "critical" : "active") : ""
-                }`}
+                className="p-4"
+                style={{ 
+                    backgroundColor: "rgba(0, 0, 0, 0.9)",
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    boxShadow: isPanic && showData 
+                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
+                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                }}
             >
                 <div 
-                    className="text-[10px] tracking-[0.2em] uppercase mb-1 fear-text-reveal-delay-2"
-                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                    className="text-[10px] tracking-[0.2em] uppercase mb-2"
+                    style={{ 
+                        color: "#FF0000",
+                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                    }}
                 >
                     {texts.stress}
                 </div>
                 <div 
-                    className={`text-2xl font-bold transition-all duration-500 ${
-                        stress > 60 ? 'fear-data-breathe-fast' : 'fear-data-breathe'
-                    } ${
-                        isPanic && showData
-                            ? "text-fear-red text-glow-red-intense" 
-                            : isActive && revealPhase >= 3
-                                ? "text-fear-red/90 text-glow-red" 
-                                : "text-fear-gray/40"
-                    }`}
+                    className="text-3xl font-bold font-mono"
                     style={{ 
-                        opacity: revealPhase >= 3 ? 1 : 0.3,
-                        transition: 'opacity 0.3s ease-out',
+                        color: isActive && revealPhase >= 3 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        textShadow: isActive && revealPhase >= 3 
+                            ? isPanic 
+                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
+                                : "0 0 15px rgba(255, 0, 0, 0.6)"
+                            : "none",
+                        opacity: revealPhase >= 3 ? 1 : 0.4,
+                        transition: 'all 0.3s ease-out',
                     }}
                 >
                     {isActive && revealPhase >= 3 ? `${stress}%` : "---"}
@@ -139,22 +122,35 @@ export const DataGrid = ({
 
             {/* Signal Block */}
             <div 
-                className={`data-block p-3 rounded micro-tremor fear-border-flicker ${
-                    isActive && showData ? (isPanic ? "critical" : "active") : ""
-                }`}
-                style={{ marginBottom: '1px' }} // Subtle misalignment
+                className="p-4"
+                style={{ 
+                    backgroundColor: "rgba(0, 0, 0, 0.9)",
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    boxShadow: isPanic && showData 
+                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
+                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                }}
             >
                 <div 
-                    className="text-[10px] tracking-[0.2em] uppercase mb-1 fear-text-reveal-delay-3"
-                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                    className="text-[10px] tracking-[0.2em] uppercase mb-2"
+                    style={{ 
+                        color: "#FF0000",
+                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                    }}
                 >
                     {texts.signal}
                 </div>
                 <div 
-                    className={`text-sm font-bold tracking-wider transition-all duration-500 ${getSignalClass()}`}
+                    className="text-sm font-bold tracking-wider"
                     style={{ 
-                        opacity: revealPhase >= 4 ? 1 : 0.3,
-                        transition: 'opacity 0.3s ease-out',
+                        color: isActive && revealPhase >= 4 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        textShadow: isActive && revealPhase >= 4 
+                            ? signal === "CRITICAL"
+                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
+                                : "0 0 10px rgba(255, 0, 0, 0.5)"
+                            : "none",
+                        opacity: revealPhase >= 4 ? 1 : 0.4,
+                        transition: 'all 0.3s ease-out',
                     }}
                 >
                     {getSignalText()}
