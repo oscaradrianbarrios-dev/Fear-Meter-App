@@ -267,6 +267,14 @@ export const FearMeterApp = () => {
                 isCalibrated={isCalibrated}
             />
 
+            {/* Expiration Warning */}
+            <ExpirationWarning
+                visible={expirationWarning && !showCalibration}
+                hoursLeft={hoursUntilExpiration}
+                onRecalibrate={handleOpenCalibration}
+                language={language}
+            />
+
             {/* Response Type Indicator */}
             {isActive && (
                 <ResponseIndicator
