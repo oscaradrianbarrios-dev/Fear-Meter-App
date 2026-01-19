@@ -320,6 +320,14 @@ export const SideMenu = ({
                     </div>
                 </div>
             </div>
+
+            {/* Language Selector Modal */}
+            <LanguageSelector
+                isOpen={languageSelectorOpen}
+                onClose={handleLanguageSelectorClose}
+                currentLanguage={language}
+                onLanguageChange={handleLanguageSelect}
+            />
         </>
     );
 };
