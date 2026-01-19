@@ -258,9 +258,9 @@ frontend:
 
   - task: "Calibration Protocol System"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/CalibrationProtocol.jsx, /app/frontend/src/hooks/useCalibration.js, /app/frontend/src/components/ResponseIndicator.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -279,6 +279,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "✅ BUG FIXED AND ALL 3 IMPROVEMENTS IMPLEMENTED - Fixed calibration progress bug by moving interval logic to useEffect with isCalibrating state. IMPROVEMENTS: 1) Adjusted movement detection thresholds (LOW=1.5, MEDIUM=3.5, HIGH=7.0) with weighted axes and BPM variance tracking for anxiety detection. 2) Added localStorage persistence with 24-hour expiration - calibration data survives page reload. 3) Enhanced ResponseIndicator with SAFE badge for exercise mode. VERIFIED: Calibration progress advances correctly (4%→16%→38%→100%), completion screen shows baseline values (BPM: 69-71, Stress: 11-14%), localStorage stores calibration data, ACTIVE badge appears in menu after reload."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL INTEGRATION BUG FOUND - Comprehensive testing of UPDATED calibration system revealed mixed results: ✅ WORKING FEATURES: 1) Calibration duration correctly reduced to 30 SECONDS (verified in intro screen), 2) Calibration process completes successfully in ~28 seconds with progress tracking (0% → 'ANALYZING BIOMETRIC PATTERNS...' → 'CALIBRATION COMPLETE'), 3) Completion screen shows 'VALID FOR 24 HOURS' text correctly, 4) BASE BPM (72) and BASE STRESS (15%) values displayed, 5) localStorage persistence working (survives page reload), 6) Menu shows 'ACTIVE' badge after calibration, 7) Hamburger menu access working (left side, red color). ❌ CRITICAL BUG: ResponseIndicator integration broken - even after successful calibration and with 'ACTIVE' badge in menu, the main monitor still shows 'CALIBRATION REQUIRED' indicator during active session (BPM: 89, STRESS: 36%, SIGNAL: ACTIVE). This suggests the ResponseIndicator component is not properly reading the calibration state from localStorage or the isCalibrated prop is not being passed correctly. ROOT CAUSE: Integration issue between useCalibration hook and ResponseIndicator component - calibration data persists but ResponseIndicator doesn't recognize calibrated state."
 
 metadata:
   created_by: "testing_agent"
