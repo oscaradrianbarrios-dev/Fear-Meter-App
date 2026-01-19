@@ -230,6 +230,99 @@ export const SideMenu = ({
                     <span className="text-[11px] tracking-[0.15em]">Fear Library</span>
                 </button>
 
+                {/* Movie Session */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/movie-session");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 340ms",
+                    }}
+                >
+                    <Film className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">Movie Session</span>
+                </button>
+
+                {/* VR Experience */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/vr");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 360ms",
+                    }}
+                >
+                    <Glasses className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">VR Experience</span>
+                </button>
+
+                {/* Fear Challenge */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/challenge");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 380ms",
+                    }}
+                >
+                    <Trophy className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">Fear Challenge</span>
+                </button>
+
+                {/* Divider */}
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }} />
+
+                {/* Biometric Profile */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/profile");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 400ms",
+                    }}
+                >
+                    <User className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">Biometric Profile</span>
+                </button>
+
+                {/* Share Fear */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/share");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 420ms",
+                    }}
+                >
+                    <Share2 className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">Share Fear</span>
+                </button>
+
                 {/* Divider */}
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }} />
 
@@ -238,7 +331,7 @@ export const SideMenu = ({
                     style={{ 
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 250ms ease-out 360ms",
+                        transition: "all 250ms ease-out 440ms",
                     }}
                 >
                     <SoundToggle />
@@ -254,7 +347,7 @@ export const SideMenu = ({
                         color: "rgba(142, 14, 28, 0.4)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 250ms ease-out 400ms",
+                        transition: "all 250ms ease-out 460ms",
                     }}
                 >
                     <Info className="w-4 h-4" />
