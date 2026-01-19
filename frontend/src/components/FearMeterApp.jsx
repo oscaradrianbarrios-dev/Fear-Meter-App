@@ -13,18 +13,13 @@ import ExpirationWarning from "./ExpirationWarning";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useCalibration, CALIBRATION_STATE } from "@/hooks/useCalibration";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const FearMeterApp = () => {
     const navigate = useNavigate();
+    const { language, setLanguage, texts } = useLanguage();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
-    const [language, setLanguage] = useState(() => {
-        try {
-            return localStorage.getItem("fear_meter_language") || "EN";
-        } catch {
-            return "EN";
-        }
-    });
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
     const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
