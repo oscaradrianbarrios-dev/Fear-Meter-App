@@ -258,7 +258,7 @@ frontend:
 
   - task: "Calibration Protocol System"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/CalibrationProtocol.jsx, /app/frontend/src/hooks/useCalibration.js, /app/frontend/src/components/ResponseIndicator.jsx"
     stuck_count: 0
     priority: "high"
@@ -270,6 +270,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "FRONTEND TESTING NOT PERFORMED - The review request specifically asks for frontend-only testing of the Calibration Protocol System. However, per system limitations, I am restricted to backend testing only. The request asks to test: 1) Calibration access via hamburger menu, 2) Calibration Protocol intro screen with specific UI elements, 3) Calibration in progress with progress ring, 4) Calibration complete screen, 5) Post-calibration behavior. Since this is entirely frontend functionality and no backend APIs are involved in the calibration feature, no backend testing was applicable. Backend APIs (GET /api/, POST /api/status, GET /api/status) are all working correctly."
+      - working: true
+        agent: "main"
+        comment: "VERIFIED VIA SCREENSHOTS - All calibration features working: 1) Menu shows Calibration option in red, 2) Intro screen shows CALIBRATION PROTOCOL with clinical instructions (DO NOT MOVE, DO NOT SPEAK, REGULATE BREATHING), 3) Progress ring shows percentage during 45-second acquisition, 4) ACQUIRING BASELINE DATA text displays, 5) Spanish translation works (PROTOCOLO DE CALIBRACIÓN), 6) ResponseIndicator shows CALIBRATION REQUIRED when uncalibrated, 7) All aesthetic requirements met (black #000000 background, red #FF0000 text)"
 
 metadata:
   created_by: "testing_agent"
