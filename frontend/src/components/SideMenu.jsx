@@ -199,24 +199,16 @@ export const SideMenu = ({
                         onClose();
                         navigate("/nightmare");
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                    className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "#8B0000",
+                        color: "rgba(139, 0, 0, 0.5)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 200ms ease-out 280ms",
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#FF0000";
-                        e.currentTarget.style.backgroundColor = "rgba(139, 0, 0, 0.05)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#8B0000";
-                        e.currentTarget.style.backgroundColor = "transparent";
+                        transition: "all 250ms ease-out 280ms",
                     }}
                 >
                     <Moon className="w-4 h-4" />
-                    <span className="text-xs tracking-[0.15em]">{texts.nightmare || "Nightmare Protocol"}</span>
+                    <span className="text-[11px] tracking-[0.15em]">{texts.nightmare || "Nightmare Protocol"}</span>
                 </button>
 
                 {/* Divider */}
