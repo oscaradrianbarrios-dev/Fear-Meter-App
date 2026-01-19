@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { CALIBRATION_STATE } from "@/hooks/useCalibration";
 
 export const CalibrationProtocol = ({
@@ -13,6 +13,7 @@ export const CalibrationProtocol = ({
 }) => {
     const [showData, setShowData] = useState(false);
     const [glitchText, setGlitchText] = useState(false);
+    const showDataTimerRef = useRef(null);
     
     // Derive phase from calibrationState instead of using setState in effect
     const phase = useMemo(() => {
