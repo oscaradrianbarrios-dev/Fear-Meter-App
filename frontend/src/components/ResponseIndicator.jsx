@@ -93,6 +93,7 @@ export const ResponseIndicator = ({
     
     // Check if this is a critical response
     const isCritical = responseType === RESPONSE_TYPE.FEAR;
+    const isExercise = responseType === RESPONSE_TYPE.EXERCISE;
     
     if (!isActive && !isCalibrated) return null;
     
@@ -102,7 +103,9 @@ export const ResponseIndicator = ({
             style={{ 
                 backgroundColor: isCritical 
                     ? "rgba(255, 0, 0, 0.08)" 
-                    : "rgba(255, 0, 0, 0.02)",
+                    : isExercise
+                        ? "rgba(255, 0, 0, 0.03)"
+                        : "rgba(255, 0, 0, 0.02)",
                 borderTop: `1px solid ${getBorderColor()}`,
                 borderBottom: `1px solid ${getBorderColor()}`,
             }}
@@ -141,6 +144,20 @@ export const ResponseIndicator = ({
                         }}
                     >
                         CRITICAL
+                    </div>
+                )}
+                
+                {/* Exercise indicator - shows that panic is being suppressed */}
+                {isExercise && isCalibrated && (
+                    <div 
+                        className="ml-1 px-1.5 py-0.5 text-[7px] tracking-[0.1em]"
+                        style={{ 
+                            backgroundColor: "rgba(255, 0, 0, 0.05)",
+                            color: "rgba(255, 0, 0, 0.4)",
+                            border: "1px solid rgba(255, 0, 0, 0.1)",
+                        }}
+                    >
+                        SAFE
                     </div>
                 )}
             </div>
