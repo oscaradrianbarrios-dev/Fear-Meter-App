@@ -122,6 +122,12 @@ export const FearMeterApp = () => {
 
     const handleLanguageChange = useCallback((lang) => {
         setLanguage(lang);
+        // Persist language for other views (NightmareProtocol, etc)
+        try {
+            localStorage.setItem("fear_meter_language", lang);
+        } catch (e) {
+            console.warn("Failed to save language preference:", e);
+        }
     }, []);
 
     // Long press on logo activates demo option visibility
