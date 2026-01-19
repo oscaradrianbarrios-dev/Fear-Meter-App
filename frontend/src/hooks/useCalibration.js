@@ -456,6 +456,10 @@ export const useCalibration = () => {
         movementIntensity,
         isCalibrated: calibrationState === CALIBRATION_STATE.COMPLETE,
         
+        // Expiration info
+        expirationWarning,
+        hoursUntilExpiration,
+        
         // Actions
         startCalibration,
         addBpmSample,
