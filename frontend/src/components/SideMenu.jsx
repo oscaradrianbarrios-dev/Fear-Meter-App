@@ -1,6 +1,8 @@
 import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import LanguageSelector from "./LanguageSelector";
+import { LANGUAGES } from "@/i18n/translations";
 
 export const SideMenu = ({
     isOpen,
@@ -19,6 +21,7 @@ export const SideMenu = ({
     const [isVisible, setIsVisible] = useState(false);
     const [itemsReady, setItemsReady] = useState(false);
     const [translateX, setTranslateX] = useState(-100);
+    const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
     const menuRef = useRef(null);
 
     useEffect(() => {
@@ -46,10 +49,21 @@ export const SideMenu = ({
         { id: "history", icon: History, label: texts.history },
     ];
 
-    const languageOptions = [
-        { code: "EN", label: "English", flag: "🇺🇸" },
-        { code: "ES", label: "Español", flag: "🇪🇸" },
-    ];
+    // Get current language native name
+    const currentLangInfo = LANGUAGES[language] || LANGUAGES.EN;
+
+    const handleLanguageSelectorOpen = () => {
+        setLanguageSelectorOpen(true);
+    };
+
+    const handleLanguageSelectorClose = () => {
+        setLanguageSelectorOpen(false);
+    };
+
+    const handleLanguageSelect = (langCode) => {
+        onLanguageChange(langCode);
+        setLanguageSelectorOpen(false);
+    };
 
     return (
         <>
