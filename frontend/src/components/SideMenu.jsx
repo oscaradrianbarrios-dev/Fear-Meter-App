@@ -1,4 +1,4 @@
-import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon, BookOpen } from "lucide-react";
+import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon, BookOpen, Glasses, Trophy, User, Share2, Film } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LanguageSelector from "./LanguageSelector";
