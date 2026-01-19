@@ -460,6 +460,70 @@ export const NightmareProtocol = () => {
                 </h2>
             </div>
             
+            {/* Statistics Section */}
+            {statistics && (
+                <div 
+                    className="mx-4 mb-4 py-3 px-4"
+                    style={{ 
+                        backgroundColor: "rgba(139, 0, 0, 0.03)",
+                        border: "1px solid rgba(139, 0, 0, 0.1)",
+                    }}
+                >
+                    <p 
+                        className="text-[8px] tracking-[0.2em] mb-3"
+                        style={{ color: "rgba(139, 0, 0, 0.5)" }}
+                    >
+                        {t.stats}
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                        <div>
+                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
+                                {t.totalEvents}
+                            </p>
+                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
+                                {statistics.totalEvents}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
+                                {t.avgIntensity}
+                            </p>
+                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
+                                {statistics.avgIntensity}%
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
+                                {t.maxPeak}
+                            </p>
+                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
+                                {statistics.maxPeakBpm}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mt-3">
+                        <div>
+                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
+                                {t.avgDuration}
+                            </p>
+                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
+                                {statistics.avgDuration}s
+                            </p>
+                        </div>
+                        {statistics.peakHour !== null && (
+                            <div>
+                                <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
+                                    {t.peakHour}
+                                </p>
+                                <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
+                                    {statistics.peakHour}:00
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+            
             {/* Events List */}
             <div className="flex-1 overflow-y-auto px-4 pb-4">
                 {events.length === 0 ? (
