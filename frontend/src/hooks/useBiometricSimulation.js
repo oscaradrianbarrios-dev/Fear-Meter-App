@@ -1,6 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
-export const useBiometricSimulation = ({ onPanicStart, onPanicEnd, isDemo = false }) => {
+export const useBiometricSimulation = ({ 
+    onPanicStart, 
+    onPanicEnd, 
+    isDemo = false,
+    // Calibration integration
+    shouldTriggerPanic: externalPanicCheck = null,
+    onBpmUpdate = null,
+}) => {
     const [bpm, setBpm] = useState(72);
     const [stress, setStress] = useState(0);
     const [signal, setSignal] = useState("ACTIVE");
