@@ -392,7 +392,10 @@ export const useNightmareProtocol = () => {
         sessionStartTime,
         totalEventsTonight,
         isMoving,
-        isNighttime: isNighttime(),
+        isNighttime: isNighttime(forceNightMode),
+        forceNightMode,
+        thresholds,
+        statistics,
         
         // Computed
         tonightEvents: getTonightEvents(),
@@ -401,6 +404,8 @@ export const useNightmareProtocol = () => {
         startProtocol,
         stopProtocol,
         clearLog,
+        updateThresholds,
+        setForceNightMode,
     };
 };
 
