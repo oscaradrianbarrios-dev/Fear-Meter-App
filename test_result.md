@@ -255,6 +255,19 @@ frontend:
         agent: "testing"
         comment: "✅ UPDATED SIDE MENU & DEMO MODE FULLY VERIFIED - All new requirements implemented perfectly at mobile viewport 390x844: ✅ SIDE MENU: Hamburger icon correctly positioned on LEFT side of header in red (rgba(255, 0, 0, 0.5)), slides in from LEFT with smooth animation, absolute black background (#000000) confirmed, red subtle separators present, correct menu order (Monitor, Watch Mode, History, Language with EN🇺🇸/ES🇪🇸 flags, About/Legal), swipe gesture from left edge functional, 'SYSTEM ACCESS' and 'RESTRICTED ACCESS' text confirmed. ✅ DEMO MODE: Accessible at /demo URL, discrete 'DEMO MODE' indicator positioned in bottom right corner with dim red color (rgba(139, 0, 0, 0.4)), all 5 preloaded demo sessions present with correct BPM values (Night Terror 128, Shadow Encounter 115, Dark Vision 122, Fear Response 108, Panic Episode 135), LIST/GRAPH view toggle working, 'FEAR EVOLUTION' chart with red line on black background, smooth vertical scroll confirmed. All updated specifications implemented and working perfectly."
 
+
+  - task: "Calibration Protocol System"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/CalibrationProtocol.jsx, /app/frontend/src/hooks/useCalibration.js, /app/frontend/src/components/ResponseIndicator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "NEW FEATURE - Calibration system implemented with: 1) CalibrationProtocol.jsx screen (intro/calibrating/complete phases), 2) useCalibration.js hook for baseline acquisition and response classification, 3) ResponseIndicator.jsx for showing EXERCISE/FEAR/STRESS/ANXIETY detection, 4) Integration with useBiometricSimulation.js for calibration-aware panic triggering, 5) Menu option added to SideMenu.jsx"
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
