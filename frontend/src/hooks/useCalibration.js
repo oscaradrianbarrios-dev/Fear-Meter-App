@@ -76,6 +76,7 @@ export const useCalibration = () => {
     const [isMoving, setIsMoving] = useState(false);
     const [responseType, setResponseType] = useState(RESPONSE_TYPE.NONE);
     const [movementIntensity, setMovementIntensity] = useState(0);
+    const [isCalibrating, setIsCalibrating] = useState(false);
     
     const calibrationIntervalRef = useRef(null);
     const bpmSamplesRef = useRef([]);
@@ -83,6 +84,8 @@ export const useCalibration = () => {
     const movementHistoryRef = useRef([]);
     const lastMotionRef = useRef({ x: 0, y: 0, z: 0 });
     const bpmVarianceRef = useRef([]);
+    const calibrationStartTimeRef = useRef(null);
+    const simulatedBpmRef = useRef(72);
     
     // Calibration duration in seconds
     const CALIBRATION_DURATION = 45;
