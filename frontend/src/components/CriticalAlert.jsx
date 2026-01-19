@@ -1,30 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export const CriticalAlert = ({ visible, language = "EN" }) => {
     const [opacity, setOpacity] = useState(0);
     const [isShowing, setIsShowing] = useState(false);
+    const [textPhase, setTextPhase] = useState(0);
 
-    const text = language === "ES" 
-        ? "NIVEL DE ESTRÉS CRÍTICO DETECTADO" 
-        : "CRITICAL STRESS LEVEL DETECTED";
+    const texts = useMemo(() => ({
+        EN: [
+            "CRITICAL FEAR RESPONSE",
+            "NO ESCAPE DETECTED",
+            "DATA CONTINUES RECORDING",
+        ],
+        ES: [
+            "RESPUESTA DE MIEDO CRÍTICA",
+            "SIN ESCAPE DETECTADO",
+            "DATOS CONTINÚAN REGISTRÁNDOSE",
+        ],
+    }), []);
 
     useEffect(() => {
         if (visible && !isShowing) {
             setIsShowing(true);
+            setTextPhase(0);
+            
             // Fade in over 200ms
             const fadeIn = setTimeout(() => setOpacity(1), 50);
+            
+            // Phase through different messages for psychological effect
+            const phase1 = setTimeout(() => setTextPhase(1), 800);
+            const phase2 = setTimeout(() => setTextPhase(2), 1500);
             
             // Auto disappear after showing
             const fadeOut = setTimeout(() => {
                 setOpacity(0);
-            }, 1800);
+            }, 2500);
             
             const hide = setTimeout(() => {
                 setIsShowing(false);
-            }, 2200);
+                setTextPhase(0);
+            }, 2900);
             
             return () => {
                 clearTimeout(fadeIn);
+                clearTimeout(phase1);
+                clearTimeout(phase2);
                 clearTimeout(fadeOut);
                 clearTimeout(hide);
             };
@@ -32,6 +51,8 @@ export const CriticalAlert = ({ visible, language = "EN" }) => {
     }, [visible, isShowing]);
 
     if (!isShowing) return null;
+
+    const currentText = texts[language][textPhase] || texts.EN[textPhase];
 
     return (
         <div 
@@ -46,14 +67,31 @@ export const CriticalAlert = ({ visible, language = "EN" }) => {
                 }}
             >
                 <div 
-                    className="font-bold text-sm tracking-[0.25em] uppercase leading-relaxed"
+                    className="font-bold text-sm tracking-[0.25em] uppercase leading-relaxed fear-text-reveal"
                     style={{ 
                         fontFamily: "'JetBrains Mono', monospace",
                         color: "#8B0000",
                         textShadow: "0 0 30px rgba(139, 0, 0, 0.8), 0 0 60px rgba(139, 0, 0, 0.4)",
                     }}
                 >
-                    {text}
+                    {currentText}
+                </div>
+                
+                {/* Subtle watching indicator */}
+                <div 
+                    className="mt-4 flex items-center justify-center gap-2"
+                    style={{ opacity: textPhase >= 2 ? 0.5 : 0, transition: "opacity 0.5s" }}
+                >
+                    <div 
+                        className="w-1 h-1 rounded-full"
+                        style={{ backgroundColor: "rgba(139, 0, 0, 0.6)" }}
+                    />
+                    <span 
+                        className="text-[8px] tracking-[0.2em]"
+                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                    >
+                        RECORDING
+                    </span>
                 </div>
             </div>
         </div>
