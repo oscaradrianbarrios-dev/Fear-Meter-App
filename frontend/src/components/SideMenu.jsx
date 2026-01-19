@@ -84,32 +84,30 @@ export const SideMenu = ({
                 className="fixed top-0 left-0 h-full w-64 z-50"
                 style={{ 
                     backgroundColor: "#000000",
-                    borderRight: "1px solid rgba(255, 0, 0, 0.15)",
+                    borderRight: "1px solid rgba(139, 0, 0, 0.1)",
                     transform: `translateX(${translateX}%)`,
-                    transition: "transform 220ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    transition: "transform 300ms cubic-bezier(0.25, 0.1, 0.25, 1)",
                 }}
             >
-                {/* Header */}
+                {/* Header - minimal */}
                 <div 
                     className="flex items-center justify-between p-4"
-                    style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
+                    style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.05)" }}
                 >
                     <span 
-                        className="text-[10px] tracking-[0.3em] uppercase"
+                        className="text-[9px] tracking-[0.3em] uppercase"
                         style={{ 
-                            color: "#B0B0B0",
+                            color: "rgba(139, 0, 0, 0.4)",
                             opacity: itemsReady ? 1 : 0,
-                            transition: "opacity 150ms ease-out",
+                            transition: "opacity 200ms ease-out",
                         }}
                     >
-                        SYSTEM ACCESS
+                        SYSTEM
                     </span>
                     <button
                         onClick={onClose}
-                        className="p-1 transition-colors duration-200"
-                        style={{ color: "#B0B0B0" }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = "#FF0000"}
-                        onMouseLeave={(e) => e.currentTarget.style.color = "#B0B0B0"}
+                        className="p-1"
+                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
                     >
                         <X className="w-4 h-4" />
                     </button>
