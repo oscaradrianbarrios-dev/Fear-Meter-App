@@ -1,62 +1,94 @@
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 
-// Clinical beep frequencies and patterns
+// Clinical beep frequencies - hospital monitor style
 const BEEP_CONFIG = {
     normal: {
         frequency: 880, // A5 note - classic cardiac monitor
-        duration: 80,
-        volume: 0.08,
-        interval: 0, // No beeps in normal state
+        duration: 50, // Very short like hospital beep
+        volume: 0.25,
     },
     elevated: {
-        frequency: 880,
-        duration: 80,
-        volume: 0.12,
-        interval: 2500, // Every 2.5 seconds
+        frequency: 950, // Slightly higher
+        duration: 50,
+        volume: 0.30,
     },
     critical: {
-        frequency: 932, // Slightly higher pitch for urgency
-        duration: 100,
-        volume: 0.18,
-        interval: 800, // More frequent
+        frequency: 1000, // Higher pitch for urgency
+        duration: 40,
+        volume: 0.35,
+        doubleBeep: true, // Double beep in critical
     },
+};
+
+// White noise generator for VHS horror texture
+const createWhiteNoise = (audioContext, volume = 0.02) => {
+    const bufferSize = audioContext.sampleRate * 2;
+    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * volume;
+    }
+    
+    const whiteNoise = audioContext.createBufferSource();
+    whiteNoise.buffer = buffer;
+    whiteNoise.loop = true;
+    
+    // Low-pass filter for more analog feel
+    const filter = audioContext.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 2000;
+    
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = volume;
+    
+    whiteNoise.connect(filter);
+    filter.connect(gainNode);
+    
+    return { source: whiteNoise, gain: gainNode };
 };
 
 export const useClinicalAudio = ({ bpm, isActive, soundEnabled }) => {
     const audioContextRef = useRef(null);
-    const intervalRef = useRef(null);
-    const lastBeepRef = useRef(0);
+    const whiteNoiseRef = useRef(null);
+    const lastBeepTimeRef = useRef(0);
+    const beepScheduledRef = useRef(false);
+    const [masterVolume, setMasterVolume] = useState(0.3); // Start at 30%
     
     // Get current state based on BPM
     const getState = useCallback(() => {
         if (!isActive || bpm <= 100) return "normal";
-        if (bpm > 120) return "critical";
-        return "elevated";
+        if (bpm > 130) return "critical";
+        if (bpm > 110) return "elevated";
+        return "normal";
     }, [bpm, isActive]);
     
-    // Initialize AudioContext lazily (requires user interaction)
+    // Initialize AudioContext lazily
     const initAudio = useCallback(() => {
         if (!audioContextRef.current) {
             try {
                 audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
             } catch (e) {
                 console.warn("Web Audio API not supported:", e);
+                return null;
             }
         }
+        
+        // Resume if suspended
+        if (audioContextRef.current.state === "suspended") {
+            audioContextRef.current.resume();
+        }
+        
         return audioContextRef.current;
     }, []);
     
-    // Play a single clinical beep
-    const playBeep = useCallback((config) => {
+    // Play a single clinical beep synchronized with heartbeat
+    const playBeep = useCallback((config, isSecondBeep = false) => {
         const ctx = initAudio();
         if (!ctx || !soundEnabled) return;
         
-        // Resume context if suspended (mobile browsers)
-        if (ctx.state === "suspended") {
-            ctx.resume();
-        }
-        
         const now = ctx.currentTime;
+        const delay = isSecondBeep ? 0.08 : 0; // Second beep comes 80ms after first
         
         // Create oscillator for the beep
         const oscillator = ctx.createOscillator();
@@ -66,74 +98,115 @@ export const useClinicalAudio = ({ bpm, isActive, soundEnabled }) => {
         oscillator.connect(gainNode);
         gainNode.connect(ctx.destination);
         
-        // Configure oscillator
-        oscillator.type = "sine";
-        oscillator.frequency.setValueAtTime(config.frequency, now);
+        // Configure oscillator - square wave for more clinical sound
+        oscillator.type = "square";
+        oscillator.frequency.setValueAtTime(config.frequency, now + delay);
         
-        // Configure envelope (attack-release)
-        gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(config.volume, now + 0.01); // Fast attack
-        gainNode.gain.linearRampToValueAtTime(config.volume * 0.7, now + 0.03);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, now + config.duration / 1000);
+        // Apply master volume
+        const finalVolume = config.volume * masterVolume;
+        
+        // Sharp attack, quick decay (hospital monitor style)
+        gainNode.gain.setValueAtTime(0, now + delay);
+        gainNode.gain.linearRampToValueAtTime(finalVolume, now + delay + 0.005);
+        gainNode.gain.setValueAtTime(finalVolume, now + delay + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + delay + config.duration / 1000);
         
         // Start and stop
-        oscillator.start(now);
-        oscillator.stop(now + config.duration / 1000 + 0.1);
+        oscillator.start(now + delay);
+        oscillator.stop(now + delay + config.duration / 1000 + 0.05);
         
-        lastBeepRef.current = Date.now();
-    }, [initAudio, soundEnabled]);
+        lastBeepTimeRef.current = Date.now();
+    }, [initAudio, soundEnabled, masterVolume]);
     
-    // Main audio loop effect
+    // Start/stop white noise
     useEffect(() => {
         if (!soundEnabled || !isActive) {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-                intervalRef.current = null;
+            if (whiteNoiseRef.current) {
+                try {
+                    whiteNoiseRef.current.source.stop();
+                } catch (e) {
+                    // Already stopped
+                }
+                whiteNoiseRef.current = null;
             }
             return;
         }
         
-        const state = getState();
-        const config = BEEP_CONFIG[state];
+        const ctx = initAudio();
+        if (!ctx) return;
         
-        // Clear existing interval
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
+        // Create white noise for VHS texture
+        const noise = createWhiteNoise(ctx, 0.015 * masterVolume);
+        noise.gain.connect(ctx.destination);
+        noise.source.start();
+        whiteNoiseRef.current = noise;
+        
+        return () => {
+            if (whiteNoiseRef.current) {
+                try {
+                    whiteNoiseRef.current.source.stop();
+                } catch (e) {
+                    // Already stopped
+                }
+            }
+        };
+    }, [soundEnabled, isActive, initAudio, masterVolume]);
+    
+    // Main heartbeat beep synchronized with BPM
+    useEffect(() => {
+        if (!soundEnabled || !isActive) {
+            beepScheduledRef.current = false;
+            return;
         }
         
-        // No beeps in normal state
-        if (config.interval <= 0) return;
+        // Calculate interval based on BPM (ms between beats)
+        const beatInterval = 60000 / bpm;
         
-        // Set up new interval
-        const checkAndBeep = () => {
-            const now = Date.now();
-            const timeSinceLastBeep = now - lastBeepRef.current;
+        const scheduleBeep = () => {
+            const state = getState();
+            const config = BEEP_CONFIG[state];
             
-            if (timeSinceLastBeep >= config.interval) {
-                playBeep(config);
+            // Play beep
+            playBeep(config);
+            
+            // Double beep in critical state
+            if (config.doubleBeep) {
+                setTimeout(() => playBeep(config, true), 80);
+            }
+            
+            // Trigger vibration on critical
+            if (state === "critical" && navigator.vibrate) {
+                navigator.vibrate(50);
             }
         };
         
-        // Initial beep after a delay
+        // Initial beep after short delay
         const initialTimeout = setTimeout(() => {
-            playBeep(config);
-            intervalRef.current = setInterval(checkAndBeep, 200);
-        }, 500);
+            scheduleBeep();
+            beepScheduledRef.current = true;
+        }, 200);
+        
+        // Schedule regular beeps at heartbeat interval
+        const interval = setInterval(() => {
+            scheduleBeep();
+        }, beatInterval);
         
         return () => {
             clearTimeout(initialTimeout);
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
+            clearInterval(interval);
+            beepScheduledRef.current = false;
         };
-    }, [soundEnabled, isActive, getState, playBeep]);
+    }, [soundEnabled, isActive, bpm, getState, playBeep]);
     
     // Cleanup on unmount
     useEffect(() => {
         return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
+            if (whiteNoiseRef.current) {
+                try {
+                    whiteNoiseRef.current.source.stop();
+                } catch (e) {
+                    // Already stopped
+                }
             }
             if (audioContextRef.current) {
                 audioContextRef.current.close();
@@ -141,20 +214,11 @@ export const useClinicalAudio = ({ bpm, isActive, soundEnabled }) => {
         };
     }, []);
     
-    // Trigger vibration on critical (complementary to audio)
-    useEffect(() => {
-        if (!isActive) return;
-        
-        const state = getState();
-        if (state === "critical" && navigator.vibrate) {
-            navigator.vibrate(100);
-        }
-    }, [bpm, isActive, getState]);
-    
     return {
         initAudio,
-        playBeep: (config = BEEP_CONFIG.elevated) => playBeep(config),
         getState,
+        masterVolume,
+        setMasterVolume,
     };
 };
 
