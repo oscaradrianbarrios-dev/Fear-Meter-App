@@ -87,8 +87,13 @@ export const useCalibration = () => {
     const calibrationStartTimeRef = useRef(null);
     const simulatedBpmRef = useRef(72);
     
-    // Calibration duration in seconds
-    const CALIBRATION_DURATION = 45;
+    // Calibration configuration
+    const CALIBRATION_DURATION = 30; // Reduced to 30 seconds for better UX
+    const EXPIRATION_WARNING_HOURS = 2; // Warn 2 hours before expiration
+    
+    // Check if calibration is about to expire
+    const [expirationWarning, setExpirationWarning] = useState(false);
+    const [hoursUntilExpiration, setHoursUntilExpiration] = useState(null);
     
     // ===== IMPROVED MOVEMENT DETECTION THRESHOLDS =====
     // Lower threshold = more sensitive to movement
