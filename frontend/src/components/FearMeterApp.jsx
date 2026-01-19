@@ -244,7 +244,7 @@ export const FearMeterApp = () => {
                         isPanic={isPanic}
                         isRecovering={isRecovering}
                         onStartStop={handleStartStop}
-                        texts={t}
+                        texts={texts}
                         isBlocked={isBlocked}
                         isCalibrated={isCalibrated}
                         responseType={responseType}
@@ -263,7 +263,7 @@ export const FearMeterApp = () => {
                 {currentView === "history" && (
                     <History
                         sessions={sessions}
-                        texts={t}
+                        texts={texts}
                         onClear={clearHistory}
                     />
                 )}
@@ -277,13 +277,13 @@ export const FearMeterApp = () => {
                     className="text-[10px] tracking-[0.25em]"
                     style={{ color: "rgba(176, 176, 176, 0.35)" }}
                 >
-                    {t.footer}
+                    {texts.footer}
                 </p>
                 <p 
                     className="text-[9px] mt-1"
                     style={{ color: "rgba(176, 176, 176, 0.2)" }}
                 >
-                    {t.footerSub}
+                    {texts.footerSub}
                 </p>
             </footer>
 
@@ -293,8 +293,8 @@ export const FearMeterApp = () => {
                 currentView={currentView}
                 onViewChange={handleViewChange}
                 language={language}
-                onLanguageChange={handleLanguageChange}
-                texts={t}
+                onLanguageChange={setLanguage}
+                texts={texts}
                 showDemoOption={showDemoOption}
                 onDemoActivate={handleGoToDemo}
                 isCalibrated={isCalibrated}
