@@ -1,5 +1,6 @@
-import { X, Activity, Watch, History, Globe, Info, Play, Target } from "lucide-react";
+import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const SideMenu = ({
     isOpen,
@@ -14,6 +15,7 @@ export const SideMenu = ({
     isCalibrated = false,
     onCalibrationOpen,
 }) => {
+    const navigate = useNavigate();
     const [isVisible, setIsVisible] = useState(false);
     const [itemsReady, setItemsReady] = useState(false);
     const [translateX, setTranslateX] = useState(-100);
