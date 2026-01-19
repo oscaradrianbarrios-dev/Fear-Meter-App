@@ -1,5 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
+// LocalStorage key for calibration persistence
+const CALIBRATION_STORAGE_KEY = "fear_meter_calibration";
+
 // Calibration states
 export const CALIBRATION_STATE = {
     IDLE: "IDLE",
@@ -16,11 +19,60 @@ export const RESPONSE_TYPE = {
     ANXIETY: "ANXIETY",
 };
 
+// Load calibration from localStorage
+const loadCalibrationFromStorage = () => {
+    try {
+        const stored = localStorage.getItem(CALIBRATION_STORAGE_KEY);
+        if (stored) {
+            const data = JSON.parse(stored);
+            // Check if calibration is still valid (expires after 24 hours)
+            const expiresAt = data.expiresAt || 0;
+            if (Date.now() < expiresAt) {
+                return data;
+            }
+            // Expired, remove from storage
+            localStorage.removeItem(CALIBRATION_STORAGE_KEY);
+        }
+    } catch (e) {
+        console.warn("Failed to load calibration from storage:", e);
+    }
+    return null;
+};
+
+// Save calibration to localStorage
+const saveCalibrationToStorage = (baselineBpm, baselineStress) => {
+    try {
+        const data = {
+            baselineBpm,
+            baselineStress,
+            calibratedAt: Date.now(),
+            expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+        };
+        localStorage.setItem(CALIBRATION_STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+        console.warn("Failed to save calibration to storage:", e);
+    }
+};
+
+// Clear calibration from localStorage
+const clearCalibrationFromStorage = () => {
+    try {
+        localStorage.removeItem(CALIBRATION_STORAGE_KEY);
+    } catch (e) {
+        console.warn("Failed to clear calibration from storage:", e);
+    }
+};
+
 export const useCalibration = () => {
-    const [calibrationState, setCalibrationState] = useState(CALIBRATION_STATE.IDLE);
-    const [progress, setProgress] = useState(0);
-    const [baselineBpm, setBaselineBpm] = useState(null);
-    const [baselineStress, setBaselineStress] = useState(null);
+    // Try to load persisted calibration on init
+    const storedCalibration = loadCalibrationFromStorage();
+    
+    const [calibrationState, setCalibrationState] = useState(
+        storedCalibration ? CALIBRATION_STATE.COMPLETE : CALIBRATION_STATE.IDLE
+    );
+    const [progress, setProgress] = useState(storedCalibration ? 100 : 0);
+    const [baselineBpm, setBaselineBpm] = useState(storedCalibration?.baselineBpm || null);
+    const [baselineStress, setBaselineStress] = useState(storedCalibration?.baselineStress || null);
     const [isMoving, setIsMoving] = useState(false);
     const [responseType, setResponseType] = useState(RESPONSE_TYPE.NONE);
     const [movementIntensity, setMovementIntensity] = useState(0);
@@ -30,42 +82,68 @@ export const useCalibration = () => {
     const motionListenerRef = useRef(null);
     const movementHistoryRef = useRef([]);
     const lastMotionRef = useRef({ x: 0, y: 0, z: 0 });
+    const bpmVarianceRef = useRef([]);
     
     // Calibration duration in seconds
     const CALIBRATION_DURATION = 45;
     
-    // Movement detection thresholds
-    const MOVEMENT_THRESHOLD = 2.5; // Acceleration threshold for "moving"
-    const HIGH_MOVEMENT_THRESHOLD = 8; // High activity threshold
+    // ===== IMPROVED MOVEMENT DETECTION THRESHOLDS =====
+    // Lower threshold = more sensitive to movement
+    const MOVEMENT_THRESHOLD_LOW = 1.5;      // Light movement (fidgeting)
+    const MOVEMENT_THRESHOLD_MEDIUM = 3.5;   // Walking/moderate activity
+    const MOVEMENT_THRESHOLD_HIGH = 7.0;     // Running/intense exercise
     
-    // Initialize motion detection
+    // BPM thresholds relative to baseline
+    const BPM_ELEVATED_DELTA = 15;           // Slightly elevated
+    const BPM_HIGH_DELTA = 30;               // High elevation
+    const BPM_CRITICAL_DELTA = 45;           // Critical elevation
+    
+    // Stress thresholds
+    const STRESS_MODERATE = 50;
+    const STRESS_HIGH = 70;
+    const STRESS_CRITICAL = 85;
+    
+    // BPM variance threshold for anxiety detection
+    const BPM_VARIANCE_THRESHOLD = 8;        // Irregular heartbeat pattern
+    
+    // Initialize motion detection with improved sensitivity
     const initMotionDetection = useCallback(() => {
         if (typeof window !== 'undefined' && window.DeviceMotionEvent) {
             const handleMotion = (event) => {
-                const { accelerationIncludingGravity } = event;
-                if (!accelerationIncludingGravity) return;
+                const { accelerationIncludingGravity, acceleration } = event;
                 
-                const { x, y, z } = accelerationIncludingGravity;
+                // Prefer pure acceleration if available (excludes gravity)
+                const accel = acceleration?.x !== null ? acceleration : accelerationIncludingGravity;
+                if (!accel) return;
+                
+                const { x, y, z } = accel;
                 const lastMotion = lastMotionRef.current;
                 
-                // Calculate delta movement
+                // Calculate delta movement with weighted axes
+                // Y-axis (up/down) is weighted more for running detection
                 const deltaX = Math.abs((x || 0) - lastMotion.x);
-                const deltaY = Math.abs((y || 0) - lastMotion.y);
+                const deltaY = Math.abs((y || 0) - lastMotion.y) * 1.2; // Weight vertical movement
                 const deltaZ = Math.abs((z || 0) - lastMotion.z);
                 const totalDelta = deltaX + deltaY + deltaZ;
                 
-                // Update movement history (last 10 samples)
+                // Update movement history (last 15 samples for smoother detection)
                 movementHistoryRef.current.push(totalDelta);
-                if (movementHistoryRef.current.length > 10) {
+                if (movementHistoryRef.current.length > 15) {
                     movementHistoryRef.current.shift();
                 }
                 
-                // Calculate average movement
-                const avgMovement = movementHistoryRef.current.reduce((a, b) => a + b, 0) / 
-                                   movementHistoryRef.current.length;
+                // Calculate weighted moving average (recent samples weighted more)
+                let weightedSum = 0;
+                let weightTotal = 0;
+                movementHistoryRef.current.forEach((val, idx) => {
+                    const weight = idx + 1; // Later samples have higher weight
+                    weightedSum += val * weight;
+                    weightTotal += weight;
+                });
+                const avgMovement = weightTotal > 0 ? weightedSum / weightTotal : 0;
                 
                 setMovementIntensity(avgMovement);
-                setIsMoving(avgMovement > MOVEMENT_THRESHOLD);
+                setIsMoving(avgMovement > MOVEMENT_THRESHOLD_LOW);
                 
                 lastMotionRef.current = { x: x || 0, y: y || 0, z: z || 0 };
             };
@@ -92,22 +170,32 @@ export const useCalibration = () => {
         clearInterval(calibrationIntervalRef.current);
         
         // Calculate baseline from samples
+        let finalBpm = 72;
+        let finalStress = 15;
+        
         if (bpmSamplesRef.current.length > 0) {
-            const avgBpm = Math.round(
-                bpmSamplesRef.current.reduce((a, b) => a + b, 0) / bpmSamplesRef.current.length
-            );
-            const avgStress = Math.round(((avgBpm - 60) / 80) * 100);
+            // Remove outliers (top and bottom 10%)
+            const sorted = [...bpmSamplesRef.current].sort((a, b) => a - b);
+            const trimStart = Math.floor(sorted.length * 0.1);
+            const trimEnd = Math.ceil(sorted.length * 0.9);
+            const trimmed = sorted.slice(trimStart, trimEnd);
             
-            setBaselineBpm(avgBpm);
-            setBaselineStress(Math.max(0, Math.min(100, avgStress)));
-        } else {
-            // Default baseline if no samples
-            setBaselineBpm(72);
-            setBaselineStress(15);
+            if (trimmed.length > 0) {
+                finalBpm = Math.round(
+                    trimmed.reduce((a, b) => a + b, 0) / trimmed.length
+                );
+            }
+            finalStress = Math.round(((finalBpm - 60) / 80) * 100);
+            finalStress = Math.max(0, Math.min(100, finalStress));
         }
         
+        setBaselineBpm(finalBpm);
+        setBaselineStress(finalStress);
         setCalibrationState(CALIBRATION_STATE.COMPLETE);
         setProgress(100);
+        
+        // Persist to localStorage
+        saveCalibrationToStorage(finalBpm, finalStress);
     }, []);
     
     // Start calibration process
@@ -116,6 +204,7 @@ export const useCalibration = () => {
         setProgress(0);
         bpmSamplesRef.current = [];
         movementHistoryRef.current = [];
+        bpmVarianceRef.current = [];
         
         initMotionDetection();
         
@@ -136,9 +225,26 @@ export const useCalibration = () => {
         if (calibrationState === CALIBRATION_STATE.IN_PROGRESS) {
             bpmSamplesRef.current.push(bpm);
         }
+        
+        // Track BPM variance for anxiety detection (always, not just during calibration)
+        bpmVarianceRef.current.push(bpm);
+        if (bpmVarianceRef.current.length > 20) {
+            bpmVarianceRef.current.shift();
+        }
     }, [calibrationState]);
     
-    // Classify response based on current readings vs baseline
+    // Calculate BPM variance (for anxiety detection)
+    const calculateBpmVariance = useCallback(() => {
+        if (bpmVarianceRef.current.length < 5) return 0;
+        
+        const samples = bpmVarianceRef.current;
+        const mean = samples.reduce((a, b) => a + b, 0) / samples.length;
+        const squaredDiffs = samples.map(val => Math.pow(val - mean, 2));
+        const avgSquaredDiff = squaredDiffs.reduce((a, b) => a + b, 0) / squaredDiffs.length;
+        return Math.sqrt(avgSquaredDiff);
+    }, []);
+    
+    // ===== IMPROVED CLASSIFICATION LOGIC =====
     const classifyResponse = useCallback((currentBpm, currentStress) => {
         if (calibrationState !== CALIBRATION_STATE.COMPLETE || !baselineBpm) {
             setResponseType(RESPONSE_TYPE.NONE);
@@ -147,43 +253,69 @@ export const useCalibration = () => {
         
         const bpmDelta = currentBpm - baselineBpm;
         const stressDelta = currentStress - baselineStress;
-        const isHighBpm = currentBpm > 100 || bpmDelta > 25;
-        const isMediumBpm = currentBpm > 85 || bpmDelta > 15;
+        const bpmVariance = calculateBpmVariance();
+        
+        // Determine elevation levels
+        const isBpmElevated = bpmDelta > BPM_ELEVATED_DELTA;
+        const isBpmHigh = bpmDelta > BPM_HIGH_DELTA;
+        const isBpmCritical = bpmDelta > BPM_CRITICAL_DELTA;
+        
+        // Determine movement levels
+        const isLightMovement = movementIntensity > MOVEMENT_THRESHOLD_LOW && movementIntensity <= MOVEMENT_THRESHOLD_MEDIUM;
+        const isModerateMovement = movementIntensity > MOVEMENT_THRESHOLD_MEDIUM && movementIntensity <= MOVEMENT_THRESHOLD_HIGH;
+        const isIntenseMovement = movementIntensity > MOVEMENT_THRESHOLD_HIGH;
+        
+        // Determine stress levels
+        const isStressModerate = currentStress > STRESS_MODERATE;
+        const isStressHigh = currentStress > STRESS_HIGH;
+        const isStressCritical = currentStress > STRESS_CRITICAL;
+        
+        // Check for irregular heartbeat (anxiety indicator)
+        const hasIrregularBpm = bpmVariance > BPM_VARIANCE_THRESHOLD;
         
         let newResponseType = RESPONSE_TYPE.NONE;
         
-        // Classification logic:
-        // HIGH BPM + HIGH MOVEMENT = EXERCISE
-        // HIGH BPM + LOW MOVEMENT = FEAR/STRESS
-        // MEDIUM BPM + IRREGULAR PATTERNS = ANXIETY
+        // ===== CLASSIFICATION RULES =====
         
-        if (isHighBpm && isMoving && movementIntensity > HIGH_MOVEMENT_THRESHOLD) {
+        // RULE 1: Intense exercise - High BPM + Intense movement
+        if ((isBpmHigh || isBpmCritical) && (isModerateMovement || isIntenseMovement)) {
             newResponseType = RESPONSE_TYPE.EXERCISE;
-        } else if (isHighBpm && !isMoving) {
-            // High BPM without movement = FEAR
-            if (currentStress > 70) {
-                newResponseType = RESPONSE_TYPE.FEAR;
-            } else {
-                newResponseType = RESPONSE_TYPE.STRESS;
-            }
-        } else if (isMediumBpm && !isMoving && stressDelta > 20) {
-            // Medium BPM with stress spikes = ANXIETY
+        }
+        // RULE 2: Light exercise - Elevated BPM + Light/Moderate movement
+        else if (isBpmElevated && (isLightMovement || isModerateMovement)) {
+            newResponseType = RESPONSE_TYPE.EXERCISE;
+        }
+        // RULE 3: FEAR - Critical BPM + High Stress + NO movement
+        else if (isBpmCritical && isStressCritical && !isMoving) {
+            newResponseType = RESPONSE_TYPE.FEAR;
+        }
+        // RULE 4: FEAR - High BPM + High Stress + NO movement
+        else if (isBpmHigh && isStressHigh && !isMoving) {
+            newResponseType = RESPONSE_TYPE.FEAR;
+        }
+        // RULE 5: STRESS - Elevated/High BPM + Moderate Stress + NO movement
+        else if ((isBpmElevated || isBpmHigh) && isStressModerate && !isMoving) {
+            newResponseType = RESPONSE_TYPE.STRESS;
+        }
+        // RULE 6: ANXIETY - Irregular BPM pattern + Elevated stress + NO movement
+        else if (hasIrregularBpm && stressDelta > 15 && !isModerateMovement && !isIntenseMovement) {
             newResponseType = RESPONSE_TYPE.ANXIETY;
-        } else if (isMediumBpm && isMoving) {
-            // Medium BPM with movement = light exercise
-            newResponseType = RESPONSE_TYPE.EXERCISE;
+        }
+        // RULE 7: ANXIETY - Moderate BPM elevation with high variance
+        else if (isBpmElevated && hasIrregularBpm && !isMoving) {
+            newResponseType = RESPONSE_TYPE.ANXIETY;
         }
         
         setResponseType(newResponseType);
         return newResponseType;
-    }, [calibrationState, baselineBpm, baselineStress, isMoving, movementIntensity]);
+    }, [calibrationState, baselineBpm, baselineStress, isMoving, movementIntensity, calculateBpmVariance]);
     
     // Check if panic should be triggered (only for FEAR response)
     const shouldTriggerPanic = useCallback((currentBpm, currentStress) => {
         const response = classifyResponse(currentBpm, currentStress);
         
         // Only trigger panic for genuine FEAR response
-        // NOT for exercise or general stress
+        // NOT for exercise, stress, or anxiety
         if (response === RESPONSE_TYPE.FEAR) {
             return currentBpm > 110 && currentStress > 75;
         }
@@ -196,7 +328,7 @@ export const useCalibration = () => {
         return false;
     }, [classifyResponse, calibrationState]);
     
-    // Reset calibration
+    // Reset calibration (also clears localStorage)
     const resetCalibration = useCallback(() => {
         clearInterval(calibrationIntervalRef.current);
         cleanupMotionDetection();
@@ -210,15 +342,23 @@ export const useCalibration = () => {
         setMovementIntensity(0);
         bpmSamplesRef.current = [];
         movementHistoryRef.current = [];
+        bpmVarianceRef.current = [];
+        
+        // Clear from localStorage
+        clearCalibrationFromStorage();
     }, [cleanupMotionDetection]);
     
-    // Cleanup on unmount
+    // Initialize motion detection on mount if already calibrated
     useEffect(() => {
+        if (calibrationState === CALIBRATION_STATE.COMPLETE) {
+            initMotionDetection();
+        }
+        
         return () => {
             clearInterval(calibrationIntervalRef.current);
             cleanupMotionDetection();
         };
-    }, [cleanupMotionDetection]);
+    }, [calibrationState, initMotionDetection, cleanupMotionDetection]);
     
     return {
         // State
