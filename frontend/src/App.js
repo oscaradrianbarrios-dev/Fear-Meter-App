@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FearMeterApp from "@/components/FearMeterApp";
 import DemoMode from "@/components/DemoMode";
 import NightmareProtocol from "@/components/NightmareProtocol";
+import InvestorDemo from "@/components/InvestorDemo";
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
                     <Route path="/" element={<FearMeterApp />} />
                     <Route path="/demo" element={<DemoMode />} />
                     <Route path="/nightmare" element={<NightmareProtocol />} />
+                    <Route path="/investor" element={<InvestorDemo />} />
                 </Routes>
             </BrowserRouter>
         </div>
