@@ -70,15 +70,27 @@ export const CalibrationProtocol = ({
     
     const t = texts[language];
     
-    // Show data after completion with delay
+    // Show data after completion with delay - using ref to track timer
+    const showDataTimerRef = useRef(null);
+    
     useEffect(() => {
-        if (phase === "complete") {
-            const timer = setTimeout(() => setShowData(true), 500);
-            return () => clearTimeout(timer);
-        } else {
+        if (phase === "complete" && !showData) {
+            showDataTimerRef.current = setTimeout(() => setShowData(true), 500);
+        }
+        
+        return () => {
+            if (showDataTimerRef.current) {
+                clearTimeout(showDataTimerRef.current);
+            }
+        };
+    }, [phase, showData]);
+    
+    // Reset showData when phase changes away from complete
+    useEffect(() => {
+        if (phase !== "complete" && showData) {
             setShowData(false);
         }
-    }, [phase]);
+    }, [phase, showData]);
     
     // Glitch effect during calibration
     useEffect(() => {
