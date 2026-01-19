@@ -1,592 +1,242 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon, Activity, ChevronLeft, Power } from "lucide-react";
-import { useNightmareProtocol, NIGHTMARE_STATE, EVENT_SEVERITY } from "@/hooks/useNightmareProtocol";
+import { ChevronLeft } from "lucide-react";
+import { useNightmareProtocol, NIGHTMARE_STATE } from "@/hooks/useNightmareProtocol";
 
 export const NightmareProtocol = () => {
     const navigate = useNavigate();
     const [showLog, setShowLog] = useState(false);
     
-    // Get language from localStorage (set by FearMeterApp)
-    const [language, setLanguage] = useState(() => {
-        try {
-            return localStorage.getItem("fear_meter_language") || "EN";
-        } catch {
-            return "EN";
-        }
-    });
-    
-    // Listen for language changes
-    useEffect(() => {
-        const handleStorage = () => {
-            const lang = localStorage.getItem("fear_meter_language") || "EN";
-            setLanguage(lang);
-        };
-        window.addEventListener("storage", handleStorage);
-        return () => window.removeEventListener("storage", handleStorage);
-    }, []);
-    
     const {
         protocolState,
         isActive,
         currentBpm,
-        baselineBpm,
         events,
-        currentEvent,
-        totalEventsTonight,
-        isNighttime,
-        forceNightMode,
-        thresholds,
-        statistics,
-        tonightEvents,
+        sessionEvents,
+        peakBpm,
+        showSummary,
+        nightmareFlash,
+        sessionDuration,
+        totalSessionEvents,
         startProtocol,
         stopProtocol,
+        dismissSummary,
         clearLog,
-        updateThresholds,
-        setForceNightMode,
     } = useNightmareProtocol();
     
-    const texts = useMemo(() => ({
-        EN: {
-            title: "NIGHTMARE PROTOCOL",
-            subtitle: "NOCTURNAL FEAR MONITORING",
-            standby: "STANDBY — AWAITING NIGHTFALL",
-            monitoring: "MONITORING ACTIVE",
-            monitoringTest: "TEST MODE — MONITORING ACTIVE",
-            eventDetected: "NOCTURNAL FEAR EVENT DETECTED",
-            subconscious: "SUBCONSCIOUS STRESS RESPONSE",
-            currentBpm: "CURRENT BPM",
-            baseline: "BASELINE",
-            eventsTonight: "EVENTS TONIGHT",
-            activate: "ACTIVATE PROTOCOL",
-            activateTest: "TEST MODE",
-            deactivate: "DEACTIVATE",
-            nightmareLog: "NIGHTMARE LOG",
-            noEvents: "NO EVENTS RECORDED",
-            clearLog: "CLEAR LOG",
-            back: "BACK",
-            severity: {
-                [EVENT_SEVERITY.MINOR]: "MINOR DISTURBANCE",
-                [EVENT_SEVERITY.MODERATE]: "MODERATE EVENT",
-                [EVENT_SEVERITY.SEVERE]: "SEVERE NIGHTMARE",
-                [EVENT_SEVERITY.CRITICAL]: "CRITICAL TERROR EVENT",
-            },
-            intensity: "INTENSITY",
-            duration: "DURATION",
-            peak: "PEAK",
-            seconds: "SEC",
-            instructions: [
-                "PLACE DEVICE NEAR BED",
-                "ACTIVATE BEFORE SLEEP",
-                "DO NOT DISTURB MODE RECOMMENDED",
-            ],
-            warning: "SILENT MONITORING — NO ALERTS DURING SLEEP",
-            stats: "STATISTICS",
-            totalEvents: "TOTAL EVENTS",
-            avgIntensity: "AVG INTENSITY",
-            avgDuration: "AVG DURATION",
-            maxPeak: "MAX PEAK",
-            peakHour: "PEAK HOUR",
-        },
-        ES: {
-            title: "PROTOCOLO PESADILLA",
-            subtitle: "MONITOREO NOCTURNO DE MIEDO",
-            standby: "ESPERA — AGUARDANDO NOCHE",
-            monitoring: "MONITOREO ACTIVO",
-            monitoringTest: "MODO PRUEBA — MONITOREO ACTIVO",
-            eventDetected: "EVENTO DE MIEDO NOCTURNO DETECTADO",
-            subconscious: "RESPUESTA DE ESTRÉS SUBCONSCIENTE",
-            currentBpm: "BPM ACTUAL",
-            baseline: "LÍNEA BASE",
-            eventsTonight: "EVENTOS ESTA NOCHE",
-            activate: "ACTIVAR PROTOCOLO",
-            activateTest: "MODO PRUEBA",
-            deactivate: "DESACTIVAR",
-            nightmareLog: "REGISTRO DE PESADILLAS",
-            noEvents: "SIN EVENTOS REGISTRADOS",
-            clearLog: "BORRAR REGISTRO",
-            back: "VOLVER",
-            severity: {
-                [EVENT_SEVERITY.MINOR]: "PERTURBACIÓN MENOR",
-                [EVENT_SEVERITY.MODERATE]: "EVENTO MODERADO",
-                [EVENT_SEVERITY.SEVERE]: "PESADILLA SEVERA",
-                [EVENT_SEVERITY.CRITICAL]: "EVENTO DE TERROR CRÍTICO",
-            },
-            intensity: "INTENSIDAD",
-            duration: "DURACIÓN",
-            peak: "PICO",
-            seconds: "SEG",
-            stats: "ESTADÍSTICAS",
-            totalEvents: "TOTAL EVENTOS",
-            avgIntensity: "INTENSIDAD PROM",
-            avgDuration: "DURACIÓN PROM",
-            maxPeak: "PICO MÁXIMO",
-            peakHour: "HORA PICO",
-            instructions: [
-                "COLOQUE EL DISPOSITIVO CERCA DE LA CAMA",
-                "ACTIVE ANTES DE DORMIR",
-                "MODO NO MOLESTAR RECOMENDADO",
-            ],
-            warning: "MONITOREO SILENCIOSO — SIN ALERTAS DURANTE EL SUEÑO",
-        },
-    }), []);
-    
-    const t = texts[language] || texts.EN;
-    
-    // Get status color
-    const getStatusColor = () => {
-        switch (protocolState) {
-            case NIGHTMARE_STATE.EVENT_DETECTED:
-                return "#FF0000";
-            case NIGHTMARE_STATE.MONITORING:
-                return "#8B0000";
-            case NIGHTMARE_STATE.STANDBY:
-                return "rgba(139, 0, 0, 0.5)";
-            default:
-                return "rgba(139, 0, 0, 0.3)";
+    // Handle tap to deactivate (anywhere on screen during active mode)
+    const handleScreenTap = () => {
+        if (isActive && !showSummary) {
+            stopProtocol();
         }
     };
     
-    // Get severity color
-    const getSeverityColor = (severity) => {
-        switch (severity) {
-            case EVENT_SEVERITY.CRITICAL:
-                return "#FF0000";
-            case EVENT_SEVERITY.SEVERE:
-                return "rgba(255, 0, 0, 0.85)";
-            case EVENT_SEVERITY.MODERATE:
-                return "rgba(139, 0, 0, 0.8)";
-            default:
-                return "rgba(139, 0, 0, 0.6)";
-        }
-    };
-    
+    // Render inactive/pre-activation view
     const renderInactiveView = () => (
-        <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-            {/* Moon Icon */}
-            <div 
-                className="w-24 h-24 rounded-full flex items-center justify-center mb-8"
-                style={{ 
-                    border: "1px solid rgba(139, 0, 0, 0.3)",
-                    backgroundColor: "rgba(139, 0, 0, 0.05)",
-                }}
-            >
-                <Moon 
-                    className="w-12 h-12" 
-                    style={{ color: "rgba(139, 0, 0, 0.6)" }}
-                />
-            </div>
-            
-            {/* Title */}
-            <h1 
-                className="text-lg tracking-[0.4em] font-bold mb-2"
-                style={{ color: "#8B0000" }}
-            >
-                {t.title}
-            </h1>
+        <div 
+            className="flex-1 flex flex-col items-center justify-center px-6"
+            onClick={() => startProtocol()}
+        >
             <p 
-                className="text-[10px] tracking-[0.3em] mb-10"
-                style={{ color: "rgba(139, 0, 0, 0.5)" }}
+                className="text-[10px] tracking-[0.3em] mb-8"
+                style={{ color: "rgba(139, 0, 0, 0.4)" }}
             >
-                {t.subtitle}
+                PASSIVE BIOMETRIC MONITORING
             </p>
             
-            {/* Instructions */}
-            <div className="mb-10 space-y-2">
-                {t.instructions.map((instruction, i) => (
-                    <p 
-                        key={i}
-                        className="text-[9px] tracking-[0.15em]"
-                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
-                    >
-                        [{String(i + 1).padStart(2, '0')}] {instruction}
-                    </p>
-                ))}
-            </div>
-            
-            {/* Warning */}
-            <div 
-                className="mb-10 py-2 px-4"
-                style={{ 
-                    backgroundColor: "rgba(139, 0, 0, 0.05)",
-                    border: "1px solid rgba(139, 0, 0, 0.15)",
-                }}
+            <p 
+                className="text-[9px] tracking-[0.2em] text-center max-w-xs"
+                style={{ color: "rgba(139, 0, 0, 0.25)" }}
             >
-                <p 
-                    className="text-[8px] tracking-[0.2em]"
-                    style={{ color: "rgba(139, 0, 0, 0.5)" }}
-                >
-                    {t.warning}
-                </p>
-            </div>
-            
-            {/* Activate Button */}
-            <button
-                onClick={() => startProtocol(false)}
-                className="py-3 px-8 text-[10px] tracking-[0.25em] transition-all duration-300"
-                style={{ 
-                    backgroundColor: "#8B0000",
-                    color: "#000000",
-                    border: "none",
-                }}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = "0 0 30px rgba(139, 0, 0, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = "none";
-                }}
-            >
-                {t.activate}
-            </button>
-            
-            {/* Test Mode Button */}
-            <button
-                onClick={() => startProtocol(true)}
-                className="mt-4 py-2 px-6 text-[9px] tracking-[0.2em] transition-all duration-200"
-                style={{ 
-                    backgroundColor: "transparent",
-                    color: "rgba(139, 0, 0, 0.4)",
-                    border: "1px solid rgba(139, 0, 0, 0.2)",
-                }}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "rgba(139, 0, 0, 0.7)";
-                    e.currentTarget.style.borderColor = "rgba(139, 0, 0, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "rgba(139, 0, 0, 0.4)";
-                    e.currentTarget.style.borderColor = "rgba(139, 0, 0, 0.2)";
-                }}
-            >
-                {t.activateTest}
-            </button>
+                TAP ANYWHERE TO ACTIVATE
+            </p>
         </div>
     );
     
+    // Render active monitoring view (minimalist)
     const renderActiveView = () => (
-        <div className="flex flex-col h-full">
-            {/* Status Header */}
-            <div 
-                className="py-4 px-4 text-center"
-                style={{ 
-                    backgroundColor: protocolState === NIGHTMARE_STATE.EVENT_DETECTED 
-                        ? "rgba(255, 0, 0, 0.1)" 
-                        : "rgba(139, 0, 0, 0.05)",
-                    borderBottom: `1px solid ${getStatusColor()}`,
-                }}
-            >
-                <div className="flex items-center justify-center gap-2 mb-1">
-                    <div 
-                        className="w-2 h-2 rounded-full"
-                        style={{ 
-                            backgroundColor: getStatusColor(),
-                            animation: protocolState === NIGHTMARE_STATE.MONITORING 
-                                ? "pulse-slow 3s ease-in-out infinite" 
-                                : protocolState === NIGHTMARE_STATE.EVENT_DETECTED
-                                    ? "pulse-fast 0.5s ease-in-out infinite"
-                                    : "none",
-                        }}
-                    />
-                    <span 
-                        className="text-[10px] tracking-[0.25em]"
-                        style={{ color: getStatusColor() }}
-                    >
-                        {protocolState === NIGHTMARE_STATE.STANDBY && t.standby}
-                        {protocolState === NIGHTMARE_STATE.MONITORING && (forceNightMode ? t.monitoringTest : t.monitoring)}
-                        {protocolState === NIGHTMARE_STATE.EVENT_DETECTED && t.eventDetected}
-                    </span>
-                </div>
-                
-                {protocolState === NIGHTMARE_STATE.EVENT_DETECTED && (
-                    <p 
-                        className="text-[8px] tracking-[0.15em]"
-                        style={{ color: "rgba(255, 0, 0, 0.7)" }}
-                    >
-                        {t.subconscious}
-                    </p>
-                )}
-            </div>
+        <div 
+            className="flex-1 flex flex-col items-center justify-center relative"
+            onClick={handleScreenTap}
+        >
+            {/* Nightmare flash overlay */}
+            {nightmareFlash && (
+                <div 
+                    className="fixed inset-0 pointer-events-none z-50"
+                    style={{ backgroundColor: "rgba(255, 0, 0, 0.3)" }}
+                />
+            )}
             
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col items-center justify-center px-6">
-                {/* BPM Display */}
-                <div className="text-center mb-8">
+            {/* Nightmare detected text */}
+            {protocolState === NIGHTMARE_STATE.NIGHTMARE_DETECTED ? (
+                <div className="text-center">
                     <p 
-                        className="text-[9px] tracking-[0.2em] mb-2"
-                        style={{ color: "rgba(139, 0, 0, 0.5)" }}
-                    >
-                        {t.currentBpm}
-                    </p>
-                    <p 
-                        className="text-5xl font-mono"
+                        className="text-xs tracking-[0.3em]"
                         style={{ 
-                            color: getStatusColor(),
-                            textShadow: protocolState === NIGHTMARE_STATE.EVENT_DETECTED 
-                                ? "0 0 20px rgba(255, 0, 0, 0.3)" 
-                                : "none",
+                            color: "#FF0000",
+                            textShadow: "0 0 20px rgba(255, 0, 0, 0.5)",
                         }}
                     >
-                        {currentBpm}
+                        NIGHTMARE DETECTED
                     </p>
+                </div>
+            ) : (
+                // Normal monitoring - minimal text
+                <div className="text-center">
                     <p 
-                        className="text-[8px] tracking-[0.15em] mt-2"
+                        className="text-[10px] tracking-[0.25em]"
+                        style={{ color: "#8B0000" }}
+                    >
+                        NIGHTMARE MODE ACTIVE
+                    </p>
+                </div>
+            )}
+            
+            {/* Session events counter - subtle */}
+            {totalSessionEvents > 0 && protocolState !== NIGHTMARE_STATE.NIGHTMARE_DETECTED && (
+                <p 
+                    className="absolute bottom-20 text-[8px] tracking-[0.2em]"
+                    style={{ color: "rgba(139, 0, 0, 0.3)" }}
+                >
+                    EVENTS: {totalSessionEvents}
+                </p>
+            )}
+        </div>
+    );
+    
+    // Render summary view after deactivation
+    const renderSummaryView = () => (
+        <div 
+            className="flex-1 flex flex-col items-center justify-center px-6"
+            onClick={dismissSummary}
+        >
+            <div className="text-center space-y-6">
+                <p 
+                    className="text-[9px] tracking-[0.3em]"
+                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                >
+                    SESSION COMPLETE
+                </p>
+                
+                {/* Night events detected */}
+                <div>
+                    <p 
+                        className="text-[8px] tracking-[0.15em] mb-1"
                         style={{ color: "rgba(139, 0, 0, 0.4)" }}
                     >
-                        {t.baseline}: {Math.round(baselineBpm)}
+                        NIGHT EVENTS DETECTED
+                    </p>
+                    <p 
+                        className="text-3xl font-mono"
+                        style={{ color: "#8B0000" }}
+                    >
+                        {totalSessionEvents}
                     </p>
                 </div>
                 
-                {/* Current Event Display */}
-                {currentEvent && (
-                    <div 
-                        className="w-full mb-8 py-4 px-4 text-center"
-                        style={{ 
-                            backgroundColor: "rgba(255, 0, 0, 0.08)",
-                            border: "1px solid rgba(255, 0, 0, 0.2)",
-                        }}
-                    >
+                {/* Peak BPM */}
+                {peakBpm > 0 && (
+                    <div>
                         <p 
-                            className="text-[10px] tracking-[0.2em] mb-2"
-                            style={{ color: getSeverityColor(currentEvent.severity) }}
+                            className="text-[8px] tracking-[0.15em] mb-1"
+                            style={{ color: "rgba(139, 0, 0, 0.4)" }}
                         >
-                            {t.severity[currentEvent.severity]}
+                            PEAK BPM
                         </p>
-                        <div className="flex justify-center gap-6">
-                            <div>
-                                <p className="text-[8px]" style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                    {t.peak}
-                                </p>
-                                <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                    {currentEvent.peakBpm}
-                                </p>
-                            </div>
-                            <div>
-                                <p className="text-[8px]" style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                    {t.intensity}
-                                </p>
-                                <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                    {currentEvent.intensity}%
-                                </p>
-                            </div>
-                            <div>
-                                <p className="text-[8px]" style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                    {t.duration}
-                                </p>
-                                <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                    {currentEvent.duration}{t.seconds}
-                                </p>
-                            </div>
-                        </div>
+                        <p 
+                            className="text-2xl font-mono"
+                            style={{ color: "#8B0000" }}
+                        >
+                            {peakBpm}
+                        </p>
                     </div>
                 )}
                 
-                {/* Events Tonight Counter */}
-                <div className="text-center mb-8">
+                {/* Duration */}
+                <div>
                     <p 
-                        className="text-[9px] tracking-[0.2em] mb-1"
+                        className="text-[8px] tracking-[0.15em] mb-1"
                         style={{ color: "rgba(139, 0, 0, 0.4)" }}
                     >
-                        {t.eventsTonight}
+                        DURATION
                     </p>
                     <p 
-                        className="text-2xl font-mono"
+                        className="text-lg font-mono"
                         style={{ color: "#8B0000" }}
                     >
-                        {totalEventsTonight}
+                        {sessionDuration}
                     </p>
                 </div>
                 
-                {/* Deactivate Button */}
-                <button
-                    onClick={stopProtocol}
-                    className="py-2 px-6 text-[9px] tracking-[0.2em] transition-all duration-300"
-                    style={{ 
-                        backgroundColor: "transparent",
-                        color: "rgba(139, 0, 0, 0.5)",
-                        border: "1px solid rgba(139, 0, 0, 0.2)",
-                    }}
+                <p 
+                    className="text-[8px] tracking-[0.15em] mt-8"
+                    style={{ color: "rgba(139, 0, 0, 0.2)" }}
                 >
-                    {t.deactivate}
-                </button>
+                    TAP TO DISMISS
+                </p>
             </div>
-            
-            {/* CSS Animations */}
-            <style>{`
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.4; }
-                }
-                @keyframes pulse-fast {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.6; transform: scale(1.2); }
-                }
-            `}</style>
         </div>
     );
     
+    // Render log view
     const renderLogView = () => (
-        <div className="flex flex-col h-full">
+        <div className="flex-1 flex flex-col">
             {/* Log Header */}
             <div 
                 className="py-4 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.15)" }}
+                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => setShowLog(false)}
-                    className="flex items-center gap-2 text-[9px] tracking-[0.15em]"
+                    className="text-[9px] tracking-[0.15em]"
                     style={{ color: "rgba(139, 0, 0, 0.5)" }}
                 >
-                    <ChevronLeft className="w-4 h-4" />
-                    {t.back}
+                    BACK
                 </button>
                 
                 {events.length > 0 && (
                     <button
                         onClick={clearLog}
                         className="text-[8px] tracking-[0.15em]"
-                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                        style={{ color: "rgba(139, 0, 0, 0.3)" }}
                     >
-                        {t.clearLog}
+                        CLEAR
                     </button>
                 )}
             </div>
             
-            {/* Log Title */}
-            <div className="py-4 px-4 text-center">
-                <h2 
-                    className="text-sm tracking-[0.3em]"
-                    style={{ color: "#8B0000" }}
-                >
-                    {t.nightmareLog}
-                </h2>
-            </div>
-            
-            {/* Statistics Section */}
-            {statistics && (
-                <div 
-                    className="mx-4 mb-4 py-3 px-4"
-                    style={{ 
-                        backgroundColor: "rgba(139, 0, 0, 0.03)",
-                        border: "1px solid rgba(139, 0, 0, 0.1)",
-                    }}
-                >
-                    <p 
-                        className="text-[8px] tracking-[0.2em] mb-3"
-                        style={{ color: "rgba(139, 0, 0, 0.5)" }}
-                    >
-                        {t.stats}
-                    </p>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div>
-                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
-                                {t.totalEvents}
-                            </p>
-                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                {statistics.totalEvents}
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
-                                {t.avgIntensity}
-                            </p>
-                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                {statistics.avgIntensity}%
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
-                                {t.maxPeak}
-                            </p>
-                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                {statistics.maxPeakBpm}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 mt-3">
-                        <div>
-                            <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
-                                {t.avgDuration}
-                            </p>
-                            <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                {statistics.avgDuration}s
-                            </p>
-                        </div>
-                        {statistics.peakHour !== null && (
-                            <div>
-                                <p className="text-[7px]" style={{ color: "rgba(139, 0, 0, 0.4)" }}>
-                                    {t.peakHour}
-                                </p>
-                                <p className="text-sm font-mono" style={{ color: "#8B0000" }}>
-                                    {statistics.peakHour}:00
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-            
             {/* Events List */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4">
+            <div className="flex-1 overflow-y-auto px-4 py-4">
                 {events.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
                         <p 
-                            className="text-[10px] tracking-[0.2em]"
-                            style={{ color: "rgba(139, 0, 0, 0.3)" }}
+                            className="text-[9px] tracking-[0.2em]"
+                            style={{ color: "rgba(139, 0, 0, 0.25)" }}
                         >
-                            {t.noEvents}
+                            NO EVENTS RECORDED
                         </p>
                     </div>
                 ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                         {events.map((event) => (
                             <div 
                                 key={event.id}
-                                className="py-3 px-4"
-                                style={{ 
-                                    backgroundColor: "rgba(139, 0, 0, 0.03)",
-                                    borderLeft: `2px solid ${getSeverityColor(event.severity)}`,
-                                }}
+                                className="py-2"
+                                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.05)" }}
                             >
-                                <div className="flex justify-between items-start mb-2">
-                                    <div>
-                                        <p 
-                                            className="text-[9px] tracking-[0.15em]"
-                                            style={{ color: getSeverityColor(event.severity) }}
-                                        >
-                                            {t.severity[event.severity]}
-                                        </p>
-                                        <p 
-                                            className="text-[8px] mt-1"
-                                            style={{ color: "rgba(139, 0, 0, 0.4)" }}
-                                        >
-                                            {event.date} • {event.time}
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p 
-                                            className="text-lg font-mono"
-                                            style={{ color: "#8B0000" }}
-                                        >
-                                            {event.peakBpm}
-                                        </p>
-                                        <p 
-                                            className="text-[7px]"
-                                            style={{ color: "rgba(139, 0, 0, 0.4)" }}
-                                        >
-                                            PEAK BPM
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex gap-4 text-[8px]">
-                                    <span style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                        {t.intensity}: {event.intensity}%
-                                    </span>
-                                    <span style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                        {t.duration}: {event.duration}{t.seconds}
-                                    </span>
-                                    <span style={{ color: "rgba(139, 0, 0, 0.5)" }}>
-                                        +{event.bpmSpike} BPM
-                                    </span>
+                                <div className="flex justify-between items-center">
+                                    <p 
+                                        className="text-[8px] tracking-[0.1em]"
+                                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                                    >
+                                        {event.date} • {event.time}
+                                    </p>
+                                    <p 
+                                        className="text-sm font-mono"
+                                        style={{ color: "#8B0000" }}
+                                    >
+                                        {event.peakBpm} BPM
+                                    </p>
                                 </div>
                             </div>
                         ))}
@@ -601,54 +251,45 @@ export const NightmareProtocol = () => {
             className="min-h-screen flex flex-col"
             style={{ backgroundColor: "#000000" }}
         >
-            {/* Header */}
+            {/* Header - minimal */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.05)" }}
             >
                 <button
                     onClick={() => navigate("/")}
-                    className="flex items-center gap-2 text-[9px] tracking-[0.15em]"
-                    style={{ color: "rgba(139, 0, 0, 0.5)" }}
+                    className="p-1"
+                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
-                    className="text-[9px] tracking-[0.3em]"
-                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                    className="text-[8px] tracking-[0.25em]"
+                    style={{ color: "rgba(139, 0, 0, 0.3)" }}
                 >
-                    NIGHTMARE_PROTOCOL_v1.0
+                    NIGHTMARE PROTOCOL
                 </span>
                 
                 <button
                     onClick={() => setShowLog(true)}
-                    className="text-[9px] tracking-[0.15em]"
-                    style={{ color: "rgba(139, 0, 0, 0.5)" }}
+                    className="text-[8px] tracking-[0.15em] p-1"
+                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
                 >
                     LOG
                 </button>
             </div>
             
             {/* Main Content */}
-            <div className="flex-1">
-                {showLog ? renderLogView() : (
-                    isActive ? renderActiveView() : renderInactiveView()
-                )}
-            </div>
-            
-            {/* Footer */}
-            <div 
-                className="py-3 text-center"
-                style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }}
-            >
-                <p 
-                    className="text-[8px] tracking-[0.2em]"
-                    style={{ color: "rgba(139, 0, 0, 0.2)" }}
-                >
-                    FEAR METER — NOCTURNAL SUBSYSTEM
-                </p>
-            </div>
+            {showLog ? (
+                renderLogView()
+            ) : showSummary ? (
+                renderSummaryView()
+            ) : isActive ? (
+                renderActiveView()
+            ) : (
+                renderInactiveView()
+            )}
         </div>
     );
 };
