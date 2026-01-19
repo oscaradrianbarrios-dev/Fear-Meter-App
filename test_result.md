@@ -278,7 +278,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Calibration Protocol System"
+    - "Nightmare Protocol System"
   stuck_tasks:
     - "Calibration Protocol System"
   test_all: false
