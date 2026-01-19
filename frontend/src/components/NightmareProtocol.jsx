@@ -3,9 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { Moon, Activity, ChevronLeft, Power } from "lucide-react";
 import { useNightmareProtocol, NIGHTMARE_STATE, EVENT_SEVERITY } from "@/hooks/useNightmareProtocol";
 
-export const NightmareProtocol = ({ language = "EN" }) => {
+export const NightmareProtocol = () => {
     const navigate = useNavigate();
     const [showLog, setShowLog] = useState(false);
+    
+    // Get language from localStorage (set by FearMeterApp)
+    const [language, setLanguage] = useState(() => {
+        try {
+            return localStorage.getItem("fear_meter_language") || "EN";
+        } catch {
+            return "EN";
+        }
+    });
+    
+    // Listen for language changes
+    useEffect(() => {
+        const handleStorage = () => {
+            const lang = localStorage.getItem("fear_meter_language") || "EN";
+            setLanguage(lang);
+        };
+        window.addEventListener("storage", handleStorage);
+        return () => window.removeEventListener("storage", handleStorage);
+    }, []);
     
     const {
         protocolState,
