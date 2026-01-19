@@ -85,6 +85,9 @@ export const FearMeterApp = () => {
         },
     });
 
+    // Clinical audio hook - beeps based on BPM state
+    useClinicalAudio({ bpm, isActive, soundEnabled });
+
     const handlePanicSequenceComplete = useCallback(() => {
         setTimeout(() => {
             setPanicActive(false);
