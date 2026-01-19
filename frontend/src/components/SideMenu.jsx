@@ -192,7 +192,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }} />
 
                 {/* Nightmare Protocol */}
                 <button
@@ -202,7 +202,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(139, 0, 0, 0.5)",
+                        color: "rgba(142, 14, 28, 0.5)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 280ms",
@@ -212,17 +212,49 @@ export const SideMenu = ({
                     <span className="text-[11px] tracking-[0.15em]">{texts.nightmare || "Nightmare Protocol"}</span>
                 </button>
 
+                {/* Fear Library */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/library");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: "rgba(142, 14, 28, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 320ms",
+                    }}
+                >
+                    <BookOpen className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">Fear Library</span>
+                </button>
+
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }} />
+
+                {/* Sound Toggle */}
+                <div
+                    style={{ 
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 360ms",
+                    }}
+                >
+                    <SoundToggle />
+                </div>
+
+                {/* Divider */}
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }} />
 
                 {/* About */}
                 <button
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(139, 0, 0, 0.4)",
+                        color: "rgba(142, 14, 28, 0.4)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 250ms ease-out 320ms",
+                        transition: "all 250ms ease-out 400ms",
                     }}
                 >
                     <Info className="w-4 h-4" />
