@@ -233,6 +233,20 @@ export const FearMeterApp = () => {
                 filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
             }}
         >
+            {/* Calibration Protocol Overlay */}
+            {showCalibration && (
+                <CalibrationProtocol
+                    calibrationState={calibrationState}
+                    progress={calibrationProgress}
+                    baselineBpm={baselineBpm}
+                    baselineStress={baselineStress}
+                    onStartCalibration={startCalibration}
+                    onComplete={handleCalibrationComplete}
+                    onCancel={handleCalibrationCancel}
+                    language={language}
+                />
+            )}
+            
             <PanicOverlay 
                 active={panicActive} 
                 onSequenceComplete={handlePanicSequenceComplete}
@@ -246,7 +260,18 @@ export const FearMeterApp = () => {
             <Header 
                 onMenuOpen={() => !isBlocked && setMenuOpen(true)}
                 onDemoActivate={handleDemoActivate}
+                isCalibrated={isCalibrated}
             />
+
+            {/* Response Type Indicator */}
+            {isActive && (
+                <ResponseIndicator
+                    responseType={responseType}
+                    isCalibrated={isCalibrated}
+                    isActive={isActive}
+                    language={language}
+                />
+            )}
 
             <main className="flex-1 flex flex-col px-4 pb-4">
                 {currentView === "monitor" && (
@@ -260,6 +285,8 @@ export const FearMeterApp = () => {
                         onStartStop={handleStartStop}
                         texts={t}
                         isBlocked={isBlocked}
+                        isCalibrated={isCalibrated}
+                        responseType={responseType}
                     />
                 )}
 
