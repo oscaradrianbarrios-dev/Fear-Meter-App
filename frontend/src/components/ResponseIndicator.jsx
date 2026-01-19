@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { RESPONSE_TYPE } from "@/hooks/useCalibration";
 
 export const ResponseIndicator = ({
@@ -7,8 +7,13 @@ export const ResponseIndicator = ({
     isActive,
     language = "EN",
 }) => {
-    const [visible, setVisible] = useState(false);
     const [flashing, setFlashing] = useState(false);
+    const prevResponseRef = useRef(responseType);
+    
+    // Derive visibility from props
+    const visible = useMemo(() => {
+        return isActive && responseType !== RESPONSE_TYPE.NONE;
+    }, [isActive, responseType]);
     
     const texts = {
         EN: {
