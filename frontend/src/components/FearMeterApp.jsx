@@ -336,6 +336,8 @@ export const FearMeterApp = () => {
                 texts={t}
                 showDemoOption={showDemoOption}
                 onDemoActivate={handleGoToDemo}
+                isCalibrated={isCalibrated}
+                onCalibrationOpen={handleOpenCalibration}
             />
         </div>
     );
