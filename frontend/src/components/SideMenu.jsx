@@ -1,4 +1,4 @@
-import { X, Activity, Watch, History, Globe, Info, Play } from "lucide-react";
+import { X, Activity, Watch, History, Globe, Info, Play, Target } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 export const SideMenu = ({
@@ -11,6 +11,8 @@ export const SideMenu = ({
     texts,
     showDemoOption = false,
     onDemoActivate,
+    isCalibrated = false,
+    onCalibrationOpen,
 }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [itemsReady, setItemsReady] = useState(false);
