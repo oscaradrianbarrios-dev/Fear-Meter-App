@@ -1,0 +1,195 @@
+/* Fear Meter - Horror UX Styles */
+/* Microinteractions and psychological tension effects */
+
+/* ===== BREATHING EFFECT FOR DATA ===== */
+@keyframes data-breathe {
+    0%, 100% { 
+        opacity: 0.85;
+        text-shadow: 0 0 0 transparent;
+    }
+    50% { 
+        opacity: 1;
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.15);
+    }
+}
+
+@keyframes data-breathe-fast {
+    0%, 100% { 
+        opacity: 0.75;
+        text-shadow: 0 0 2px rgba(255, 0, 0, 0.2);
+    }
+    50% { 
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(255, 0, 0, 0.3);
+    }
+}
+
+/* ===== RED FLICKER ON HIGH BPM ===== */
+@keyframes red-flicker {
+    0%, 100% { opacity: 0; }
+    10% { opacity: 0.03; }
+    20% { opacity: 0; }
+    30% { opacity: 0.05; }
+    40% { opacity: 0; }
+    60% { opacity: 0.02; }
+    80% { opacity: 0.04; }
+    90% { opacity: 0; }
+}
+
+/* ===== DELAYED TEXT REVEAL ===== */
+@keyframes text-reveal {
+    0% { 
+        opacity: 0;
+        filter: blur(2px);
+    }
+    100% { 
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes text-reveal-slow {
+    0% { 
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== UNSETTLING MICRO-SHAKE ===== */
+@keyframes micro-shake {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-0.5px, 0); }
+    50% { transform: translate(0.5px, 0); }
+    75% { transform: translate(-0.3px, 0); }
+}
+
+/* ===== ECG GLOW PULSE ===== */
+@keyframes ecg-glow {
+    0%, 100% { 
+        filter: drop-shadow(0 0 1px rgba(255, 0, 0, 0.3));
+    }
+    50% { 
+        filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.5));
+    }
+}
+
+/* ===== ASYMMETRIC CONTAINER ===== */
+.fear-asymmetric {
+    margin-left: 3px;
+    margin-right: 0;
+}
+
+.fear-asymmetric-alt {
+    margin-left: 0;
+    margin-right: 4px;
+}
+
+/* ===== BREATHING DATA CLASS ===== */
+.fear-data-breathe {
+    animation: data-breathe 4s ease-in-out infinite;
+}
+
+.fear-data-breathe-fast {
+    animation: data-breathe-fast 2s ease-in-out infinite;
+}
+
+/* ===== TEXT REVEAL CLASSES ===== */
+.fear-text-reveal {
+    animation: text-reveal 0.4s ease-out forwards;
+}
+
+.fear-text-reveal-delay-1 {
+    opacity: 0;
+    animation: text-reveal-slow 0.3s ease-out 0.1s forwards;
+}
+
+.fear-text-reveal-delay-2 {
+    opacity: 0;
+    animation: text-reveal-slow 0.3s ease-out 0.2s forwards;
+}
+
+.fear-text-reveal-delay-3 {
+    opacity: 0;
+    animation: text-reveal-slow 0.3s ease-out 0.3s forwards;
+}
+
+/* ===== RED OVERLAY FLICKER ===== */
+.fear-red-flicker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 0, 0, 1);
+    pointer-events: none;
+    animation: red-flicker 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+/* ===== MICRO SHAKE ON CRITICAL ===== */
+.fear-micro-shake {
+    animation: micro-shake 0.15s ease-in-out infinite;
+}
+
+/* ===== ECG GLOW ===== */
+.fear-ecg-glow {
+    animation: ecg-glow 1.5s ease-in-out infinite;
+}
+
+/* ===== UNCOMFORTABLE SPACING ===== */
+.fear-uncomfortable-grid {
+    gap: 13px 11px; /* Asymmetric gap */
+}
+
+/* ===== WATCHING INDICATOR ===== */
+@keyframes watching-pulse {
+    0%, 100% { 
+        opacity: 0.3;
+        transform: scale(0.95);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+.fear-watching {
+    animation: watching-pulse 3s ease-in-out infinite;
+}
+
+/* ===== SUBTLE UNEASE BACKGROUND ===== */
+@keyframes bg-unease {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+}
+
+.fear-bg-unease {
+    background: radial-gradient(
+        ellipse at 50% 50%,
+        rgba(139, 0, 0, 0.02) 0%,
+        transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: bg-unease 20s ease-in-out infinite;
+}
+
+/* ===== OBSERVER STATUS ===== */
+.fear-observer-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.4);
+    animation: watching-pulse 2s ease-in-out infinite;
+}
+
+/* ===== BORDER FLICKER ===== */
+@keyframes border-flicker {
+    0%, 100% { border-color: rgba(255, 0, 0, 0.1); }
+    50% { border-color: rgba(255, 0, 0, 0.2); }
+}
+
+.fear-border-flicker {
+    animation: border-flicker 4s ease-in-out infinite;
+}
