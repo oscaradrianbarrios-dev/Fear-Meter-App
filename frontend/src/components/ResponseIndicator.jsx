@@ -38,12 +38,15 @@ export const ResponseIndicator = ({
     
     const t = texts[language];
     
-    // Flash effect when response type changes
+    // Flash effect when response type changes - using callback pattern
     useEffect(() => {
         if (responseType !== prevResponseRef.current && responseType !== RESPONSE_TYPE.NONE) {
-            setFlashing(true);
-            const timer = setTimeout(() => setFlashing(false), 2000);
             prevResponseRef.current = responseType;
+            // Use requestAnimationFrame to defer state update
+            requestAnimationFrame(() => {
+                setFlashing(true);
+            });
+            const timer = setTimeout(() => setFlashing(false), 2000);
             return () => clearTimeout(timer);
         }
     }, [responseType]);
