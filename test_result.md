@@ -258,9 +258,9 @@ frontend:
 
   - task: "Calibration Protocol System"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/CalibrationProtocol.jsx, /app/frontend/src/hooks/useCalibration.js, /app/frontend/src/components/ResponseIndicator.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -273,6 +273,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "VERIFIED VIA SCREENSHOTS - All calibration features working: 1) Menu shows Calibration option in red, 2) Intro screen shows CALIBRATION PROTOCOL with clinical instructions (DO NOT MOVE, DO NOT SPEAK, REGULATE BREATHING), 3) Progress ring shows percentage during 45-second acquisition, 4) ACQUIRING BASELINE DATA text displays, 5) Spanish translation works (PROTOCOLO DE CALIBRACIÓN), 6) ResponseIndicator shows CALIBRATION REQUIRED when uncalibrated, 7) All aesthetic requirements met (black #000000 background, red #FF0000 text)"
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL CALIBRATION BUG FOUND - Comprehensive testing revealed calibration system is broken: ✅ WORKING: Menu access (hamburger on left, calibration option in red), intro screen (all UI elements present: title, subtitle, warning, instructions, duration, buttons), black background (#000000), calibration starts correctly (shows 0% and 'ACQUIRING BASELINE DATA...'). ❌ BROKEN: Calibration progress never advances beyond 0%, gets stuck indefinitely, never reaches 'ANALYZING BIOMETRIC PATTERNS...' phase, never completes after 50+ seconds, no baseline BPM/stress values generated, cannot proceed to monitor, persistence cannot be tested. ROOT CAUSE: Integration flaw between useCalibration.js and useBiometricSimulation.js - calibration expects BPM samples via addBpmSample() but biometric simulation only runs when isActive=true (session started), during calibration no session is active so no BPM samples are generated, causing calibration to hang at 0% forever. REQUIRES FIX: Either calibration should generate its own BPM samples OR biometric simulation should run during calibration phase."
 
 metadata:
   created_by: "testing_agent"
