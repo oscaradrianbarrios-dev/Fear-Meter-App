@@ -12,6 +12,46 @@
     --fear-gray-dim: rgba(176, 176, 176, 0.4);
 }
 
+/* ===== HEARTBEAT SYNC EFFECT ===== */
+@keyframes heartbeat-sync {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    15% { 
+        transform: scale(1.008);
+        opacity: 0.98;
+    }
+    30% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes heartbeat-sync-critical {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    10% { 
+        transform: scale(1.015);
+        opacity: 0.95;
+    }
+    25% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Apply heartbeat to body in critical state */
+.heartbeat-active {
+    animation: heartbeat-sync 1s ease-in-out infinite;
+}
+
+.heartbeat-critical {
+    animation: heartbeat-sync-critical 0.5s ease-in-out infinite;
+}
+
 /* ===== BREATHING EFFECT FOR DATA ===== */
 @keyframes data-breathe {
     0%, 100% { 
