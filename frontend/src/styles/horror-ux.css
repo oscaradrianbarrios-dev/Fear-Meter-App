@@ -1,15 +1,39 @@
 /* Fear Meter - Horror UX Styles */
-/* Microinteractions and psychological tension effects */
+/* HIGH CONTRAST CLINICAL HORROR - RED PURE #FF0000 */
 
-/* ===== CLINICAL COLOR PALETTE ===== */
+/* ===== VIBRANT COLOR PALETTE ===== */
 :root {
     --fear-black: #000000;
-    --fear-red-clinical: #8E0E1C;
-    --fear-red-clinical-dark: #6B0A15;
-    --fear-red-accent: #B11226;
-    --fear-red-critical: #FF0000;
+    --fear-red: #FF0000;
+    --fear-red-glow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+    --fear-red-glow-intense: 0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.7), 0 0 45px rgba(255, 0, 0, 0.4);
+    --fear-red-border: rgba(255, 0, 0, 0.4);
+    --fear-red-border-bright: rgba(255, 0, 0, 0.6);
     --fear-gray: #B0B0B0;
-    --fear-gray-dim: rgba(176, 176, 176, 0.4);
+    --fear-gray-bright: #CCCCCC;
+}
+
+/* ===== GLOW TEXT CLASSES ===== */
+.text-glow {
+    text-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+.text-glow-intense {
+    text-shadow: 0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.7), 0 0 45px rgba(255, 0, 0, 0.4);
+}
+
+.text-glow-critical {
+    text-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.5);
+    animation: critical-pulse 0.5s ease-in-out infinite;
+}
+
+/* ===== BORDER GLOW ===== */
+.border-glow {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3), inset 0 0 5px rgba(255, 0, 0, 0.1);
+}
+
+.border-glow-intense {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.2);
 }
 
 /* ===== HEARTBEAT SYNC EFFECT ===== */
@@ -43,24 +67,35 @@
     }
 }
 
-/* Apply heartbeat to body in critical state */
-.heartbeat-active {
-    animation: heartbeat-sync 1s ease-in-out infinite;
+@keyframes critical-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
-.heartbeat-critical {
-    animation: heartbeat-sync-critical 0.5s ease-in-out infinite;
+@keyframes bpm-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        text-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    50% { 
+        transform: scale(1.02);
+        text-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7);
+    }
+}
+
+.bpm-animate {
+    animation: bpm-pulse 1s ease-in-out infinite;
 }
 
 /* ===== BREATHING EFFECT FOR DATA ===== */
 @keyframes data-breathe {
     0%, 100% { 
-        opacity: 0.85;
-        text-shadow: 0 0 0 transparent;
+        opacity: 0.9;
+        text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
     }
     50% { 
         opacity: 1;
-        text-shadow: 0 0 8px rgba(142, 14, 28, 0.15);
+        text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
     }
 }
 
