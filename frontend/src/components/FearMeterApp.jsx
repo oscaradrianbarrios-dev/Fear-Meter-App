@@ -131,6 +131,24 @@ export const FearMeterApp = () => {
         navigate("/demo");
     }, [navigate]);
 
+    // Open calibration protocol
+    const handleOpenCalibration = useCallback(() => {
+        setMenuOpen(false);
+        setShowCalibration(true);
+    }, []);
+
+    // Complete calibration and return to monitor
+    const handleCalibrationComplete = useCallback(() => {
+        setShowCalibration(false);
+        setCurrentView("monitor");
+    }, []);
+
+    // Cancel calibration
+    const handleCalibrationCancel = useCallback(() => {
+        resetCalibration();
+        setShowCalibration(false);
+    }, [resetCalibration]);
+
     // Swipe detection for menu
     const handleTouchStart = useCallback((e) => {
         touchStartRef.current = {
