@@ -209,6 +209,35 @@ export const SideMenu = ({
                 {/* Divider */}
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
 
+                {/* Nightmare Protocol */}
+                <button
+                    onClick={() => {
+                        onClose();
+                        navigate("/nightmare");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                    style={{ 
+                        color: "#8B0000",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 200ms ease-out 280ms",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#FF0000";
+                        e.currentTarget.style.backgroundColor = "rgba(139, 0, 0, 0.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "#8B0000";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                >
+                    <Moon className="w-4 h-4" />
+                    <span className="text-xs tracking-[0.15em]">{texts.nightmare || "Nightmare Protocol"}</span>
+                </button>
+
+                {/* Divider */}
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
+
                 {/* About */}
                 <button
                     className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
@@ -216,7 +245,7 @@ export const SideMenu = ({
                         color: "#B0B0B0",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                        transition: "all 200ms ease-out 280ms",
+                        transition: "all 200ms ease-out 320ms",
                     }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.color = "#FF0000";
