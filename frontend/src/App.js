@@ -6,6 +6,11 @@ import DemoMode from "@/components/DemoMode";
 import NightmareProtocol from "@/components/NightmareProtocol";
 import InvestorDemo from "@/components/InvestorDemo";
 import FearLibrary from "@/components/FearLibrary";
+import MovieSession from "@/components/MovieSession";
+import VRExperience from "@/components/VRExperience";
+import FearChallenge from "@/components/FearChallenge";
+import BiometricProfile from "@/components/BiometricProfile";
+import FearSharing from "@/components/FearSharing";
 import Disclaimer from "@/components/Disclaimer";
 
 function App() {
@@ -21,6 +26,11 @@ function App() {
                             <Route path="/investor" element={<InvestorDemo />} />
                             <Route path="/investor-demo" element={<InvestorDemo />} />
                             <Route path="/library" element={<FearLibrary />} />
+                            <Route path="/movie-session" element={<MovieSession />} />
+                            <Route path="/vr" element={<VRExperience />} />
+                            <Route path="/challenge" element={<FearChallenge />} />
+                            <Route path="/profile" element={<BiometricProfile />} />
+                            <Route path="/share" element={<FearSharing />} />
                         </Routes>
                     </BrowserRouter>
                     <Disclaimer />
