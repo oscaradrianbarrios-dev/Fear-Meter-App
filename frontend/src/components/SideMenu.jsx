@@ -152,35 +152,34 @@ export const SideMenu = ({
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
 
                 {/* Language Selection */}
-                <div 
-                    className="px-4 py-3"
+                <button
+                    onClick={handleLanguageSelectorOpen}
+                    className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
                     style={{ 
+                        color: "#B0B0B0",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 200ms ease-out 200ms",
                     }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#FF0000";
+                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.03)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "#B0B0B0";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                    data-testid="language-menu-button"
                 >
-                    <div className="flex items-center gap-3 mb-3" style={{ color: "#B0B0B0" }}>
-                        <Globe className="w-4 h-4" />
-                        <span className="text-xs tracking-[0.15em]">{texts.language}</span>
-                    </div>
-                    <div className="ml-7 space-y-1">
-                        {languageOptions.map((lang) => (
-                            <button
-                                key={lang.code}
-                                onClick={() => onLanguageChange(lang.code)}
-                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded transition-all duration-200 text-left"
-                                style={{
-                                    color: language === lang.code ? "#FF0000" : "rgba(176, 176, 176, 0.5)",
-                                    backgroundColor: language === lang.code ? "rgba(255, 0, 0, 0.05)" : "transparent",
-                                }}
-                            >
-                                <span className="text-[10px]">{lang.flag}</span>
-                                <span className="text-[11px] tracking-wider">{lang.label}</span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                    <Globe className="w-4 h-4" />
+                    <span className="text-xs tracking-[0.15em]">{texts.language}</span>
+                    <span 
+                        className="ml-auto text-[10px] tracking-wider"
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                    >
+                        {currentLangInfo.nativeName}
+                    </span>
+                </button>
 
                 {/* Divider */}
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }} />
