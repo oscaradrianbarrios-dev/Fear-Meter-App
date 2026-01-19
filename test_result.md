@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the FEAR METER biometric horror application at https://biometric-horror-1.preview.emergentagent.com"
+user_problem_statement: "Test the FEAR METER biometric horror application at https://fearmeter-protocol.preview.emergentagent.com"
 
 frontend:
   - task: "Main Monitor View"
