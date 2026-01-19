@@ -201,8 +201,10 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
             if (isPanic) {
                 const scanSpeed = 2000;
                 const scanY = (now % scanSpeed) / scanSpeed * height;
-                ctx.strokeStyle = "rgba(139, 0, 0, 0.25)";
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
+                ctx.lineWidth = 2;
+                ctx.shadowColor = "#FF0000";
+                ctx.shadowBlur = 10;
                 ctx.beginPath();
                 ctx.moveTo(0, scanY);
                 ctx.lineTo(width, scanY);
@@ -223,10 +225,13 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
 
     return (
         <div 
-            className="relative w-full h-40 overflow-hidden"
+            className="relative w-full h-40 overflow-hidden border-glow"
             style={{
-                border: `1px solid rgba(255, 0, 0, ${isPanic ? 0.25 : 0.1})`,
+                border: `1px solid rgba(255, 0, 0, ${isPanic ? 0.6 : 0.4})`,
                 backgroundColor: "#000000",
+                boxShadow: isPanic 
+                    ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(255, 0, 0, 0.1)"
+                    : "0 0 8px rgba(255, 0, 0, 0.2), inset 0 0 10px rgba(255, 0, 0, 0.05)",
             }}
         >
             <canvas
@@ -235,27 +240,27 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 style={{ display: "block" }}
             />
             
-            {/* ECG label - minimal */}
+            {/* ECG label with glow */}
             <div className="absolute top-2 left-2 flex items-center gap-1">
                 <div 
-                    className={`w-1 h-1 rounded-full ${isActive ? "animate-pulse-red" : ""}`}
+                    className={`w-1.5 h-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
                     style={{ 
-                        backgroundColor: isPanic 
-                            ? "#8B0000"
-                            : isActive 
-                                ? "rgba(255, 0, 0, 0.6)" 
-                                : "rgba(176, 176, 176, 0.15)" 
+                        backgroundColor: "#FF0000",
+                        boxShadow: isActive ? "0 0 8px #FF0000" : "none",
                     }}
                 />
                 <span 
                     className="text-[8px] tracking-[0.15em]"
-                    style={{ color: "rgba(176, 176, 176, 0.3)" }}
+                    style={{ 
+                        color: isActive ? "#FF0000" : "rgba(255, 0, 0, 0.4)",
+                        textShadow: isActive ? "0 0 5px rgba(255, 0, 0, 0.5)" : "none",
+                    }}
                 >
                     ECG
                 </span>
             </div>
             
-            {/* Critical indicator */}
+            {/* Critical indicator with intense glow */}
             {isPanic && (
                 <div className="absolute top-2 right-2">
                     <span 
