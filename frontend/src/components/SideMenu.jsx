@@ -225,7 +225,7 @@ export const SideMenu = ({
                     }}
                 >
                     <Info className="w-4 h-4" />
-                    <span className="text-xs tracking-[0.15em]">{texts.about}</span>
+                    <span className="text-[11px] tracking-[0.15em]">{texts.about}</span>
                 </button>
 
                 {/* Demo Mode Option - Hidden by default */}
@@ -234,24 +234,16 @@ export const SideMenu = ({
                         <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(139, 0, 0, 0.05)" }} />
                         <button
                             onClick={onDemoActivate}
-                            className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                            className="w-full flex items-center gap-3 px-4 py-3"
                             style={{ 
-                                color: "rgba(139, 0, 0, 0.7)",
+                                color: "rgba(139, 0, 0, 0.4)",
                                 opacity: itemsReady ? 1 : 0,
                                 transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
-                                transition: "all 200ms ease-out 300ms",
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.color = "#8B0000";
-                                e.currentTarget.style.backgroundColor = "rgba(139, 0, 0, 0.05)";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.color = "rgba(139, 0, 0, 0.7)";
-                                e.currentTarget.style.backgroundColor = "transparent";
+                                transition: "all 250ms ease-out 360ms",
                             }}
                         >
                             <Play className="w-4 h-4" />
-                            <span className="text-xs tracking-[0.15em]">Demo Mode</span>
+                            <span className="text-[11px] tracking-[0.15em]">Demo Mode</span>
                         </button>
                     </>
                 )}
@@ -260,17 +252,14 @@ export const SideMenu = ({
                 <div 
                     className="absolute bottom-0 left-0 right-0 p-4"
                     style={{ 
-                        borderTop: "1px solid rgba(139, 0, 0, 0.05)",
+                        borderTop: "1px solid rgba(139, 0, 0, 0.03)",
                         opacity: itemsReady ? 1 : 0,
-                        transition: "opacity 200ms ease-out 350ms",
+                        transition: "opacity 300ms ease-out 400ms",
                     }}
                 >
                     <div className="text-center">
-                        <div className="text-[9px] tracking-[0.2em]" style={{ color: "rgba(176, 176, 176, 0.3)" }}>
+                        <div className="text-[8px] tracking-[0.2em]" style={{ color: "rgba(139, 0, 0, 0.25)" }}>
                             FEAR METER v1.0
-                        </div>
-                        <div className="text-[8px] mt-1" style={{ color: "rgba(176, 176, 176, 0.2)" }}>
-                            RESTRICTED ACCESS
                         </div>
                     </div>
                 </div>
