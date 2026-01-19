@@ -364,10 +364,18 @@ export const CalibrationProtocol = ({
             
             {/* System ready message */}
             <p 
-                className="text-[9px] tracking-[0.15em] mb-8"
+                className="text-[9px] tracking-[0.15em] mb-2"
                 style={{ color: "rgba(176, 176, 176, 0.5)" }}
             >
                 {t.systemReady}
+            </p>
+            
+            {/* Validity notice */}
+            <p 
+                className="text-[8px] tracking-[0.15em] mb-8"
+                style={{ color: "rgba(255, 0, 0, 0.3)" }}
+            >
+                {t.validFor}
             </p>
             
             {/* Buttons */}
