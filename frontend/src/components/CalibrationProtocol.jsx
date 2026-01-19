@@ -70,15 +70,15 @@ export const CalibrationProtocol = ({
     
     const t = texts[language];
     
-    // Update phase based on calibration state
+    // Show data after completion with delay
     useEffect(() => {
-        if (calibrationState === CALIBRATION_STATE.IN_PROGRESS) {
-            setPhase("calibrating");
-        } else if (calibrationState === CALIBRATION_STATE.COMPLETE) {
-            setPhase("complete");
-            setTimeout(() => setShowData(true), 500);
+        if (phase === "complete") {
+            const timer = setTimeout(() => setShowData(true), 500);
+            return () => clearTimeout(timer);
+        } else {
+            setShowData(false);
         }
-    }, [calibrationState]);
+    }, [phase]);
     
     // Glitch effect during calibration
     useEffect(() => {
