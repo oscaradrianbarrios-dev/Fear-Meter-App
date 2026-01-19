@@ -137,7 +137,7 @@ export const useBiometricSimulation = ({
             onPanicEnd?.();
             startRecovery();
         }
-    }, [calculateStress, calculateSignal, onPanicStart, onPanicEnd, isDemo, isPanic, isRecovering, startRecovery]);
+    }, [calculateStress, calculateSignal, onPanicStart, onPanicEnd, isDemo, isPanic, isRecovering, startRecovery, externalPanicCheck, onBpmUpdate]);
 
     // Start simulation
     const startSimulation = useCallback(() => {
