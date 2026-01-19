@@ -87,27 +87,6 @@ export const useCalibration = () => {
         }
     }, []);
     
-    // Start calibration process
-    const startCalibration = useCallback(() => {
-        setCalibrationState(CALIBRATION_STATE.IN_PROGRESS);
-        setProgress(0);
-        bpmSamplesRef.current = [];
-        movementHistoryRef.current = [];
-        
-        initMotionDetection();
-        
-        let elapsed = 0;
-        calibrationIntervalRef.current = setInterval(() => {
-            elapsed += 0.1;
-            const progressPercent = Math.min((elapsed / CALIBRATION_DURATION) * 100, 100);
-            setProgress(progressPercent);
-            
-            if (elapsed >= CALIBRATION_DURATION) {
-                completeCalibration();
-            }
-        }, 100);
-    }, [initMotionDetection]);
-    
     // Complete calibration and calculate baselines
     const completeCalibration = useCallback(() => {
         clearInterval(calibrationIntervalRef.current);
@@ -130,6 +109,27 @@ export const useCalibration = () => {
         setCalibrationState(CALIBRATION_STATE.COMPLETE);
         setProgress(100);
     }, []);
+    
+    // Start calibration process
+    const startCalibration = useCallback(() => {
+        setCalibrationState(CALIBRATION_STATE.IN_PROGRESS);
+        setProgress(0);
+        bpmSamplesRef.current = [];
+        movementHistoryRef.current = [];
+        
+        initMotionDetection();
+        
+        let elapsed = 0;
+        calibrationIntervalRef.current = setInterval(() => {
+            elapsed += 0.1;
+            const progressPercent = Math.min((elapsed / CALIBRATION_DURATION) * 100, 100);
+            setProgress(progressPercent);
+            
+            if (elapsed >= CALIBRATION_DURATION) {
+                completeCalibration();
+            }
+        }, 100);
+    }, [initMotionDetection, completeCalibration]);
     
     // Add BPM sample during calibration
     const addBpmSample = useCallback((bpm) => {
