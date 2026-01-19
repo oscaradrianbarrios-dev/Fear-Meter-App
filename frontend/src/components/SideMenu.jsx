@@ -27,16 +27,16 @@ export const SideMenu = ({
     useEffect(() => {
         if (isOpen) {
             setIsVisible(true);
-            // Smooth slide in (200-250ms)
+            // Slow, deliberate slide in (300ms) - more unsettling
             requestAnimationFrame(() => {
                 setTranslateX(0);
             });
-            const timer = setTimeout(() => setItemsReady(true), 200);
+            const timer = setTimeout(() => setItemsReady(true), 300);
             return () => clearTimeout(timer);
         } else {
             setTranslateX(-100);
             setItemsReady(false);
-            const timer = setTimeout(() => setIsVisible(false), 250);
+            const timer = setTimeout(() => setIsVisible(false), 300);
             return () => clearTimeout(timer);
         }
     }, [isOpen]);
