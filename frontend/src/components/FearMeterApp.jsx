@@ -9,6 +9,7 @@ import CriticalAlert from "./CriticalAlert";
 import PanicOverlay from "./PanicOverlay";
 import CalibrationProtocol from "./CalibrationProtocol";
 import ResponseIndicator from "./ResponseIndicator";
+import ExpirationWarning from "./ExpirationWarning";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useCalibration, CALIBRATION_STATE } from "@/hooks/useCalibration";
