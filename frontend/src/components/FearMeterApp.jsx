@@ -22,9 +22,25 @@ export const FearMeterApp = () => {
     const [panicActive, setPanicActive] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
     const [showDemoOption, setShowDemoOption] = useState(false);
+    const [showCalibration, setShowCalibration] = useState(false);
     const panicTimeoutRef = useRef(null);
     const containerRef = useRef(null);
     const touchStartRef = useRef({ x: 0, y: 0 });
+
+    // Calibration hook
+    const {
+        calibrationState,
+        progress: calibrationProgress,
+        baselineBpm,
+        baselineStress,
+        responseType,
+        isCalibrated,
+        startCalibration,
+        addBpmSample,
+        classifyResponse,
+        shouldTriggerPanic,
+        resetCalibration,
+    } = useCalibration();
 
     const {
         bpm,
@@ -46,6 +62,19 @@ export const FearMeterApp = () => {
             }, 520);
         },
         onPanicEnd: () => {},
+        // Use calibration-aware panic check
+        shouldTriggerPanic: isCalibrated ? shouldTriggerPanic : null,
+        // Feed BPM samples to calibration during calibration phase
+        onBpmUpdate: (newBpm) => {
+            if (calibrationState === CALIBRATION_STATE.IN_PROGRESS) {
+                addBpmSample(newBpm);
+            }
+            // Classify response when active
+            if (isCalibrated && isActive) {
+                const currentStress = Math.round(((newBpm - 60) / 80) * 100);
+                classifyResponse(newBpm, Math.max(0, Math.min(100, currentStress)));
+            }
+        },
     });
 
     const handlePanicSequenceComplete = useCallback(() => {
