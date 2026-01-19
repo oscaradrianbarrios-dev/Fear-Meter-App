@@ -20,6 +20,7 @@ import { useSettings } from "@/contexts/SettingsContext";
 export const FearMeterApp = () => {
     const navigate = useNavigate();
     const { language, setLanguage, texts } = useLanguage();
+    const { soundEnabled } = useSettings();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
