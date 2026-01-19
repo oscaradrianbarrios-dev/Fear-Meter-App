@@ -210,41 +210,49 @@ export const useCalibration = () => {
         
         setCalibrationState(CALIBRATION_STATE.IN_PROGRESS);
         setProgress(0);
+        setIsCalibrating(true);
         bpmSamplesRef.current = [];
         movementHistoryRef.current = [];
         bpmVarianceRef.current = [];
+        calibrationStartTimeRef.current = Date.now();
+        simulatedBpmRef.current = 68 + Math.random() * 8; // Start between 68-76
         
         initMotionDetection();
-        
-        // Generate simulated resting BPM during calibration
-        // This simulates what a real biometric sensor would read at rest
-        let simulatedBpm = 68 + Math.random() * 8; // Start between 68-76
-        const startTime = Date.now();
+    }, [initMotionDetection]);
+    
+    // Effect to handle calibration progress
+    useEffect(() => {
+        if (!isCalibrating) return;
         
         const runCalibration = () => {
-            const elapsed = (Date.now() - startTime) / 1000; // Convert to seconds
+            const elapsed = (Date.now() - calibrationStartTimeRef.current) / 1000;
             const progressPercent = Math.min((elapsed / CALIBRATION_DURATION) * 100, 100);
             
-            // Generate realistic resting BPM samples during calibration
-            // Small natural variation like a real heartbeat at rest
-            const variation = (Math.random() - 0.5) * 3; // ±1.5 BPM variation
-            simulatedBpm += (72 - simulatedBpm) * 0.02; // Drift towards 72
-            simulatedBpm += variation;
-            simulatedBpm = Math.max(60, Math.min(85, simulatedBpm)); // Keep in resting range
+            // Generate realistic resting BPM samples
+            const variation = (Math.random() - 0.5) * 3;
+            simulatedBpmRef.current += (72 - simulatedBpmRef.current) * 0.02;
+            simulatedBpmRef.current += variation;
+            simulatedBpmRef.current = Math.max(60, Math.min(85, simulatedBpmRef.current));
             
-            // Add the sample to our collection
-            bpmSamplesRef.current.push(Math.round(simulatedBpm));
+            bpmSamplesRef.current.push(Math.round(simulatedBpmRef.current));
             
             setProgress(progressPercent);
             
             if (elapsed >= CALIBRATION_DURATION) {
                 clearInterval(calibrationIntervalRef.current);
+                setIsCalibrating(false);
                 completeCalibration();
             }
         };
         
         calibrationIntervalRef.current = setInterval(runCalibration, 100);
-    }, [initMotionDetection, completeCalibration]);
+        
+        return () => {
+            if (calibrationIntervalRef.current) {
+                clearInterval(calibrationIntervalRef.current);
+            }
+        };
+    }, [isCalibrating, completeCalibration]);
     
     // Add BPM sample during calibration
     const addBpmSample = useCallback((bpm) => {
