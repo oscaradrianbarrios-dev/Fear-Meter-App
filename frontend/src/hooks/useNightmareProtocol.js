@@ -45,7 +45,9 @@ const saveNightmareLog = (events) => {
 };
 
 // Check if current time is within nighttime hours
-const isNighttime = () => {
+// Can be overridden for testing
+const isNighttime = (forceNightMode = false) => {
+    if (forceNightMode) return true;
     const hour = new Date().getHours();
     // Nighttime: 22:00 - 07:00
     return hour >= 22 || hour < 7;
@@ -61,6 +63,8 @@ export const useNightmareProtocol = () => {
     const [sessionStartTime, setSessionStartTime] = useState(null);
     const [totalEventsTonight, setTotalEventsTonight] = useState(0);
     const [isMoving, setIsMoving] = useState(false);
+    const [forceNightMode, setForceNightMode] = useState(false);
+    const [statistics, setStatistics] = useState(null);
     
     const monitoringIntervalRef = useRef(null);
     const bpmHistoryRef = useRef([]);
@@ -69,10 +73,17 @@ export const useNightmareProtocol = () => {
     const movementHistoryRef = useRef([]);
     const lastMotionRef = useRef({ x: 0, y: 0, z: 0 });
     
-    // Thresholds for nightmare detection
-    const BPM_SPIKE_THRESHOLD = 20;      // BPM increase to trigger event
-    const BPM_SEVERE_THRESHOLD = 35;     // BPM increase for severe event
-    const BPM_CRITICAL_THRESHOLD = 50;   // BPM increase for critical event
+    // Configurable thresholds for nightmare detection
+    const [thresholds, setThresholds] = useState({
+        spike: 20,      // BPM increase to trigger event
+        severe: 35,     // BPM increase for severe event
+        critical: 50,   // BPM increase for critical event
+        minDuration: 5000, // Minimum event duration in ms
+    });
+    
+    const BPM_SPIKE_THRESHOLD = thresholds.spike;
+    const BPM_SEVERE_THRESHOLD = thresholds.severe;
+    const BPM_CRITICAL_THRESHOLD = thresholds.critical;
     const MIN_EVENT_DURATION = 5000;     // Minimum 5 seconds for event
     const MOVEMENT_THRESHOLD = 1.0;      // Very low threshold for sleep
     
