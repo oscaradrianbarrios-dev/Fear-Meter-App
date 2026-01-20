@@ -328,7 +328,7 @@ export const VRExperience = () => {
                     background: currentCategory === "terror" 
                         ? "radial-gradient(circle, rgba(255,0,0,0.05) 0%, transparent 70%)"
                         : currentCategory === "tension"
-                            ? "radial-gradient(circle, rgba(142,14,28,0.03) 0%, transparent 70%)"
+                            ? "radial-gradient(circle, rgba(255,0,0,0.03) 0%, transparent 70%)"
                             : "transparent",
                 }}
             >
