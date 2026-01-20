@@ -47,6 +47,35 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 - Options: Rest, Physical activity, Emotional stress, Real fear
 - Movement detection → excludes from Fear Score
 
+### ✅ 3.1 Advanced Calibration Mode (NEW - Dec 2025)
+- **Multi-mode calibration system** with 4 distinct modes:
+  - 🌙 **REST MODE** (30s): Baseline resting heart rate (60-80 BPM expected)
+  - 🏃 **EXERCISE MODE** (30s): Physical activity baseline (90-130 BPM expected)
+  - ⚡ **STRESS MODE** (20s): Emotional stress response (75-100 BPM expected)
+  - ❤️ **FEAR MODE** (15s): Fear response with scary flash (100-140 BPM expected)
+- **Prerequisite system**: REST mode must be calibrated before other modes
+- **Haptic feedback integration**: Vibrations during calibration
+- **Fear Mode special**: Random scary flash with intense haptic at 40-80% progress
+- **Calibration results**: Shows AVG BPM, MIN BPM, MAX BPM for each mode
+- **Persistence**: Calibration data stored in localStorage (24h validity)
+
+### ✅ 3.2 Haptic Feedback System (NEW - Dec 2025)
+- **BPM-synchronized vibrations** during active sessions
+- **Intensity patterns based on BPM thresholds**:
+  - Normal (<90 BPM): Subtle 15ms pulse every other beat
+  - Elevated (90-110 BPM): 25ms pulse every beat
+  - High (110-130 BPM): 40ms double pulse
+  - Critical (130-150 BPM): 50ms triple pulse
+  - Extreme (>150 BPM): 60ms quad pulse
+- **Event patterns**:
+  - TAP: 15ms (UI interactions)
+  - SUCCESS: 50-30-100ms
+  - FEAR_SPIKE: 100-30-200-30-100ms
+  - PANIC_ALERT: 100-50-100-50-100-50-200ms
+  - NIGHTMARE_DETECTED: 200-100-200-100-300ms
+- **Toggle in menu**: ON/OFF control with visual indicator
+- **Browser API**: Uses navigator.vibrate (mobile devices)
+
 ### ✅ 4. Nightmare Protocol
 - "Nighttime Fear Analysis (Passive)"
 - BPM > 120 for 8+ seconds triggers detection
