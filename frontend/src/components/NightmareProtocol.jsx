@@ -39,14 +39,17 @@ export const NightmareProtocol = () => {
         >
             <p 
                 className="text-[10px] tracking-[0.3em] mb-8"
-                style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                style={{ 
+                    color: "rgba(255, 0, 0, 0.5)",
+                    textShadow: "0 0 8px rgba(255, 0, 0, 0.2)",
+                }}
             >
                 PASSIVE BIOMETRIC MONITORING
             </p>
             
             <p 
                 className="text-[9px] tracking-[0.2em] text-center max-w-xs"
-                style={{ color: "rgba(139, 0, 0, 0.25)" }}
+                style={{ color: "rgba(255, 0, 0, 0.3)" }}
             >
                 TAP ANYWHERE TO ACTIVATE
             </p>
@@ -74,7 +77,7 @@ export const NightmareProtocol = () => {
                         className="text-xs tracking-[0.3em]"
                         style={{ 
                             color: "#FF0000",
-                            textShadow: "0 0 20px rgba(255, 0, 0, 0.5)",
+                            textShadow: "0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.3)",
                         }}
                     >
                         NIGHTMARE DETECTED
@@ -85,7 +88,10 @@ export const NightmareProtocol = () => {
                 <div className="text-center">
                     <p 
                         className="text-[10px] tracking-[0.25em]"
-                        style={{ color: "#8B0000" }}
+                        style={{ 
+                            color: "#FF0000",
+                            textShadow: "0 0 10px rgba(255, 0, 0, 0.4)",
+                        }}
                     >
                         NIGHTMARE MODE ACTIVE
                     </p>
@@ -96,7 +102,7 @@ export const NightmareProtocol = () => {
             {totalSessionEvents > 0 && protocolState !== NIGHTMARE_STATE.NIGHTMARE_DETECTED && (
                 <p 
                     className="absolute bottom-20 text-[8px] tracking-[0.2em]"
-                    style={{ color: "rgba(139, 0, 0, 0.3)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     EVENTS: {totalSessionEvents}
                 </p>
@@ -113,7 +119,10 @@ export const NightmareProtocol = () => {
             <div className="text-center space-y-6">
                 <p 
                     className="text-[9px] tracking-[0.3em]"
-                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                    style={{ 
+                        color: "rgba(255, 0, 0, 0.5)",
+                        textShadow: "0 0 5px rgba(255, 0, 0, 0.2)",
+                    }}
                 >
                     SESSION COMPLETE
                 </p>
@@ -122,13 +131,16 @@ export const NightmareProtocol = () => {
                 <div>
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-1"
-                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                     >
                         NIGHT EVENTS DETECTED
                     </p>
                     <p 
                         className="text-3xl font-mono"
-                        style={{ color: "#8B0000" }}
+                        style={{ 
+                            color: "#FF0000",
+                            textShadow: "0 0 15px rgba(255, 0, 0, 0.5)",
+                        }}
                     >
                         {totalSessionEvents}
                     </p>
@@ -139,13 +151,16 @@ export const NightmareProtocol = () => {
                     <div>
                         <p 
                             className="text-[8px] tracking-[0.15em] mb-1"
-                            style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.5)" }}
                         >
                             PEAK BPM
                         </p>
                         <p 
                             className="text-2xl font-mono"
-                            style={{ color: "#8B0000" }}
+                            style={{ 
+                                color: "#FF0000",
+                                textShadow: "0 0 12px rgba(255, 0, 0, 0.4)",
+                            }}
                         >
                             {peakBpm}
                         </p>
@@ -156,13 +171,16 @@ export const NightmareProtocol = () => {
                 <div>
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-1"
-                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                     >
                         DURATION
                     </p>
                     <p 
                         className="text-lg font-mono"
-                        style={{ color: "#8B0000" }}
+                        style={{ 
+                            color: "#FF0000",
+                            textShadow: "0 0 10px rgba(255, 0, 0, 0.3)",
+                        }}
                     >
                         {sessionDuration}
                     </p>
@@ -170,7 +188,7 @@ export const NightmareProtocol = () => {
                 
                 <p 
                     className="text-[8px] tracking-[0.15em] mt-8"
-                    style={{ color: "rgba(139, 0, 0, 0.2)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
                 >
                     TAP TO DISMISS
                 </p>
@@ -184,12 +202,12 @@ export const NightmareProtocol = () => {
             {/* Log Header */}
             <div 
                 className="py-4 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.15)" }}
             >
                 <button
                     onClick={() => setShowLog(false)}
                     className="text-[9px] tracking-[0.15em]"
-                    style={{ color: "rgba(139, 0, 0, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     BACK
                 </button>
@@ -198,7 +216,7 @@ export const NightmareProtocol = () => {
                     <button
                         onClick={clearLog}
                         className="text-[8px] tracking-[0.15em]"
-                        style={{ color: "rgba(139, 0, 0, 0.3)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         CLEAR
                     </button>
@@ -211,7 +229,7 @@ export const NightmareProtocol = () => {
                     <div className="flex items-center justify-center h-full">
                         <p 
                             className="text-[9px] tracking-[0.2em]"
-                            style={{ color: "rgba(139, 0, 0, 0.25)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.3)" }}
                         >
                             NO EVENTS RECORDED
                         </p>
@@ -222,18 +240,21 @@ export const NightmareProtocol = () => {
                             <div 
                                 key={event.id}
                                 className="py-2"
-                                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.05)" }}
+                                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
                             >
                                 <div className="flex justify-between items-center">
                                     <p 
                                         className="text-[8px] tracking-[0.1em]"
-                                        style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                                     >
                                         {event.date} • {event.time}
                                     </p>
                                     <p 
                                         className="text-sm font-mono"
-                                        style={{ color: "#8B0000" }}
+                                        style={{ 
+                                            color: "#FF0000",
+                                            textShadow: "0 0 8px rgba(255, 0, 0, 0.3)",
+                                        }}
                                     >
                                         {event.peakBpm} BPM
                                     </p>
@@ -254,19 +275,25 @@ export const NightmareProtocol = () => {
             {/* Header - minimal */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(139, 0, 0, 0.05)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                    style={{ 
+                        color: "#FF0000",
+                        textShadow: "0 0 8px rgba(255, 0, 0, 0.4)",
+                    }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[8px] tracking-[0.25em]"
-                    style={{ color: "rgba(139, 0, 0, 0.3)" }}
+                    style={{ 
+                        color: "rgba(255, 0, 0, 0.4)",
+                        textShadow: "0 0 5px rgba(255, 0, 0, 0.2)",
+                    }}
                 >
                     NIGHTMARE PROTOCOL
                 </span>
@@ -274,7 +301,7 @@ export const NightmareProtocol = () => {
                 <button
                     onClick={() => setShowLog(true)}
                     className="text-[8px] tracking-[0.15em] p-1"
-                    style={{ color: "rgba(139, 0, 0, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     LOG
                 </button>
