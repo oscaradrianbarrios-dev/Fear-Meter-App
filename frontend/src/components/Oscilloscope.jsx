@@ -265,7 +265,10 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 <div className="absolute top-2 right-2">
                     <span 
                         className="text-[8px] tracking-[0.2em]"
-                        style={{ color: "#8B0000" }}
+                        style={{ 
+                            color: "#FF0000",
+                            textShadow: "0 0 10px rgba(255, 0, 0, 0.6)",
+                        }}
                     >
                         CRITICAL
                     </span>
