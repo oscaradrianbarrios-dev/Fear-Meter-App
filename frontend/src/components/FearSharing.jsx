@@ -68,7 +68,7 @@ export const FearSharing = () => {
             className="w-72 mx-auto p-6 relative overflow-hidden"
             style={{ 
                 ...getCardStyle(),
-                border: "1px solid rgba(142, 14, 28, 0.3)",
+                border: "1px solid rgba(255, 0, 0, 0.3)",
             }}
         >
             {/* Background pattern */}
@@ -79,8 +79,8 @@ export const FearSharing = () => {
                         45deg,
                         transparent,
                         transparent 10px,
-                        rgba(142, 14, 28, 0.5) 10px,
-                        rgba(142, 14, 28, 0.5) 11px
+                        rgba(255, 0, 0, 0.5) 10px,
+                        rgba(255, 0, 0, 0.5) 11px
                     )`,
                 }}
             />
@@ -91,13 +91,13 @@ export const FearSharing = () => {
                 <div className="text-center mb-6">
                     <p 
                         className="text-[8px] tracking-[0.3em] mb-1"
-                        style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                     >
                         FEAR METER CERTIFIED
                     </p>
                     <h2 
                         className="text-lg tracking-[0.2em]"
-                        style={{ color: "#B11226" }}
+                        style={{ color: "#FF0000" }}
                     >
                         {selectedTemplate === "survivor" && "SURVIVOR"}
                         {selectedTemplate === "extreme" && "EXTREME FEAR"}
@@ -126,14 +126,14 @@ export const FearSharing = () => {
                     <div className="text-center">
                         <p 
                             className="text-[7px] tracking-[0.1em] mb-1"
-                            style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.4)" }}
                         >
                             PEAK BPM
                         </p>
                         <p 
                             className="text-3xl font-mono font-bold"
                             style={{ 
-                                color: peakBpm > 130 ? "#FF0000" : "#B11226",
+                                color: peakBpm > 130 ? "#FF0000" : "#FF0000",
                                 textShadow: peakBpm > 130 ? "0 0 10px rgba(255, 0, 0, 0.3)" : "none",
                             }}
                         >
@@ -143,13 +143,13 @@ export const FearSharing = () => {
                     <div className="text-center">
                         <p 
                             className="text-[7px] tracking-[0.1em] mb-1"
-                            style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.4)" }}
                         >
                             FEAR SCORE
                         </p>
                         <p 
                             className="text-3xl font-mono font-bold"
-                            style={{ color: "#8E0E1C" }}
+                            style={{ color: "#FF0000" }}
                         >
                             {fearScore}
                         </p>
@@ -160,7 +160,7 @@ export const FearSharing = () => {
                 <div className="mb-4">
                     <div 
                         className="h-2 w-full"
-                        style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                     >
                         <div 
                             className="h-full"
@@ -169,8 +169,8 @@ export const FearSharing = () => {
                                 backgroundColor: fearScore > 80 
                                     ? "#FF0000" 
                                     : fearScore > 50 
-                                        ? "#B11226" 
-                                        : "#8E0E1C",
+                                        ? "#FF0000" 
+                                        : "#FF0000",
                             }}
                         />
                     </div>
@@ -206,7 +206,7 @@ export const FearSharing = () => {
                 <div className="text-center">
                     <p 
                         className="text-[7px] tracking-[0.15em]"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         SCAN TO TRY FEAR METER
                     </p>
@@ -229,24 +229,24 @@ export const FearSharing = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     SHARE YOUR FEAR
                 </span>
                 
-                <Share2 className="w-4 h-4" style={{ color: "rgba(142, 14, 28, 0.3)" }} />
+                <Share2 className="w-4 h-4" style={{ color: "rgba(255, 0, 0, 0.3)" }} />
             </div>
             
             {/* Card Preview */}
@@ -260,7 +260,7 @@ export const FearSharing = () => {
                 <div className="mb-6">
                     <p 
                         className="text-[9px] tracking-[0.15em] mb-3"
-                        style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                     >
                         CARD TEMPLATE
                     </p>
@@ -272,14 +272,14 @@ export const FearSharing = () => {
                                 className="flex-1 py-2 px-3 text-[8px] tracking-[0.1em]"
                                 style={{ 
                                     backgroundColor: selectedTemplate === template.id 
-                                        ? "rgba(142, 14, 28, 0.15)" 
-                                        : "rgba(142, 14, 28, 0.03)",
+                                        ? "rgba(255, 0, 0, 0.15)" 
+                                        : "rgba(255, 0, 0, 0.03)",
                                     border: `1px solid ${selectedTemplate === template.id 
-                                        ? "rgba(142, 14, 28, 0.4)" 
-                                        : "rgba(142, 14, 28, 0.1)"}`,
+                                        ? "rgba(255, 0, 0, 0.4)" 
+                                        : "rgba(255, 0, 0, 0.1)"}`,
                                     color: selectedTemplate === template.id 
-                                        ? "#B11226" 
-                                        : "rgba(142, 14, 28, 0.5)",
+                                        ? "#FF0000" 
+                                        : "rgba(255, 0, 0, 0.5)",
                                 }}
                             >
                                 {template.title}
@@ -292,7 +292,7 @@ export const FearSharing = () => {
                 <div className="mb-6">
                     <p 
                         className="text-[9px] tracking-[0.15em] mb-3"
-                        style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
                     >
                         MOVIE
                     </p>
@@ -304,13 +304,13 @@ export const FearSharing = () => {
                                 className="py-1.5 px-3 text-[8px] tracking-[0.05em]"
                                 style={{ 
                                     backgroundColor: selectedMovie === movie 
-                                        ? "rgba(142, 14, 28, 0.15)" 
+                                        ? "rgba(255, 0, 0, 0.15)" 
                                         : "transparent",
                                     border: `1px solid ${selectedMovie === movie 
-                                        ? "rgba(142, 14, 28, 0.4)" 
-                                        : "rgba(142, 14, 28, 0.1)"}`,
+                                        ? "rgba(255, 0, 0, 0.4)" 
+                                        : "rgba(255, 0, 0, 0.1)"}`,
                                     color: selectedMovie === movie 
-                                        ? "#B11226" 
+                                        ? "#FF0000" 
                                         : "rgba(176, 176, 176, 0.5)",
                                 }}
                             >
@@ -325,13 +325,13 @@ export const FearSharing = () => {
                     <div className="flex justify-between mb-2">
                         <p 
                             className="text-[9px] tracking-[0.15em]"
-                            style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.5)" }}
                         >
                             PEAK BPM
                         </p>
                         <p 
                             className="text-[10px] font-mono"
-                            style={{ color: "#8E0E1C" }}
+                            style={{ color: "#FF0000" }}
                         >
                             {peakBpm}
                         </p>
@@ -344,8 +344,8 @@ export const FearSharing = () => {
                         onChange={(e) => setPeakBpm(parseInt(e.target.value))}
                         className="w-full h-1 appearance-none cursor-pointer"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.2)",
-                            accentColor: "#8E0E1C",
+                            backgroundColor: "rgba(255, 0, 0, 0.2)",
+                            accentColor: "#FF0000",
                         }}
                     />
                 </div>
@@ -355,13 +355,13 @@ export const FearSharing = () => {
                     <div className="flex justify-between mb-2">
                         <p 
                             className="text-[9px] tracking-[0.15em]"
-                            style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.5)" }}
                         >
                             FEAR SCORE
                         </p>
                         <p 
                             className="text-[10px] font-mono"
-                            style={{ color: "#8E0E1C" }}
+                            style={{ color: "#FF0000" }}
                         >
                             {fearScore}
                         </p>
@@ -374,8 +374,8 @@ export const FearSharing = () => {
                         onChange={(e) => setFearScore(parseInt(e.target.value))}
                         className="w-full h-1 appearance-none cursor-pointer"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.2)",
-                            accentColor: "#8E0E1C",
+                            backgroundColor: "rgba(255, 0, 0, 0.2)",
+                            accentColor: "#FF0000",
                         }}
                     />
                 </div>
@@ -384,16 +384,16 @@ export const FearSharing = () => {
             {/* Share buttons */}
             <div 
                 className="p-4"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 {/* Copy link */}
                 <button
                     onClick={copyLink}
                     className="w-full flex items-center justify-center gap-2 py-3 mb-3 text-[10px] tracking-[0.15em]"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.1)",
-                        border: "1px solid rgba(142, 14, 28, 0.3)",
-                        color: "#8E0E1C",
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        border: "1px solid rgba(255, 0, 0, 0.3)",
+                        color: "#FF0000",
                     }}
                 >
                     {copied ? (
@@ -436,9 +436,9 @@ export const FearSharing = () => {
                     <button
                         className="flex-1 flex items-center justify-center gap-2 py-2.5 text-[9px] tracking-[0.1em]"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.05)",
-                            border: "1px solid rgba(142, 14, 28, 0.2)",
-                            color: "#8E0E1C",
+                            backgroundColor: "rgba(255, 0, 0, 0.05)",
+                            border: "1px solid rgba(255, 0, 0, 0.2)",
+                            color: "#FF0000",
                         }}
                     >
                         <Download className="w-4 h-4" />
@@ -450,11 +450,11 @@ export const FearSharing = () => {
             {/* Footer */}
             <div 
                 className="py-2 px-4 text-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[7px] tracking-[0.1em]"
-                    style={{ color: "rgba(142, 14, 28, 0.25)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
                 >
                     SHARE YOUR FEAR EXPERIENCE WITH THE WORLD
                 </p>

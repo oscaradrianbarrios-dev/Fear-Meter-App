@@ -70,9 +70,9 @@ const MOVIES_WITH_TIMELINE = {
 // Get intensity color
 const getIntensityColor = (intensity) => {
     if (intensity >= 90) return "#FF0000";
-    if (intensity >= 70) return "#B11226";
-    if (intensity >= 50) return "#8E0E1C";
-    return "rgba(142, 14, 28, 0.5)";
+    if (intensity >= 70) return "#FF0000";
+    if (intensity >= 50) return "#FF0000";
+    return "rgba(255, 0, 0, 0.5)";
 };
 
 // Get event type label
@@ -186,7 +186,7 @@ export const MovieSession = () => {
         <div className="flex-1 p-4">
             <h2 
                 className="text-xs tracking-[0.2em] mb-6 text-center"
-                style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                style={{ color: "rgba(255, 0, 0, 0.5)" }}
             >
                 SELECT MOVIE EXPERIENCE
             </h2>
@@ -198,15 +198,15 @@ export const MovieSession = () => {
                         onClick={() => startSession(key)}
                         className="w-full p-4 text-left transition-all duration-200"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.03)",
-                            border: "1px solid rgba(142, 14, 28, 0.15)",
+                            backgroundColor: "rgba(255, 0, 0, 0.03)",
+                            border: "1px solid rgba(255, 0, 0, 0.15)",
                         }}
                     >
                         <div className="flex justify-between items-start">
                             <div>
                                 <h3 
                                     className="text-sm tracking-[0.1em]"
-                                    style={{ color: "#B11226" }}
+                                    style={{ color: "#FF0000" }}
                                 >
                                     {movie.title}
                                 </h3>
@@ -222,8 +222,8 @@ export const MovieSession = () => {
                                 style={{ 
                                     backgroundColor: movie.fearLevel === "EXTREME" 
                                         ? "rgba(255, 0, 0, 0.15)" 
-                                        : "rgba(177, 18, 38, 0.1)",
-                                    color: movie.fearLevel === "EXTREME" ? "#FF0000" : "#B11226",
+                                        : "rgba(255, 0, 0, 0.1)",
+                                    color: movie.fearLevel === "EXTREME" ? "#FF0000" : "#FF0000",
                                     border: `1px solid ${movie.fearLevel === "EXTREME" ? "rgba(255,0,0,0.3)" : "rgba(177,18,38,0.2)"}`,
                                 }}
                             >
@@ -231,10 +231,10 @@ export const MovieSession = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2 mt-3">
-                            <Play className="w-3 h-3" style={{ color: "#8E0E1C" }} />
+                            <Play className="w-3 h-3" style={{ color: "#FF0000" }} />
                             <span 
                                 className="text-[8px] tracking-[0.1em]"
-                                style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                                style={{ color: "rgba(255, 0, 0, 0.5)" }}
                             >
                                 START EXPERIENCE
                             </span>
@@ -251,11 +251,11 @@ export const MovieSession = () => {
             {/* Movie title */}
             <div 
                 className="py-3 px-4 text-center"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <h2 
                     className="text-xs tracking-[0.2em]"
-                    style={{ color: "#8E0E1C" }}
+                    style={{ color: "#FF0000" }}
                 >
                     {selectedMovie.title.toUpperCase()}
                 </h2>
@@ -285,7 +285,7 @@ export const MovieSession = () => {
                 <div 
                     className="text-6xl font-mono font-bold mb-2"
                     style={{ 
-                        color: currentBpm > 120 ? "#FF0000" : currentBpm > 100 ? "#B11226" : "#8E0E1C",
+                        color: currentBpm > 120 ? "#FF0000" : currentBpm > 100 ? "#FF0000" : "#FF0000",
                         textShadow: currentBpm > 120 ? "0 0 20px rgba(255, 0, 0, 0.5)" : "none",
                         animation: currentEvent ? "pulse 0.5s ease-in-out infinite" : "none",
                     }}
@@ -327,25 +327,25 @@ export const MovieSession = () => {
                 <div className="mt-8">
                     <p 
                         className="text-[8px] tracking-[0.15em] text-center mb-2"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         FEAR SCORE
                     </p>
                     <div 
                         className="w-48 h-2"
-                        style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                     >
                         <div 
                             className="h-full transition-all duration-300"
                             style={{ 
                                 width: `${fearScore}%`,
-                                backgroundColor: fearScore > 80 ? "#FF0000" : fearScore > 50 ? "#B11226" : "#8E0E1C",
+                                backgroundColor: fearScore > 80 ? "#FF0000" : fearScore > 50 ? "#FF0000" : "#FF0000",
                             }}
                         />
                     </div>
                     <p 
                         className="text-lg font-mono text-center mt-1"
-                        style={{ color: "#8E0E1C" }}
+                        style={{ color: "#FF0000" }}
                     >
                         {Math.round(fearScore)}
                     </p>
@@ -356,14 +356,14 @@ export const MovieSession = () => {
             <div className="px-4 pb-4">
                 <div 
                     className="h-1 w-full relative"
-                    style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                    style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                 >
                     {/* Progress */}
                     <div 
                         className="h-full absolute left-0 top-0"
                         style={{ 
                             width: `${(currentTime / selectedMovie.duration) * 100}%`,
-                            backgroundColor: "#8E0E1C",
+                            backgroundColor: "#FF0000",
                         }}
                     />
                     {/* Event markers */}
@@ -397,15 +397,15 @@ export const MovieSession = () => {
             {/* Controls */}
             <div 
                 className="flex justify-center gap-4 py-4"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => setIsPlaying(!isPlaying)}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.1)",
-                        border: "1px solid rgba(142, 14, 28, 0.2)",
-                        color: "#8E0E1C",
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        border: "1px solid rgba(255, 0, 0, 0.2)",
+                        color: "#FF0000",
                     }}
                 >
                     {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -417,9 +417,9 @@ export const MovieSession = () => {
                     }}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.05)",
-                        border: "1px solid rgba(142, 14, 28, 0.1)",
-                        color: "rgba(142, 14, 28, 0.5)",
+                        backgroundColor: "rgba(255, 0, 0, 0.05)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
+                        color: "rgba(255, 0, 0, 0.5)",
                     }}
                 >
                     <SkipForward className="w-5 h-5" />
@@ -433,7 +433,7 @@ export const MovieSession = () => {
         <div className="flex-1 flex flex-col items-center justify-center p-6">
             <h2 
                 className="text-sm tracking-[0.3em] mb-8"
-                style={{ color: "#8E0E1C" }}
+                style={{ color: "#FF0000" }}
             >
                 SESSION COMPLETE
             </h2>
@@ -442,13 +442,13 @@ export const MovieSession = () => {
                 <div>
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-1"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         PEAK BPM
                     </p>
                     <p 
                         className="text-4xl font-mono"
-                        style={{ color: peakBpm > 120 ? "#FF0000" : "#B11226" }}
+                        style={{ color: peakBpm > 120 ? "#FF0000" : "#FF0000" }}
                     >
                         {peakBpm}
                     </p>
@@ -457,13 +457,13 @@ export const MovieSession = () => {
                 <div>
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-1"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         FEAR SCORE
                     </p>
                     <p 
                         className="text-3xl font-mono"
-                        style={{ color: "#8E0E1C" }}
+                        style={{ color: "#FF0000" }}
                     >
                         {Math.round(fearScore)}/100
                     </p>
@@ -472,13 +472,13 @@ export const MovieSession = () => {
                 <div>
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-1"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         VS GLOBAL AVERAGE
                     </p>
                     <p 
                         className="text-lg font-mono"
-                        style={{ color: fearScore > 65 ? "#FF0000" : "#8E0E1C" }}
+                        style={{ color: fearScore > 65 ? "#FF0000" : "#FF0000" }}
                     >
                         {fearScore > 65 ? "ABOVE" : fearScore > 45 ? "AVERAGE" : "BELOW"} AVERAGE
                     </p>
@@ -492,9 +492,9 @@ export const MovieSession = () => {
                 }}
                 className="mt-8 px-6 py-3 text-[10px] tracking-[0.15em]"
                 style={{ 
-                    backgroundColor: "rgba(142, 14, 28, 0.1)",
-                    border: "1px solid rgba(142, 14, 28, 0.3)",
-                    color: "#8E0E1C",
+                    backgroundColor: "rgba(255, 0, 0, 0.1)",
+                    border: "1px solid rgba(255, 0, 0, 0.3)",
+                    color: "#FF0000",
                 }}
             >
                 NEW SESSION
@@ -510,19 +510,19 @@ export const MovieSession = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/library")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     MOVIE SESSION
                 </span>
@@ -542,11 +542,11 @@ export const MovieSession = () => {
             {/* Footer */}
             <div 
                 className="py-2 px-4 text-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[7px] tracking-[0.1em]"
-                    style={{ color: "rgba(142, 14, 28, 0.25)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
                 >
                     SIMULATED EXPERIENCE — NOT REAL BIOMETRIC DATA
                 </p>

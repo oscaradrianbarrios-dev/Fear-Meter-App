@@ -140,7 +140,7 @@ export const FearChallenge = () => {
         <div className="flex-1 p-4">
             <h2 
                 className="text-xs tracking-[0.2em] mb-2 text-center"
-                style={{ color: "#8E0E1C" }}
+                style={{ color: "#FF0000" }}
             >
                 FEAR CHALLENGE
             </h2>
@@ -158,16 +158,16 @@ export const FearChallenge = () => {
                         onClick={() => startChallenge(key)}
                         className="w-full p-4 text-left transition-all duration-200"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.03)",
-                            border: "1px solid rgba(142, 14, 28, 0.15)",
+                            backgroundColor: "rgba(255, 0, 0, 0.03)",
+                            border: "1px solid rgba(255, 0, 0, 0.15)",
                         }}
                     >
                         <div className="flex items-start gap-3">
-                            <mode.icon className="w-5 h-5 mt-0.5" style={{ color: "#8E0E1C" }} />
+                            <mode.icon className="w-5 h-5 mt-0.5" style={{ color: "#FF0000" }} />
                             <div>
                                 <h3 
                                     className="text-sm tracking-[0.15em]"
-                                    style={{ color: "#B11226" }}
+                                    style={{ color: "#FF0000" }}
                                 >
                                     {mode.name}
                                 </h3>
@@ -179,7 +179,7 @@ export const FearChallenge = () => {
                                 </p>
                                 <p 
                                     className="text-[8px] tracking-[0.1em] mt-2"
-                                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                                 >
                                     SCORE MULTIPLIER: {mode.scoreMultiplier}x
                                 </p>
@@ -194,19 +194,19 @@ export const FearChallenge = () => {
                 <div 
                     className="mt-8 p-4 text-center"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.05)",
-                        border: "1px solid rgba(142, 14, 28, 0.1)",
+                        backgroundColor: "rgba(255, 0, 0, 0.05)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
                     }}
                 >
                     <p 
                         className="text-[8px] tracking-[0.15em] mb-2"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         YOUR PERSONAL BEST
                     </p>
                     <p 
                         className="text-2xl font-mono"
-                        style={{ color: "#8E0E1C" }}
+                        style={{ color: "#FF0000" }}
                     >
                         {personalBest.score}
                     </p>
@@ -232,13 +232,13 @@ export const FearChallenge = () => {
                 <div 
                     className="py-2 px-4 text-center"
                     style={{ 
-                        backgroundColor: isOverLimit ? "rgba(255, 0, 0, 0.1)" : "rgba(142, 14, 28, 0.05)",
-                        borderBottom: `1px solid ${isOverLimit ? "rgba(255, 0, 0, 0.3)" : "rgba(142, 14, 28, 0.1)"}`,
+                        backgroundColor: isOverLimit ? "rgba(255, 0, 0, 0.1)" : "rgba(255, 0, 0, 0.05)",
+                        borderBottom: `1px solid ${isOverLimit ? "rgba(255, 0, 0, 0.3)" : "rgba(255, 0, 0, 0.1)"}`,
                     }}
                 >
                     <span 
                         className="text-[9px] tracking-[0.2em]"
-                        style={{ color: isOverLimit ? "#FF0000" : "#8E0E1C" }}
+                        style={{ color: isOverLimit ? "#FF0000" : "#FF0000" }}
                     >
                         {mode.name} MODE — TARGET: &lt;{mode.targetBpm} BPM
                     </span>
@@ -250,7 +250,7 @@ export const FearChallenge = () => {
                     <div 
                         className="text-7xl font-mono font-bold"
                         style={{ 
-                            color: isOverLimit ? "#FF0000" : currentBpm > mode.targetBpm - 10 ? "#B11226" : "#8E0E1C",
+                            color: isOverLimit ? "#FF0000" : currentBpm > mode.targetBpm - 10 ? "#FF0000" : "#FF0000",
                             textShadow: isOverLimit ? "0 0 30px rgba(255, 0, 0, 0.5)" : "none",
                             animation: isOverLimit ? "shake 0.2s ease-in-out infinite" : "none",
                         }}
@@ -288,7 +288,7 @@ export const FearChallenge = () => {
                                 style={{ 
                                     backgroundColor: i < violations 
                                         ? "#FF0000" 
-                                        : "rgba(142, 14, 28, 0.2)",
+                                        : "rgba(255, 0, 0, 0.2)",
                                 }}
                             />
                         ))}
@@ -304,21 +304,21 @@ export const FearChallenge = () => {
                 {/* Stats */}
                 <div 
                     className="py-4 px-6 flex justify-around"
-                    style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                    style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
                 >
                     <div className="text-center">
-                        <p className="text-[8px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                        <p className="text-[8px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                             TIME
                         </p>
-                        <p className="text-xl font-mono" style={{ color: "#8E0E1C" }}>
+                        <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                             {formatTime(elapsedTime)}
                         </p>
                     </div>
                     <div className="text-center">
-                        <p className="text-[8px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                        <p className="text-[8px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                             SCORE
                         </p>
-                        <p className="text-xl font-mono" style={{ color: "#B11226" }}>
+                        <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                             {Math.round(score)}
                         </p>
                     </div>
@@ -329,7 +329,7 @@ export const FearChallenge = () => {
                     <button
                         onClick={endChallenge}
                         className="text-[9px] tracking-[0.1em] px-4 py-2"
-                        style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
                     >
                         GIVE UP
                     </button>
@@ -361,12 +361,12 @@ export const FearChallenge = () => {
                 {isNewBest && (
                     <div 
                         className="flex items-center gap-2 mb-4 py-2 px-4"
-                        style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                     >
-                        <Crown className="w-4 h-4" style={{ color: "#B11226" }} />
+                        <Crown className="w-4 h-4" style={{ color: "#FF0000" }} />
                         <span 
                             className="text-[10px] tracking-[0.15em]"
-                            style={{ color: "#B11226" }}
+                            style={{ color: "#FF0000" }}
                         >
                             NEW PERSONAL BEST!
                         </span>
@@ -375,18 +375,18 @@ export const FearChallenge = () => {
                 
                 <div className="space-y-4 text-center">
                     <div>
-                        <p className="text-[8px] tracking-[0.15em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                        <p className="text-[8px] tracking-[0.15em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                             FINAL SCORE
                         </p>
-                        <p className="text-4xl font-mono" style={{ color: "#B11226" }}>
+                        <p className="text-4xl font-mono" style={{ color: "#FF0000" }}>
                             {finalScore}
                         </p>
                     </div>
                     <div>
-                        <p className="text-[8px] tracking-[0.15em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                        <p className="text-[8px] tracking-[0.15em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                             SURVIVAL TIME
                         </p>
-                        <p className="text-2xl font-mono" style={{ color: "#8E0E1C" }}>
+                        <p className="text-2xl font-mono" style={{ color: "#FF0000" }}>
                             {formatTime(elapsedTime)}
                         </p>
                     </div>
@@ -399,9 +399,9 @@ export const FearChallenge = () => {
                     }}
                     className="mt-8 px-6 py-3 text-[10px] tracking-[0.15em]"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.1)",
-                        border: "1px solid rgba(142, 14, 28, 0.3)",
-                        color: "#8E0E1C",
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        border: "1px solid rgba(255, 0, 0, 0.3)",
+                        color: "#FF0000",
                     }}
                 >
                     TRY AGAIN
@@ -415,7 +415,7 @@ export const FearChallenge = () => {
         <div className="p-4">
             <h3 
                 className="text-[10px] tracking-[0.2em] mb-4 text-center"
-                style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                style={{ color: "rgba(255, 0, 0, 0.5)" }}
             >
                 GLOBAL LEADERBOARD
             </h3>
@@ -427,9 +427,9 @@ export const FearChallenge = () => {
                         className="flex items-center gap-3 py-2 px-3"
                         style={{ 
                             backgroundColor: entry.rank <= 3 
-                                ? "rgba(142, 14, 28, 0.05)" 
+                                ? "rgba(255, 0, 0, 0.05)" 
                                 : "transparent",
-                            borderBottom: "1px solid rgba(142, 14, 28, 0.05)",
+                            borderBottom: "1px solid rgba(255, 0, 0, 0.05)",
                         }}
                     >
                         <span 
@@ -438,8 +438,8 @@ export const FearChallenge = () => {
                                 color: entry.rank === 1 
                                     ? "#FF0000" 
                                     : entry.rank <= 3 
-                                        ? "#B11226" 
-                                        : "#8E0E1C",
+                                        ? "#FF0000" 
+                                        : "#FF0000",
                             }}
                         >
                             {entry.rank}
@@ -461,7 +461,7 @@ export const FearChallenge = () => {
                         <div className="text-right">
                             <p 
                                 className="text-sm font-mono"
-                                style={{ color: "#8E0E1C" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 {entry.score}
                             </p>
@@ -478,7 +478,7 @@ export const FearChallenge = () => {
             
             <p 
                 className="text-[7px] tracking-[0.1em] text-center mt-4"
-                style={{ color: "rgba(142, 14, 28, 0.3)" }}
+                style={{ color: "rgba(255, 0, 0, 0.3)" }}
             >
                 SIMULATED LEADERBOARD — DEMO DATA
             </p>
@@ -493,24 +493,24 @@ export const FearChallenge = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     FEAR CHALLENGE
                 </span>
                 
-                <Trophy className="w-4 h-4" style={{ color: "rgba(142, 14, 28, 0.3)" }} />
+                <Trophy className="w-4 h-4" style={{ color: "rgba(255, 0, 0, 0.3)" }} />
             </div>
             
             {/* Content */}

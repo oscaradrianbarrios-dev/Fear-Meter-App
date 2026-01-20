@@ -104,23 +104,23 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                     style={{
                         backgroundColor: "#000000",
                         border: session.hasPanicEvent 
-                            ? "1px solid rgba(139, 0, 0, 0.5)" 
+                            ? "1px solid rgba(255, 0, 0, 0.5)" 
                             : "1px solid rgba(255, 0, 0, 0.12)",
                         borderLeft: session.hasPanicEvent 
-                            ? "3px solid #8B0000" 
+                            ? "3px solid #FF0000" 
                             : "2px solid rgba(255, 0, 0, 0.4)",
                         animation: `fadeSlideIn 0.3s ease-out ${index * 50}ms both`,
                     }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.02)";
                         e.currentTarget.style.borderColor = session.hasPanicEvent 
-                            ? "rgba(139, 0, 0, 0.7)" 
+                            ? "rgba(255, 0, 0, 0.7)" 
                             : "rgba(255, 0, 0, 0.25)";
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "#000000";
                         e.currentTarget.style.borderColor = session.hasPanicEvent 
-                            ? "rgba(139, 0, 0, 0.5)" 
+                            ? "rgba(255, 0, 0, 0.5)" 
                             : "rgba(255, 0, 0, 0.12)";
                     }}
                 >
@@ -138,7 +138,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                                     <div 
                                         className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] tracking-wider"
                                         style={{ 
-                                            backgroundColor: "rgba(139, 0, 0, 0.3)",
+                                            backgroundColor: "rgba(255, 0, 0, 0.3)",
                                             color: "#FF0000",
                                         }}
                                     >
@@ -149,7 +149,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-xs mt-1 tracking-wide"
-                                style={{ color: session.hasPanicEvent ? "#8B0000" : "rgba(255, 0, 0, 0.7)" }}
+                                style={{ color: session.hasPanicEvent ? "#FF0000" : "rgba(255, 0, 0, 0.7)" }}
                             >
                                 {session.name}
                             </div>
@@ -180,9 +180,9 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                                 className="h-full rounded-full transition-all duration-500"
                                 style={{ 
                                     width: `${session.maxStress || 0}%`,
-                                    backgroundColor: session.maxStress > 85 ? "#8B0000" : "#FF0000",
+                                    backgroundColor: session.maxStress > 85 ? "#FF0000" : "#FF0000",
                                     boxShadow: session.maxStress > 85 
-                                        ? "0 0 8px rgba(139, 0, 0, 0.5)" 
+                                        ? "0 0 8px rgba(255, 0, 0, 0.5)" 
                                         : "0 0 4px rgba(255, 0, 0, 0.3)",
                                 }}
                             />
@@ -202,7 +202,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-base font-bold mt-0.5"
-                                style={{ color: session.maxBpm > 120 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                                style={{ color: session.maxBpm > 120 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
                             >
                                 {session.maxBpm || 0}
                             </div>
@@ -236,7 +236,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-base font-bold mt-0.5"
-                                style={{ color: session.maxStress > 85 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                                style={{ color: session.maxStress > 85 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
                             >
                                 {session.maxStress || 0}%
                             </div>
@@ -311,7 +311,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                 style={{ 
                     backgroundColor: "#000000",
                     border: session.hasPanicEvent 
-                        ? "1px solid rgba(139, 0, 0, 0.5)" 
+                        ? "1px solid rgba(255, 0, 0, 0.5)" 
                         : "1px solid rgba(255, 0, 0, 0.15)",
                 }}
             >
@@ -319,7 +319,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     <div>
                         <div 
                             className="text-sm font-bold tracking-wide"
-                            style={{ color: session.hasPanicEvent ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.hasPanicEvent ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
                         >
                             {session.name}
                         </div>
@@ -334,7 +334,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         <div 
                             className="flex items-center gap-1 px-2 py-1 rounded text-[9px] tracking-wider"
                             style={{ 
-                                backgroundColor: "rgba(139, 0, 0, 0.3)",
+                                backgroundColor: "rgba(255, 0, 0, 0.3)",
                                 color: "#FF0000",
                             }}
                         >
@@ -388,7 +388,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         {/* BPM line */}
                         <path
                             d={generateBpmPath()}
-                            stroke={session.hasPanicEvent ? "#8B0000" : "#FF0000"}
+                            stroke={session.hasPanicEvent ? "#FF0000" : "#FF0000"}
                             strokeWidth="2"
                             fill="none"
                             strokeLinecap="round"
@@ -411,7 +411,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.maxBpm > 120 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.maxBpm > 120 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
                         >
                             {session.maxBpm || 0}
                         </div>
@@ -428,7 +428,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.maxStress > 85 ? "#8B0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.maxStress > 85 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
                         >
                             {session.maxStress || 0}%
                         </div>
@@ -462,7 +462,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.panicCount > 0 ? "#8B0000" : "rgba(176, 176, 176, 0.4)" }}
+                            style={{ color: session.panicCount > 0 ? "#FF0000" : "rgba(176, 176, 176, 0.4)" }}
                         >
                             {session.panicCount || 0}
                         </div>
@@ -507,14 +507,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     <div 
                         className="flex items-center gap-2 py-2 px-3 rounded mb-2"
                         style={{ 
-                            backgroundColor: "rgba(139, 0, 0, 0.1)",
-                            borderLeft: "2px solid #8B0000",
+                            backgroundColor: "rgba(255, 0, 0, 0.1)",
+                            borderLeft: "2px solid #FF0000",
                         }}
                     >
-                        <AlertTriangle className="w-3 h-3" style={{ color: "#8B0000" }} />
+                        <AlertTriangle className="w-3 h-3" style={{ color: "#FF0000" }} />
                         <span 
                             className="text-[10px] tracking-wider"
-                            style={{ color: "#8B0000" }}
+                            style={{ color: "#FF0000" }}
                         >
                             CRITICAL STRESS DETECTED
                         </span>
@@ -616,7 +616,7 @@ const GraphView = ({ sessions }) => {
                                 cx={x}
                                 cy={y}
                                 r="3"
-                                fill={session.hasPanicEvent ? "#8B0000" : "#FF0000"}
+                                fill={session.hasPanicEvent ? "#FF0000" : "#FF0000"}
                                 stroke="#000"
                                 strokeWidth="1.5"
                             />
@@ -635,7 +635,7 @@ const GraphView = ({ sessions }) => {
                 {sessions.some(s => s.hasPanicEvent) && (
                     <div 
                         className="text-[9px] mt-1 flex items-center justify-center gap-1"
-                        style={{ color: "#8B0000" }}
+                        style={{ color: "#FF0000" }}
                     >
                         <AlertTriangle className="w-3 h-3" />
                         {sessions.filter(s => s.hasPanicEvent).length} PANIC EVENT{sessions.filter(s => s.hasPanicEvent).length !== 1 ? 'S' : ''}

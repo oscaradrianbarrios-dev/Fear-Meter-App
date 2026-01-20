@@ -29,9 +29,9 @@ export const ExpirationWarning = ({
         <div 
             className="fixed top-16 left-4 right-4 z-30 py-3 px-4"
             style={{ 
-                backgroundColor: "rgba(139, 0, 0, 0.95)",
+                backgroundColor: "rgba(255, 0, 0, 0.95)",
                 border: "1px solid rgba(255, 0, 0, 0.4)",
-                boxShadow: "0 4px 20px rgba(139, 0, 0, 0.3)",
+                boxShadow: "0 4px 20px rgba(255, 0, 0, 0.3)",
             }}
         >
             <div className="flex items-center justify-between gap-3">

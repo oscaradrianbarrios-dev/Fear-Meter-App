@@ -6,7 +6,7 @@ import { ChevronLeft, Glasses, Wifi, WifiOff, Play, Square, Eye } from "lucide-r
 const VR_VIDEOS = {
     calm: {
         label: "CALM",
-        color: "rgba(142, 14, 28, 0.3)",
+        color: "rgba(255, 0, 0, 0.3)",
         scenes: [
             "Empty hospital corridor — fluorescent lights flickering",
             "Abandoned house entrance — wind sounds",
@@ -16,7 +16,7 @@ const VR_VIDEOS = {
     },
     tension: {
         label: "TENSION",
-        color: "#8E0E1C",
+        color: "#FF0000",
         scenes: [
             "Shadow movement in peripheral vision",
             "Footsteps approaching from behind",
@@ -176,7 +176,7 @@ export const VRExperience = () => {
             <div 
                 className="w-24 h-24 flex items-center justify-center mb-6"
                 style={{ 
-                    border: `2px solid ${connectionState === CONNECTION_STATES.CONNECTED ? "#8E0E1C" : "rgba(142, 14, 28, 0.2)"}`,
+                    border: `2px solid ${connectionState === CONNECTION_STATES.CONNECTED ? "#FF0000" : "rgba(255, 0, 0, 0.2)"}`,
                     borderRadius: "50%",
                 }}
             >
@@ -184,8 +184,8 @@ export const VRExperience = () => {
                     className="w-12 h-12"
                     style={{ 
                         color: connectionState === CONNECTION_STATES.CONNECTED 
-                            ? "#8E0E1C" 
-                            : "rgba(142, 14, 28, 0.3)",
+                            ? "#FF0000" 
+                            : "rgba(255, 0, 0, 0.3)",
                     }}
                 />
             </div>
@@ -196,8 +196,8 @@ export const VRExperience = () => {
                     className="text-xs tracking-[0.2em] mb-2"
                     style={{ 
                         color: connectionState === CONNECTION_STATES.CONNECTED 
-                            ? "#8E0E1C" 
-                            : "rgba(142, 14, 28, 0.5)",
+                            ? "#FF0000" 
+                            : "rgba(255, 0, 0, 0.5)",
                     }}
                 >
                     {connectionState}
@@ -237,9 +237,9 @@ export const VRExperience = () => {
                     onClick={connectVR}
                     className="flex items-center gap-2 px-6 py-3 text-[10px] tracking-[0.15em]"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.1)",
-                        border: "1px solid rgba(142, 14, 28, 0.3)",
-                        color: "#8E0E1C",
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        border: "1px solid rgba(255, 0, 0, 0.3)",
+                        color: "#FF0000",
                     }}
                 >
                     <Wifi className="w-4 h-4" />
@@ -253,9 +253,9 @@ export const VRExperience = () => {
                         onClick={startSession}
                         className="flex items-center gap-2 px-8 py-3 text-[10px] tracking-[0.15em]"
                         style={{ 
-                            backgroundColor: "rgba(142, 14, 28, 0.15)",
-                            border: "1px solid rgba(142, 14, 28, 0.4)",
-                            color: "#B11226",
+                            backgroundColor: "rgba(255, 0, 0, 0.15)",
+                            border: "1px solid rgba(255, 0, 0, 0.4)",
+                            color: "#FF0000",
                         }}
                     >
                         <Play className="w-4 h-4" />
@@ -266,7 +266,7 @@ export const VRExperience = () => {
                         onClick={disconnectVR}
                         className="flex items-center gap-2 px-6 py-2 text-[9px] tracking-[0.1em]"
                         style={{ 
-                            color: "rgba(142, 14, 28, 0.4)",
+                            color: "rgba(255, 0, 0, 0.4)",
                         }}
                     >
                         <WifiOff className="w-3 h-3" />
@@ -279,7 +279,7 @@ export const VRExperience = () => {
             <div className="mt-12 text-center">
                 <p 
                     className="text-[8px] tracking-[0.1em] mb-2"
-                    style={{ color: "rgba(142, 14, 28, 0.3)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.3)" }}
                 >
                     COMPATIBLE DEVICES
                 </p>
@@ -420,21 +420,21 @@ export const VRExperience = () => {
             {/* Session stats */}
             <div 
                 className="py-3 px-4 flex justify-around"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         PEAK BPM
                     </p>
-                    <p className="text-sm font-mono" style={{ color: "#8E0E1C" }}>
+                    <p className="text-sm font-mono" style={{ color: "#FF0000" }}>
                         {peakBpm}
                     </p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         TERROR EVENTS
                     </p>
-                    <p className="text-sm font-mono" style={{ color: terrorEvents > 0 ? "#FF0000" : "#8E0E1C" }}>
+                    <p className="text-sm font-mono" style={{ color: terrorEvents > 0 ? "#FF0000" : "#FF0000" }}>
                         {terrorEvents}
                     </p>
                 </div>
@@ -443,7 +443,7 @@ export const VRExperience = () => {
             {/* Stop button */}
             <div 
                 className="py-4 flex justify-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={stopSession}
@@ -469,26 +469,26 @@ export const VRExperience = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     VR EXPERIENCE
                 </span>
                 
                 <div 
                     className="flex items-center gap-1"
-                    style={{ color: isSessionActive ? "#8E0E1C" : "rgba(142, 14, 28, 0.3)" }}
+                    style={{ color: isSessionActive ? "#FF0000" : "rgba(255, 0, 0, 0.3)" }}
                 >
                     <Glasses className="w-4 h-4" />
                 </div>
@@ -500,11 +500,11 @@ export const VRExperience = () => {
             {/* Footer */}
             <div 
                 className="py-2 px-4 text-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[7px] tracking-[0.1em]"
-                    style={{ color: "rgba(142, 14, 28, 0.25)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
                 >
                     SIMULATED VR EXPERIENCE — WebXR DEMO MODE
                 </p>

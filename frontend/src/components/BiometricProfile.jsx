@@ -14,19 +14,19 @@ const PROFILE_TYPES = {
         name: "Psychological Horror Resistant",
         description: "Handles slow-burn terror well",
         icon: Brain,
-        color: "#8E0E1C",
+        color: "#FF0000",
     },
     tensionBuilder: {
         name: "Tension Builder",
         description: "Fear accumulates gradually",
         icon: Heart,
-        color: "#B11226",
+        color: "#FF0000",
     },
     fearless: {
         name: "Fearless Observer",
         description: "Minimal physiological response",
         icon: Eye,
-        color: "rgba(142, 14, 28, 0.5)",
+        color: "rgba(255, 0, 0, 0.5)",
     },
     hyperReactive: {
         name: "Hyper-Reactive",
@@ -148,7 +148,7 @@ export const BiometricProfile = () => {
                         cy={center}
                         r={maxRadius * ratio}
                         fill="none"
-                        stroke="rgba(142, 14, 28, 0.1)"
+                        stroke="rgba(255, 0, 0, 0.1)"
                         strokeWidth="1"
                     />
                 ))}
@@ -165,7 +165,7 @@ export const BiometricProfile = () => {
                             y1={center}
                             x2={x2}
                             y2={y2}
-                            stroke="rgba(142, 14, 28, 0.15)"
+                            stroke="rgba(255, 0, 0, 0.15)"
                             strokeWidth="1"
                         />
                     );
@@ -174,8 +174,8 @@ export const BiometricProfile = () => {
                 {/* Profile polygon */}
                 <polygon
                     points={polygonPoints}
-                    fill="rgba(177, 18, 38, 0.2)"
-                    stroke="#B11226"
+                    fill="rgba(255, 0, 0, 0.2)"
+                    stroke="#FF0000"
                     strokeWidth="2"
                 />
 
@@ -186,7 +186,7 @@ export const BiometricProfile = () => {
                         cx={point.x}
                         cy={point.y}
                         r="4"
-                        fill="#B11226"
+                        fill="#FF0000"
                     />
                 ))}
 
@@ -221,32 +221,32 @@ export const BiometricProfile = () => {
             <div 
                 className="w-20 h-20 flex items-center justify-center mb-6"
                 style={{ 
-                    border: "2px solid rgba(142, 14, 28, 0.3)",
+                    border: "2px solid rgba(255, 0, 0, 0.3)",
                     borderRadius: "50%",
                 }}
             >
                 <Brain 
                     className="w-10 h-10 animate-pulse"
-                    style={{ color: "#8E0E1C" }}
+                    style={{ color: "#FF0000" }}
                 />
             </div>
             
             <h2 
                 className="text-xs tracking-[0.2em] mb-4"
-                style={{ color: "#8E0E1C" }}
+                style={{ color: "#FF0000" }}
             >
                 ANALYZING BIOMETRIC PATTERNS
             </h2>
             
             <div 
                 className="w-48 h-1 mb-2"
-                style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
             >
                 <div 
                     className="h-full transition-all duration-200"
                     style={{ 
                         width: `${analysisProgress}%`,
-                        backgroundColor: "#8E0E1C",
+                        backgroundColor: "#FF0000",
                     }}
                 />
             </div>
@@ -272,19 +272,19 @@ export const BiometricProfile = () => {
             <div 
                 className="w-20 h-20 flex items-center justify-center mb-6"
                 style={{ 
-                    border: "2px solid rgba(142, 14, 28, 0.2)",
+                    border: "2px solid rgba(255, 0, 0, 0.2)",
                     borderRadius: "50%",
                 }}
             >
                 <User 
                     className="w-10 h-10"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 />
             </div>
             
             <h2 
                 className="text-xs tracking-[0.2em] mb-2"
-                style={{ color: "#8E0E1C" }}
+                style={{ color: "#FF0000" }}
             >
                 NO PROFILE DETECTED
             </h2>
@@ -300,9 +300,9 @@ export const BiometricProfile = () => {
                 onClick={startAnalysis}
                 className="px-6 py-3 text-[10px] tracking-[0.15em]"
                 style={{ 
-                    backgroundColor: "rgba(142, 14, 28, 0.1)",
-                    border: "1px solid rgba(142, 14, 28, 0.3)",
-                    color: "#8E0E1C",
+                    backgroundColor: "rgba(255, 0, 0, 0.1)",
+                    border: "1px solid rgba(255, 0, 0, 0.3)",
+                    color: "#FF0000",
                 }}
             >
                 GENERATE PROFILE
@@ -316,7 +316,7 @@ export const BiometricProfile = () => {
             {/* Profile header */}
             <div 
                 className="py-6 px-4 text-center"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <div 
                     className="w-16 h-16 mx-auto mb-4 flex items-center justify-center"
@@ -350,7 +350,7 @@ export const BiometricProfile = () => {
             <div className="py-6">
                 <h3 
                     className="text-[9px] tracking-[0.2em] mb-4 text-center"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     FEAR SENSITIVITY RADAR
                 </h3>
@@ -358,10 +358,10 @@ export const BiometricProfile = () => {
             </div>
             
             {/* Attribute breakdown */}
-            <div className="px-4 py-4" style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}>
+            <div className="px-4 py-4" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}>
                 <h3 
                     className="text-[9px] tracking-[0.2em] mb-4"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     SENSITIVITY BREAKDOWN
                 </h3>
@@ -378,14 +378,14 @@ export const BiometricProfile = () => {
                                 </span>
                                 <span 
                                     className="text-[9px] font-mono"
-                                    style={{ color: "#8E0E1C" }}
+                                    style={{ color: "#FF0000" }}
                                 >
                                     {profile.attributes[attr.key]}%
                                 </span>
                             </div>
                             <div 
                                 className="h-1 w-full"
-                                style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                                style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                             >
                                 <div 
                                     className="h-full"
@@ -394,8 +394,8 @@ export const BiometricProfile = () => {
                                         backgroundColor: profile.attributes[attr.key] > 70 
                                             ? "#FF0000" 
                                             : profile.attributes[attr.key] > 50 
-                                                ? "#B11226" 
-                                                : "#8E0E1C",
+                                                ? "#FF0000" 
+                                                : "#FF0000",
                                     }}
                                 />
                             </div>
@@ -407,37 +407,37 @@ export const BiometricProfile = () => {
             {/* Stats */}
             <div 
                 className="px-4 py-4 grid grid-cols-2 gap-4"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         AVG BPM
                     </p>
-                    <p className="text-xl font-mono" style={{ color: "#8E0E1C" }}>
+                    <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                         {profile.stats.avgBpm}
                     </p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         PEAK BPM
                     </p>
-                    <p className="text-xl font-mono" style={{ color: "#B11226" }}>
+                    <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                         {profile.stats.peakBpm}
                     </p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         FEAR EVENTS
                     </p>
-                    <p className="text-xl font-mono" style={{ color: "#8E0E1C" }}>
+                    <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                         {profile.stats.fearEvents}
                     </p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(142, 14, 28, 0.4)" }}>
+                    <p className="text-[7px] tracking-[0.1em]" style={{ color: "rgba(255, 0, 0, 0.4)" }}>
                         SESSIONS
                     </p>
-                    <p className="text-xl font-mono" style={{ color: "#8E0E1C" }}>
+                    <p className="text-xl font-mono" style={{ color: "#FF0000" }}>
                         {profile.stats.totalSessions}
                     </p>
                 </div>
@@ -449,8 +449,8 @@ export const BiometricProfile = () => {
                     onClick={startAnalysis}
                     className="text-[9px] tracking-[0.1em] px-4 py-2"
                     style={{ 
-                        color: "rgba(142, 14, 28, 0.5)",
-                        border: "1px solid rgba(142, 14, 28, 0.2)",
+                        color: "rgba(255, 0, 0, 0.5)",
+                        border: "1px solid rgba(255, 0, 0, 0.2)",
                     }}
                 >
                     REGENERATE PROFILE
@@ -467,24 +467,24 @@ export const BiometricProfile = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     BIOMETRIC PROFILE
                 </span>
                 
-                <User className="w-4 h-4" style={{ color: "rgba(142, 14, 28, 0.3)" }} />
+                <User className="w-4 h-4" style={{ color: "rgba(255, 0, 0, 0.3)" }} />
             </div>
             
             {/* Content */}
@@ -499,11 +499,11 @@ export const BiometricProfile = () => {
             {/* Footer */}
             <div 
                 className="py-2 px-4 text-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[7px] tracking-[0.1em]"
-                    style={{ color: "rgba(142, 14, 28, 0.25)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.25)" }}
                 >
                     SIMULATED ANALYSIS — NOT REAL PSYCHOLOGICAL ASSESSMENT
                 </p>

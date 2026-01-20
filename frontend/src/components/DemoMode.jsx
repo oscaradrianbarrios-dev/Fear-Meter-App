@@ -277,7 +277,7 @@ export const DemoMode = () => {
                 <div 
                     className="absolute bottom-2 right-3"
                     style={{ 
-                        color: "rgba(139, 0, 0, 0.4)",
+                        color: "rgba(255, 0, 0, 0.4)",
                         fontSize: "8px",
                         letterSpacing: "0.15em",
                     }}

@@ -36,9 +36,9 @@ const ATTRACTIONS_DATA = [
 // Fear level badge component
 const FearBadge = ({ level }) => {
     const colors = {
-        LOW: { bg: "rgba(142, 14, 28, 0.1)", text: "rgba(142, 14, 28, 0.5)" },
-        MODERATE: { bg: "rgba(142, 14, 28, 0.15)", text: "rgba(142, 14, 28, 0.7)" },
-        HIGH: { bg: "rgba(177, 18, 38, 0.2)", text: "#B11226" },
+        LOW: { bg: "rgba(255, 0, 0, 0.1)", text: "rgba(255, 0, 0, 0.5)" },
+        MODERATE: { bg: "rgba(255, 0, 0, 0.15)", text: "rgba(255, 0, 0, 0.7)" },
+        HIGH: { bg: "rgba(255, 0, 0, 0.2)", text: "#FF0000" },
         EXTREME: { bg: "rgba(255, 0, 0, 0.15)", text: "#FF0000" },
         CRITICAL: { bg: "rgba(255, 0, 0, 0.25)", text: "#FF0000" },
     };
@@ -77,15 +77,15 @@ export const FearLibrary = () => {
                     key={movie.id}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.03)",
-                        border: "1px solid rgba(142, 14, 28, 0.1)",
+                        backgroundColor: "rgba(255, 0, 0, 0.03)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
                     }}
                 >
                     <div className="flex justify-between items-start mb-2">
                         <div>
                             <h3 
                                 className="text-xs tracking-[0.1em]"
-                                style={{ color: "#B11226" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 {movie.title}
                             </h3>
@@ -101,7 +101,7 @@ export const FearLibrary = () => {
                     <div className="flex gap-4 text-[8px]">
                         <div>
                             <span style={{ color: "rgba(176, 176, 176, 0.4)" }}>AVG SPIKE: </span>
-                            <span style={{ color: "#8E0E1C" }}>+{movie.avgBpmSpike} BPM</span>
+                            <span style={{ color: "#FF0000" }}>+{movie.avgBpmSpike} BPM</span>
                         </div>
                         <div>
                             <span style={{ color: "rgba(176, 176, 176, 0.4)" }}>PEAK: </span>
@@ -120,15 +120,15 @@ export const FearLibrary = () => {
                     key={game.id}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.03)",
-                        border: "1px solid rgba(142, 14, 28, 0.1)",
+                        backgroundColor: "rgba(255, 0, 0, 0.03)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
                     }}
                 >
                     <div className="flex justify-between items-start mb-2">
                         <div>
                             <h3 
                                 className="text-xs tracking-[0.1em]"
-                                style={{ color: "#B11226" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 {game.title}
                             </h3>
@@ -141,7 +141,7 @@ export const FearLibrary = () => {
                         </div>
                         <span 
                             className="text-sm font-mono"
-                            style={{ color: game.peakBpm > 140 ? "#FF0000" : "#8E0E1C" }}
+                            style={{ color: game.peakBpm > 140 ? "#FF0000" : "#FF0000" }}
                         >
                             {game.peakBpm}
                         </span>
@@ -153,7 +153,7 @@ export const FearLibrary = () => {
                         </div>
                         <div>
                             <span style={{ color: "rgba(176, 176, 176, 0.4)" }}>PEAK FEAR: </span>
-                            <span style={{ color: "#8E0E1C" }}>{game.peakMoment}</span>
+                            <span style={{ color: "#FF0000" }}>{game.peakMoment}</span>
                         </div>
                     </div>
                 </div>
@@ -168,15 +168,15 @@ export const FearLibrary = () => {
                     key={attraction.id}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(142, 14, 28, 0.03)",
-                        border: "1px solid rgba(142, 14, 28, 0.1)",
+                        backgroundColor: "rgba(255, 0, 0, 0.03)",
+                        border: "1px solid rgba(255, 0, 0, 0.1)",
                     }}
                 >
                     <div className="flex justify-between items-start mb-2">
                         <div>
                             <h3 
                                 className="text-xs tracking-[0.1em]"
-                                style={{ color: "#B11226" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 {attraction.name}
                             </h3>
@@ -193,7 +193,7 @@ export const FearLibrary = () => {
                     <div className="mt-2">
                         <div 
                             className="h-1 w-full"
-                            style={{ backgroundColor: "rgba(142, 14, 28, 0.1)" }}
+                            style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
                         >
                             <div 
                                 className="h-full transition-all duration-500"
@@ -202,8 +202,8 @@ export const FearLibrary = () => {
                                     backgroundColor: attraction.intensity > 90 
                                         ? "#FF0000" 
                                         : attraction.intensity > 70 
-                                            ? "#B11226" 
-                                            : "#8E0E1C",
+                                            ? "#FF0000" 
+                                            : "#FF0000",
                                 }}
                             />
                         </div>
@@ -225,7 +225,7 @@ export const FearLibrary = () => {
             <div>
                 <h3 
                     className="text-[10px] tracking-[0.2em] mb-3"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     GLOBAL FEAR INDEX — TOP 5
                 </h3>
@@ -242,11 +242,11 @@ export const FearLibrary = () => {
                         <div 
                             key={movie.id}
                             className="flex items-center gap-2 py-1"
-                            style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.05)" }}
+                            style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.05)" }}
                         >
                             <span 
                                 className="text-[10px] font-mono w-4"
-                                style={{ color: idx === 0 ? "#FF0000" : "#8E0E1C" }}
+                                style={{ color: idx === 0 ? "#FF0000" : "#FF0000" }}
                             >
                                 {idx + 1}
                             </span>
@@ -258,7 +258,7 @@ export const FearLibrary = () => {
                             </span>
                             <span 
                                 className="text-[9px] font-mono"
-                                style={{ color: "#8E0E1C" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 +{movie.avgBpmSpike}
                             </span>
@@ -278,11 +278,11 @@ export const FearLibrary = () => {
                         <div 
                             key={game.id}
                             className="flex items-center gap-2 py-1"
-                            style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.05)" }}
+                            style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.05)" }}
                         >
                             <span 
                                 className="text-[10px] font-mono w-4"
-                                style={{ color: idx === 0 ? "#FF0000" : "#8E0E1C" }}
+                                style={{ color: idx === 0 ? "#FF0000" : "#FF0000" }}
                             >
                                 {idx + 1}
                             </span>
@@ -294,7 +294,7 @@ export const FearLibrary = () => {
                             </span>
                             <span 
                                 className="text-[9px] font-mono"
-                                style={{ color: "#8E0E1C" }}
+                                style={{ color: "#FF0000" }}
                             >
                                 {game.peakBpm}
                             </span>
@@ -307,13 +307,13 @@ export const FearLibrary = () => {
             <div 
                 className="p-3"
                 style={{ 
-                    backgroundColor: "rgba(142, 14, 28, 0.03)",
-                    border: "1px solid rgba(142, 14, 28, 0.1)",
+                    backgroundColor: "rgba(255, 0, 0, 0.03)",
+                    border: "1px solid rgba(255, 0, 0, 0.1)",
                 }}
             >
                 <p 
                     className="text-[7px] tracking-[0.1em] text-center"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     COMMUNITY-BASED SIMULATED DATA FOR DEMO & TESTING PURPOSES
                 </p>
@@ -329,19 +329,19 @@ export const FearLibrary = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <button
                     onClick={() => navigate("/")}
                     className="p-1"
-                    style={{ color: "rgba(142, 14, 28, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <span 
                     className="text-[9px] tracking-[0.25em]"
-                    style={{ color: "rgba(142, 14, 28, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     FEAR LIBRARY
                 </span>
@@ -352,7 +352,7 @@ export const FearLibrary = () => {
             {/* Tabs */}
             <div 
                 className="flex"
-                style={{ borderBottom: "1px solid rgba(142, 14, 28, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 {tabs.map((tab) => (
                     <button
@@ -361,10 +361,10 @@ export const FearLibrary = () => {
                         className="flex-1 py-3 flex flex-col items-center gap-1 transition-colors duration-200"
                         style={{ 
                             color: activeTab === tab.id 
-                                ? "#8E0E1C" 
-                                : "rgba(142, 14, 28, 0.3)",
+                                ? "#FF0000" 
+                                : "rgba(255, 0, 0, 0.3)",
                             borderBottom: activeTab === tab.id 
-                                ? "1px solid #8E0E1C" 
+                                ? "1px solid #FF0000" 
                                 : "1px solid transparent",
                         }}
                     >
@@ -385,11 +385,11 @@ export const FearLibrary = () => {
             {/* Footer disclaimer */}
             <div 
                 className="py-3 px-4 text-center"
-                style={{ borderTop: "1px solid rgba(142, 14, 28, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[7px] tracking-[0.15em]"
-                    style={{ color: "rgba(142, 14, 28, 0.3)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.3)" }}
                 >
                     ALL DATA SIMULATED — NOT MEDICAL DEVICE
                 </p>
