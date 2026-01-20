@@ -8,12 +8,14 @@ import SideMenu from "./SideMenu";
 import CriticalAlert from "./CriticalAlert";
 import PanicOverlay from "./PanicOverlay";
 import CalibrationProtocol from "./CalibrationProtocol";
+import AdvancedCalibration from "./AdvancedCalibration";
 import ResponseIndicator from "./ResponseIndicator";
 import ExpirationWarning from "./ExpirationWarning";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useCalibration, CALIBRATION_STATE } from "@/hooks/useCalibration";
 import { useClinicalAudio } from "@/hooks/useClinicalAudio";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSettings } from "@/contexts/SettingsContext";
 
