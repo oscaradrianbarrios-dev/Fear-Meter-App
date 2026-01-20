@@ -9,12 +9,13 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 
 ## Design Language (Clinical Horror)
 
-### Color Palette
+### Color Palette (UPDATED Dec 2025)
 - **Background**: Absolute black (#000000)
-- **Clinical Red**: #8E0E1C (primary UI)
-- **Clinical Red Accent**: #B11226 (highlights)
-- **Critical Red**: #FF0000 (ONLY critical states)
+- **Primary Red (Vibrant)**: #FF0000 (all UI elements, text, borders) ✅ UPDATED
+- **Glow Effects**: text-shadow with #FF0000 and rgba(255, 0, 0, X)
 - **Text**: Gray (#B0B0B0) and muted variations
+
+> **NOTE**: Entire color scheme was renovated from dark reds (#8E0E1C, #8B0000, #B11226) to vibrant pure red (#FF0000) with laser-like glow effects.
 
 ### Typography
 - Font: JetBrains Mono
@@ -27,13 +28,20 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 
 ### ✅ 1. Monitor Principal
 - Biological ECG oscilloscope with imperfections
+- **3px thick laser-like line with glow effect** ✅ UPDATED
 - Clinical messages: "Signal unstable", "Biometric pattern altered"
 - Heartbeat Sync: UI pulses with BPM
 
-### ✅ 2. Clinical Audio System
-- Hospital monitor-style beeps
-- Progressive activation based on BPM
-- Toggle: Sound ON/OFF in menu
+### ✅ 2. Clinical Audio System (IMPLEMENTED Dec 2025)
+- **Dynamic synthetic beeps using Web Audio API** ✅ UPDATED
+- Hospital monitor-style square wave beeps
+- **BPM-synchronized beeping** (beep interval matches BPM)
+- **Pitch changes based on urgency**:
+  - Normal (<110 BPM): 880Hz
+  - Elevated (110-130 BPM): 950Hz  
+  - Critical (>130 BPM): 1000Hz + double beep
+- **Background white noise/static** for VHS horror texture
+- Toggle: Sound ON/OFF in header and menu
 
 ### ✅ 3. Calibration Mode
 - Options: Rest, Physical activity, Emotional stress, Real fear
