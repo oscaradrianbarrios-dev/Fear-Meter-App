@@ -165,8 +165,31 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 ---
 
 ## Testing Status
-- **All features tested**: 100% pass rate
-- **Test report**: `/app/test_reports/iteration_4.json`
+- **All features tested**: 95% pass rate (minor UI fixes completed)
+- **Latest test report**: `/app/test_reports/iteration_5.json`
+
+---
+
+## Changelog (Dec 2025)
+
+### UI/Audio Overhaul (COMPLETED)
+1. **Color Renovation**
+   - Changed all colors from dark reds (#8E0E1C, #8B0000, #B11226) to vibrant pure red (#FF0000)
+   - Added glow/text-shadow effects to all text and borders
+   - Updated: SideMenu, NightmareProtocol, FearLibrary, FearChallenge, BiometricProfile, MovieSession, VRExperience, FearSharing, Oscilloscope, DataGrid, MainButton
+
+2. **Clinical Audio System**
+   - Implemented `useClinicalAudio.js` hook using Web Audio API
+   - Synthetic beeps synchronized with BPM
+   - Pitch changes based on BPM thresholds (880Hz → 950Hz → 1000Hz)
+   - Background white noise for horror texture
+   - Double beep in critical state (>130 BPM)
+   - Audio control in header (SoundToggle.jsx)
+
+3. **ECG Oscilloscope Enhancement**
+   - 3px thick laser-like line
+   - Intense glow effect (shadowBlur 15-25)
+   - CRITICAL text with glow
 
 ---
 
@@ -182,15 +205,17 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 
 ## Future/Backlog Tasks
 
-### P1
+### P1 - Upcoming
+- [ ] **Advanced Calibration Mode** - Differentiate rest, exercise, emotional stress, and fear (originally requested but not implemented)
+
+### P2
+- [ ] Real-time VR Video Generation based on BPM
+- [ ] Web Bluetooth API integration for real heart rate monitors
 - [ ] Real WebXR integration (requires hardware)
 - [ ] Firebase/backend for real leaderboards
 
-### P2
+### Future
 - [ ] More movies in Fear Library
 - [ ] Audio improvements (directional sound)
-
-### Future
-- [ ] Real biometric device integration (Web Bluetooth)
 - [ ] Multiplayer fear challenges
 - [ ] Community-submitted content
