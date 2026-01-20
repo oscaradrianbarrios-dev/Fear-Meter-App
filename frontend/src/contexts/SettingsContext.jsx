@@ -81,6 +81,7 @@ export const SettingsProvider = ({ children }) => {
         updateSetting,
         toggleSound,
         toggleVibrate,
+        toggleHaptic,
         dismissDisclaimer,
     };
     
