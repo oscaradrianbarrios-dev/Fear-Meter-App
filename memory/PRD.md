@@ -203,6 +203,31 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 
 ## Changelog (Dec 2025)
 
+### Advanced Calibration & Haptic System (COMPLETED - Latest)
+1. **Advanced Calibration Mode**
+   - New `AdvancedCalibration.jsx` component with 4 calibration modes
+   - REST MODE (30s): Resting baseline (60-80 BPM)
+   - EXERCISE MODE (30s): Activity baseline (90-130 BPM)
+   - STRESS MODE (20s): Stress response (75-100 BPM)
+   - FEAR MODE (15s): Fear response with scary flash (100-140 BPM)
+   - Prerequisite system: REST must be calibrated first
+   - Progress ring with real-time BPM display
+   - Calibration results: AVG, MIN, MAX BPM per mode
+   - Integrated into SideMenu.jsx
+
+2. **Haptic Feedback System**
+   - New `useHapticFeedback.js` hook
+   - BPM-synchronized vibrations during active sessions
+   - Intensity patterns based on BPM thresholds
+   - Special event patterns (PANIC, FEAR_SPIKE, etc.)
+   - Toggle control in SideMenu
+   - Uses browser navigator.vibrate API
+
+3. **Integration Updates**
+   - Updated FearMeterApp.jsx with haptic hook integration
+   - Updated SettingsContext.jsx with hapticEnabled setting
+   - Updated SideMenu.jsx with Advanced Calibration and Haptic toggle
+
 ### UI/Audio Overhaul (COMPLETED)
 1. **Color Renovation**
    - Changed all colors from dark reds (#8E0E1C, #8B0000, #B11226) to vibrant pure red (#FF0000)
@@ -230,18 +255,18 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 - **NOT A MEDICAL DEVICE** - Entertainment only
 - **VR is simulated** - WebXR demo mode, no real VR integration
 - **Leaderboards are simulated** - Demo data
+- **Haptic feedback** - Only works on devices supporting navigator.vibrate
 - User's preferred language: Spanish
 
 ---
 
 ## Future/Backlog Tasks
 
-### P1 - Upcoming
-- [ ] **Advanced Calibration Mode** - Differentiate rest, exercise, emotional stress, and fear (originally requested but not implemented)
-
-### P2
+### P2 - Upcoming
 - [ ] Real-time VR Video Generation based on BPM
 - [ ] Web Bluetooth API integration for real heart rate monitors
+
+### P3
 - [ ] Real WebXR integration (requires hardware)
 - [ ] Firebase/backend for real leaderboards
 
