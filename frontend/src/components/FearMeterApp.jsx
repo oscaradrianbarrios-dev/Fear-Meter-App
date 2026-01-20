@@ -98,12 +98,6 @@ export const FearMeterApp = () => {
             }
         },
     });
-            if (isCalibrated && isActive) {
-                const currentStress = Math.round(((newBpm - 60) / 80) * 100);
-                classifyResponse(newBpm, Math.max(0, Math.min(100, currentStress)));
-            }
-        },
-    });
 
     // Clinical audio hook - beeps based on BPM state
     useClinicalAudio({ bpm, isActive, soundEnabled });
