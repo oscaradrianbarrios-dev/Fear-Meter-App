@@ -156,19 +156,36 @@ export const FearMeterApp = () => {
     const handleOpenCalibration = useCallback(() => {
         setMenuOpen(false);
         setShowCalibration(true);
-    }, []);
+        haptic.tap();
+    }, [haptic]);
+
+    // Open advanced calibration
+    const handleOpenAdvancedCalibration = useCallback(() => {
+        setMenuOpen(false);
+        setShowAdvancedCalibration(true);
+        haptic.tap();
+    }, [haptic]);
 
     // Complete calibration and return to monitor
     const handleCalibrationComplete = useCallback(() => {
         setShowCalibration(false);
         setCurrentView("monitor");
-    }, []);
+        haptic.success();
+    }, [haptic]);
+
+    // Complete advanced calibration
+    const handleAdvancedCalibrationComplete = useCallback((data) => {
+        setAdvancedCalibrationData(data);
+        setShowAdvancedCalibration(false);
+        haptic.success();
+    }, [haptic]);
 
     // Cancel calibration
     const handleCalibrationCancel = useCallback(() => {
         resetCalibration();
         setShowCalibration(false);
-    }, [resetCalibration]);
+        haptic.tap();
+    }, [resetCalibration, haptic]);
 
     // Swipe detection for menu
     const handleTouchStart = useCallback((e) => {
