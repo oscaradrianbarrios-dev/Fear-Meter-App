@@ -58,7 +58,14 @@ export const SettingsProvider = ({ children }) => {
     const toggleVibrate = useCallback(() => {
         setSettings(prev => ({
             ...prev,
-            vibrateEnabled: !prev.vibrateEnabled,
+            hapticEnabled: !prev.hapticEnabled,
+        }));
+    }, []);
+
+    const toggleHaptic = useCallback(() => {
+        setSettings(prev => ({
+            ...prev,
+            hapticEnabled: !prev.hapticEnabled,
         }));
     }, []);
     
