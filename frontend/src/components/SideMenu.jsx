@@ -385,6 +385,36 @@ export const SideMenu = ({
                     <SoundToggle />
                 </div>
 
+                {/* Haptic Toggle */}
+                <button
+                    onClick={() => { triggerHaptic(); toggleHaptic(); }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: hapticEnabled ? "#FF0000" : "rgba(255, 0, 0, 0.4)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 460ms",
+                    }}
+                >
+                    <Vibrate className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">
+                        {language === "ES" ? "Vibración Háptica" : "Haptic Feedback"}
+                    </span>
+                    <span 
+                        className="ml-auto text-[8px] tracking-[0.1em]"
+                        style={{ 
+                            color: hapticEnabled 
+                                ? "#FF0000"
+                                : "rgba(176, 176, 176, 0.4)",
+                            textShadow: hapticEnabled 
+                                ? "0 0 8px rgba(255, 0, 0, 0.4)"
+                                : "none",
+                        }}
+                    >
+                        {hapticEnabled ? "ON" : "OFF"}
+                    </span>
+                </button>
+
                 {/* Divider */}
                 <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
 
