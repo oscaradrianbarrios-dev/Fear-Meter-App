@@ -22,7 +22,7 @@ import { useSettings } from "@/contexts/SettingsContext";
 export const FearMeterApp = () => {
     const navigate = useNavigate();
     const { language, setLanguage, texts } = useLanguage();
-    const { soundEnabled } = useSettings();
+    const { soundEnabled, hapticEnabled } = useSettings();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
     const [showCriticalMessage, setShowCriticalMessage] = useState(false);
@@ -30,9 +30,14 @@ export const FearMeterApp = () => {
     const [isBlocked, setIsBlocked] = useState(false);
     const [showDemoOption, setShowDemoOption] = useState(false);
     const [showCalibration, setShowCalibration] = useState(false);
+    const [showAdvancedCalibration, setShowAdvancedCalibration] = useState(false);
+    const [advancedCalibrationData, setAdvancedCalibrationData] = useState(null);
     const panicTimeoutRef = useRef(null);
     const containerRef = useRef(null);
     const touchStartRef = useRef({ x: 0, y: 0 });
+
+    // Haptic feedback hook
+    const haptic = useHapticFeedback(hapticEnabled);
 
     // Calibration hook
     const {
