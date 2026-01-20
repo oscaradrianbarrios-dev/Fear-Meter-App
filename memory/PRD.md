@@ -165,18 +165,19 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 ```
 /app/frontend/src/
 ├── components/
-│   ├── BiometricProfile.jsx (NEW)
+│   ├── AdvancedCalibration.jsx (NEW - Dec 2025)
+│   ├── BiometricProfile.jsx
 │   ├── CalibrationProtocol.jsx
 │   ├── Disclaimer.jsx
-│   ├── FearChallenge.jsx (NEW)
+│   ├── FearChallenge.jsx
 │   ├── FearLibrary.jsx
 │   ├── FearMeterApp.jsx
-│   ├── FearSharing.jsx (NEW)
-│   ├── MovieSession.jsx (NEW)
+│   ├── FearSharing.jsx
+│   ├── MovieSession.jsx
 │   ├── NightmareProtocol.jsx
 │   ├── SideMenu.jsx
 │   ├── SoundToggle.jsx
-│   ├── VRExperience.jsx (NEW)
+│   ├── VRExperience.jsx
 │   ├── WatchMode.jsx
 │   └── ...
 ├── contexts/
@@ -184,6 +185,7 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 │   └── SettingsContext.jsx
 ├── hooks/
 │   ├── useClinicalAudio.js
+│   ├── useHapticFeedback.js (NEW - Dec 2025)
 │   ├── useNightmareProtocol.js
 │   └── ...
 ├── styles/
@@ -194,8 +196,8 @@ Crear una aplicación llamada "FEAR METER" con estética de "horror biométrico 
 ---
 
 ## Testing Status
-- **All features tested**: 95% pass rate (minor UI fixes completed)
-- **Latest test report**: `/app/test_reports/iteration_5.json`
+- **All features tested**: 100% pass rate
+- **Latest test report**: `/app/test_reports/iteration_6.json`
 
 ---
 
