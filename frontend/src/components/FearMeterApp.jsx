@@ -345,6 +345,8 @@ export const FearMeterApp = () => {
                 onDemoActivate={handleGoToDemo}
                 isCalibrated={isCalibrated}
                 onCalibrationOpen={handleOpenCalibration}
+                onAdvancedCalibrationOpen={handleOpenAdvancedCalibration}
+                advancedCalibrationData={advancedCalibrationData}
             />
         </div>
     );
