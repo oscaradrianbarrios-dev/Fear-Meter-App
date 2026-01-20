@@ -130,6 +130,30 @@ export const AdvancedCalibration = ({
         }
     }, []);
 
+    // Complete current mode calibration (defined first to avoid circular dependency)
+    const completeMode = useCallback(() => {
+        if (!selectedMode || bpmSamplesRef.current.length === 0) return;
+
+        const samples = bpmSamplesRef.current;
+        const avgBpm = Math.round(samples.reduce((a, b) => a + b, 0) / samples.length);
+        const minBpm = Math.min(...samples);
+        const maxBpm = Math.max(...samples);
+
+        setCalibratedModes(prev => ({
+            ...prev,
+            [selectedMode]: {
+                avgBpm,
+                minBpm,
+                maxBpm,
+                samples: samples.length,
+                timestamp: Date.now(),
+            },
+        }));
+
+        setPhase("complete");
+        triggerHaptic([50, 50, 100]); // Success pattern
+    }, [selectedMode, triggerHaptic]);
+
     // Start calibration for selected mode
     const startModeCalibration = useCallback(() => {
         if (!selectedMode) return;
@@ -187,31 +211,7 @@ export const AdvancedCalibration = ({
                 completeMode();
             }
         }, 100);
-    }, [selectedMode, calibratedModes, triggerHaptic, showScaryImage]);
-
-    // Complete current mode calibration
-    const completeMode = useCallback(() => {
-        if (!selectedMode || bpmSamplesRef.current.length === 0) return;
-
-        const samples = bpmSamplesRef.current;
-        const avgBpm = Math.round(samples.reduce((a, b) => a + b, 0) / samples.length);
-        const minBpm = Math.min(...samples);
-        const maxBpm = Math.max(...samples);
-
-        setCalibratedModes(prev => ({
-            ...prev,
-            [selectedMode]: {
-                avgBpm,
-                minBpm,
-                maxBpm,
-                samples: samples.length,
-                timestamp: Date.now(),
-            },
-        }));
-
-        setPhase("complete");
-        triggerHaptic([50, 50, 100]); // Success pattern
-    }, [selectedMode, triggerHaptic]);
+    }, [selectedMode, calibratedModes, triggerHaptic, showScaryImage, completeMode]);
 
     // Save and continue
     const handleSaveMode = useCallback(() => {
