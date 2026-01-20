@@ -183,7 +183,7 @@ export const SideMenu = ({
 
                 {/* Calibration Option */}
                 <button
-                    onClick={onCalibrationOpen}
+                    onClick={() => { triggerHaptic(); onCalibrationOpen(); }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
                         color: isCalibrated ? "rgba(255, 0, 0, 0.4)" : "rgba(255, 0, 0, 0.5)",
@@ -205,6 +205,36 @@ export const SideMenu = ({
                             }}
                         >
                             ACTIVE
+                        </span>
+                    )}
+                </button>
+
+                {/* Advanced Calibration Option */}
+                <button
+                    onClick={() => { triggerHaptic(); onAdvancedCalibrationOpen && onAdvancedCalibrationOpen(); }}
+                    className="w-full flex items-center gap-3 px-4 py-3"
+                    style={{ 
+                        color: advancedCalibrationData ? "rgba(255, 0, 0, 0.4)" : "rgba(255, 0, 0, 0.5)",
+                        opacity: itemsReady ? 1 : 0,
+                        transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
+                        transition: "all 250ms ease-out 260ms",
+                    }}
+                >
+                    <Settings className="w-4 h-4" />
+                    <span className="text-[11px] tracking-[0.15em]">
+                        {language === "ES" ? "Calibración Avanzada" : "Advanced Calibration"}
+                    </span>
+                    {advancedCalibrationData && (
+                        <span 
+                            className="ml-auto text-[7px] tracking-[0.1em] px-1.5 py-0.5"
+                            style={{ 
+                                backgroundColor: "rgba(255, 0, 0, 0.1)",
+                                color: "#FF0000",
+                                border: "1px solid rgba(255, 0, 0, 0.3)",
+                                boxShadow: "0 0 8px rgba(255, 0, 0, 0.2)",
+                            }}
+                        >
+                            {Object.keys(advancedCalibrationData.modes || {}).length}/4
                         </span>
                     )}
                 </button>
