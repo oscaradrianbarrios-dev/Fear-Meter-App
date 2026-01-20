@@ -1,9 +1,10 @@
-import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon, BookOpen, Glasses, Trophy, User, Share2, Film } from "lucide-react";
+import { X, Activity, Watch, History, Globe, Info, Play, Target, Moon, BookOpen, Glasses, Trophy, User, Share2, Film, Settings, Vibrate } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LanguageSelector from "./LanguageSelector";
 import SoundToggle from "./SoundToggle";
 import { LANGUAGES } from "@/i18n/translations";
+import { useSettings } from "@/contexts/SettingsContext";
 
 export const SideMenu = ({
     isOpen,
@@ -17,13 +18,23 @@ export const SideMenu = ({
     onDemoActivate,
     isCalibrated = false,
     onCalibrationOpen,
+    onAdvancedCalibrationOpen,
+    advancedCalibrationData,
 }) => {
     const navigate = useNavigate();
+    const { hapticEnabled, toggleHaptic } = useSettings();
     const [isVisible, setIsVisible] = useState(false);
     const [itemsReady, setItemsReady] = useState(false);
     const [translateX, setTranslateX] = useState(-100);
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
     const menuRef = useRef(null);
+
+    // Trigger haptic on menu interaction if supported
+    const triggerHaptic = () => {
+        if (hapticEnabled && navigator.vibrate) {
+            navigator.vibrate(15);
+        }
+    };
 
     useEffect(() => {
         if (isOpen) {
