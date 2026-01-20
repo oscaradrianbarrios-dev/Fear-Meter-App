@@ -72,6 +72,9 @@ export const FearMeterApp = () => {
             setIsBlocked(true);
             setPanicActive(true);
             
+            // Trigger intense haptic feedback on panic
+            haptic.triggerPattern("PANIC_ALERT");
+            
             panicTimeoutRef.current = setTimeout(() => {
                 setShowCriticalMessage(true);
             }, 520);
@@ -85,6 +88,16 @@ export const FearMeterApp = () => {
                 addBpmSample(newBpm);
             }
             // Classify response when active
+            if (isCalibrated && isActive) {
+                const currentStress = Math.round(((newBpm - 60) / 80) * 100);
+                classifyResponse(newBpm, Math.max(0, Math.min(100, currentStress)));
+            }
+            // Sync haptic with BPM when active
+            if (isActive && hapticEnabled) {
+                haptic.syncWithBpm(newBpm);
+            }
+        },
+    });
             if (isCalibrated && isActive) {
                 const currentStress = Math.round(((newBpm - 60) / 80) * 100);
                 classifyResponse(newBpm, Math.max(0, Math.min(100, currentStress)));
