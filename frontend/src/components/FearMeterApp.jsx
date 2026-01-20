@@ -235,6 +235,15 @@ export const FearMeterApp = () => {
                     language={language}
                 />
             )}
+
+            {/* Advanced Calibration Overlay */}
+            <AdvancedCalibration
+                isOpen={showAdvancedCalibration}
+                onClose={() => setShowAdvancedCalibration(false)}
+                onCalibrationComplete={handleAdvancedCalibrationComplete}
+                currentCalibrationData={advancedCalibrationData}
+                language={language}
+            />
             
             <PanicOverlay 
                 active={panicActive} 
