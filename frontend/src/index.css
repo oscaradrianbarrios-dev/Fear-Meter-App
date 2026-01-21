@@ -92,7 +92,7 @@
     }
     
     .text-fear-dark-red {
-        color: #8B0000;
+        color: #FF0000;
     }
     
     .text-fear-gray {
@@ -108,7 +108,7 @@
     }
     
     .bg-fear-dark-red {
-        background-color: #8B0000;
+        background-color: #FF0000;
     }
     
     .border-fear-red {
@@ -116,7 +116,7 @@
     }
     
     .border-fear-dark-red {
-        border-color: #8B0000;
+        border-color: #FF0000;
     }
     
     /* Subtle glow - restrained, clinical */
