@@ -258,7 +258,7 @@ export const DemoMode = () => {
 
             <footer 
                 className="py-4 text-center relative"
-                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }}
+                style={{ borderTop: "1px solid rgba(255, 85, 85, 0.08)" }}
             >
                 <p 
                     className="text-[10px] tracking-[0.25em]"
@@ -277,7 +277,7 @@ export const DemoMode = () => {
                 <div 
                     className="absolute bottom-2 right-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.4)",
+                        color: "rgba(255, 85, 85, 0.4)",
                         fontSize: "8px",
                         letterSpacing: "0.15em",
                     }}

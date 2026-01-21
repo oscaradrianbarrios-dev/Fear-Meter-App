@@ -10,9 +10,9 @@ export const History = ({ sessions, texts, onClear, onDeleteSession }) => {
             <div className="flex-1 flex flex-col items-center justify-center py-8">
                 <div 
                     className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                    style={{ border: "1px solid rgba(255, 0, 0, 0.15)" }}
+                    style={{ border: "1px solid rgba(255, 85, 85, 0.15)" }}
                 >
-                    <Activity className="w-6 h-6" style={{ color: "rgba(255, 0, 0, 0.2)" }} />
+                    <Activity className="w-6 h-6" style={{ color: "rgba(255, 85, 85, 0.2)" }} />
                 </div>
                 <p 
                     className="text-xs tracking-[0.2em] uppercase"
@@ -45,10 +45,10 @@ export const History = ({ sessions, texts, onClear, onDeleteSession }) => {
                         className="px-3 py-1.5 text-[10px] tracking-wider uppercase rounded transition-all duration-200"
                         style={{
                             border: viewMode === "list" 
-                                ? "1px solid rgba(255, 0, 0, 0.5)" 
+                                ? "1px solid rgba(255, 85, 85, 0.5)" 
                                 : "1px solid rgba(176, 176, 176, 0.15)",
-                            color: viewMode === "list" ? "#FF0000" : "rgba(176, 176, 176, 0.5)",
-                            backgroundColor: viewMode === "list" ? "rgba(255, 0, 0, 0.05)" : "transparent",
+                            color: viewMode === "list" ? "#FF5555" : "rgba(176, 176, 176, 0.5)",
+                            backgroundColor: viewMode === "list" ? "rgba(255, 85, 85, 0.05)" : "transparent",
                         }}
                     >
                         LIST
@@ -58,10 +58,10 @@ export const History = ({ sessions, texts, onClear, onDeleteSession }) => {
                         className="px-3 py-1.5 text-[10px] tracking-wider uppercase rounded transition-all duration-200"
                         style={{
                             border: viewMode === "graph" 
-                                ? "1px solid rgba(255, 0, 0, 0.5)" 
+                                ? "1px solid rgba(255, 85, 85, 0.5)" 
                                 : "1px solid rgba(176, 176, 176, 0.15)",
-                            color: viewMode === "graph" ? "#FF0000" : "rgba(176, 176, 176, 0.5)",
-                            backgroundColor: viewMode === "graph" ? "rgba(255, 0, 0, 0.05)" : "transparent",
+                            color: viewMode === "graph" ? "#FF5555" : "rgba(176, 176, 176, 0.5)",
+                            backgroundColor: viewMode === "graph" ? "rgba(255, 85, 85, 0.05)" : "transparent",
                         }}
                     >
                         GRAPH
@@ -72,7 +72,7 @@ export const History = ({ sessions, texts, onClear, onDeleteSession }) => {
                     onClick={onClear}
                     className="p-2 transition-colors duration-200"
                     style={{ color: "rgba(176, 176, 176, 0.3)" }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF0000"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF5555"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.3)"}
                     title="Clear history"
                 >
@@ -104,24 +104,24 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                     style={{
                         backgroundColor: "#000000",
                         border: session.hasPanicEvent 
-                            ? "1px solid rgba(255, 0, 0, 0.5)" 
-                            : "1px solid rgba(255, 0, 0, 0.12)",
+                            ? "1px solid rgba(255, 85, 85, 0.5)" 
+                            : "1px solid rgba(255, 85, 85, 0.12)",
                         borderLeft: session.hasPanicEvent 
-                            ? "3px solid #FF0000" 
-                            : "2px solid rgba(255, 0, 0, 0.4)",
+                            ? "3px solid #FF5555" 
+                            : "2px solid rgba(255, 85, 85, 0.4)",
                         animation: `fadeSlideIn 0.3s ease-out ${index * 50}ms both`,
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.02)";
+                        e.currentTarget.style.backgroundColor = "rgba(255, 85, 85, 0.02)";
                         e.currentTarget.style.borderColor = session.hasPanicEvent 
-                            ? "rgba(255, 0, 0, 0.7)" 
-                            : "rgba(255, 0, 0, 0.25)";
+                            ? "rgba(255, 85, 85, 0.7)" 
+                            : "rgba(255, 85, 85, 0.25)";
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "#000000";
                         e.currentTarget.style.borderColor = session.hasPanicEvent 
-                            ? "rgba(255, 0, 0, 0.5)" 
-                            : "rgba(255, 0, 0, 0.12)";
+                            ? "rgba(255, 85, 85, 0.5)" 
+                            : "rgba(255, 85, 85, 0.12)";
                     }}
                 >
                     <div className="flex justify-between items-start mb-2">
@@ -138,8 +138,8 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                                     <div 
                                         className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] tracking-wider"
                                         style={{ 
-                                            backgroundColor: "rgba(255, 0, 0, 0.3)",
-                                            color: "#FF0000",
+                                            backgroundColor: "rgba(255, 85, 85, 0.3)",
+                                            color: "#FF5555",
                                         }}
                                     >
                                         <AlertTriangle className="w-2.5 h-2.5" />
@@ -149,7 +149,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-xs mt-1 tracking-wide"
-                                style={{ color: session.hasPanicEvent ? "#FF0000" : "rgba(255, 0, 0, 0.7)" }}
+                                style={{ color: session.hasPanicEvent ? "#FF5555" : "rgba(255, 85, 85, 0.7)" }}
                             >
                                 {session.name}
                             </div>
@@ -174,16 +174,16 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                     <div className="mt-2 mb-3">
                         <div 
                             className="h-1 rounded-full overflow-hidden"
-                            style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                            style={{ backgroundColor: "rgba(255, 85, 85, 0.1)" }}
                         >
                             <div 
                                 className="h-full rounded-full transition-all duration-500"
                                 style={{ 
                                     width: `${session.maxStress || 0}%`,
-                                    backgroundColor: session.maxStress > 85 ? "#FF0000" : "#FF0000",
+                                    backgroundColor: session.maxStress > 85 ? "#FF5555" : "#FF5555",
                                     boxShadow: session.maxStress > 85 
-                                        ? "0 0 8px rgba(255, 0, 0, 0.5)" 
-                                        : "0 0 4px rgba(255, 0, 0, 0.3)",
+                                        ? "0 0 8px rgba(255, 85, 85, 0.5)" 
+                                        : "0 0 4px rgba(255, 85, 85, 0.3)",
                                 }}
                             />
                         </div>
@@ -192,7 +192,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                     <div className="grid grid-cols-3 gap-2">
                         <div 
                             className="rounded p-2"
-                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                            style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                         >
                             <div 
                                 className="text-[8px] tracking-wider"
@@ -202,14 +202,14 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-base font-bold mt-0.5"
-                                style={{ color: session.maxBpm > 120 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
+                                style={{ color: session.maxBpm > 120 ? "#FF5555" : "rgba(255, 85, 85, 0.8)" }}
                             >
                                 {session.maxBpm || 0}
                             </div>
                         </div>
                         <div 
                             className="rounded p-2"
-                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                            style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                         >
                             <div 
                                 className="text-[8px] tracking-wider"
@@ -219,14 +219,14 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-base font-bold mt-0.5"
-                                style={{ color: "rgba(255, 0, 0, 0.6)" }}
+                                style={{ color: "rgba(255, 85, 85, 0.6)" }}
                             >
                                 {session.avgBpm || session.maxBpm || 0}
                             </div>
                         </div>
                         <div 
                             className="rounded p-2"
-                            style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                            style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                         >
                             <div 
                                 className="text-[8px] tracking-wider"
@@ -236,7 +236,7 @@ const ListView = ({ sessions, texts, onSelectSession }) => {
                             </div>
                             <div 
                                 className="text-base font-bold mt-0.5"
-                                style={{ color: session.maxStress > 85 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
+                                style={{ color: session.maxStress > 85 ? "#FF5555" : "rgba(255, 85, 85, 0.8)" }}
                             >
                                 {session.maxStress || 0}%
                             </div>
@@ -290,7 +290,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     onClick={onClose}
                     className="flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200"
                     style={{ color: "rgba(176, 176, 176, 0.5)" }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF0000"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#FF5555"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.5)"}
                 >
                     <ChevronLeft className="w-4 h-4" />
@@ -311,15 +311,15 @@ const SessionDetail = ({ session, onClose, texts }) => {
                 style={{ 
                     backgroundColor: "#000000",
                     border: session.hasPanicEvent 
-                        ? "1px solid rgba(255, 0, 0, 0.5)" 
-                        : "1px solid rgba(255, 0, 0, 0.15)",
+                        ? "1px solid rgba(255, 85, 85, 0.5)" 
+                        : "1px solid rgba(255, 85, 85, 0.15)",
                 }}
             >
                 <div className="flex justify-between items-start mb-3">
                     <div>
                         <div 
                             className="text-sm font-bold tracking-wide"
-                            style={{ color: session.hasPanicEvent ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.hasPanicEvent ? "#FF5555" : "rgba(255, 85, 85, 0.8)" }}
                         >
                             {session.name}
                         </div>
@@ -334,8 +334,8 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         <div 
                             className="flex items-center gap-1 px-2 py-1 rounded text-[9px] tracking-wider"
                             style={{ 
-                                backgroundColor: "rgba(255, 0, 0, 0.3)",
-                                color: "#FF0000",
+                                backgroundColor: "rgba(255, 85, 85, 0.3)",
+                                color: "#FF5555",
                             }}
                         >
                             <AlertTriangle className="w-3 h-3" />
@@ -357,8 +357,8 @@ const SessionDetail = ({ session, onClose, texts }) => {
                 <div 
                     className="rounded p-3 mb-3"
                     style={{ 
-                        backgroundColor: "rgba(255, 0, 0, 0.02)",
-                        border: "1px solid rgba(255, 0, 0, 0.1)",
+                        backgroundColor: "rgba(255, 85, 85, 0.02)",
+                        border: "1px solid rgba(255, 85, 85, 0.1)",
                     }}
                 >
                     <div 
@@ -370,7 +370,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     <svg 
                         viewBox="0 0 300 100" 
                         className="w-full h-20"
-                        style={{ filter: "drop-shadow(0 0 3px rgba(255, 0, 0, 0.3))" }}
+                        style={{ filter: "drop-shadow(0 0 3px rgba(255, 85, 85, 0.3))" }}
                     >
                         {/* Grid lines */}
                         {[0, 1, 2, 3].map(i => (
@@ -380,7 +380,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                                 y1={10 + i * 26.67}
                                 x2="290"
                                 y2={10 + i * 26.67}
-                                stroke="rgba(255, 0, 0, 0.05)"
+                                stroke="rgba(255, 85, 85, 0.05)"
                                 strokeWidth="1"
                             />
                         ))}
@@ -388,7 +388,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         {/* BPM line */}
                         <path
                             d={generateBpmPath()}
-                            stroke={session.hasPanicEvent ? "#FF0000" : "#FF0000"}
+                            stroke={session.hasPanicEvent ? "#FF5555" : "#FF5555"}
                             strokeWidth="2"
                             fill="none"
                             strokeLinecap="round"
@@ -401,7 +401,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                 <div className="grid grid-cols-2 gap-2">
                     <div 
                         className="rounded p-3"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                     >
                         <div 
                             className="text-[8px] tracking-wider mb-1"
@@ -411,14 +411,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.maxBpm > 120 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.maxBpm > 120 ? "#FF5555" : "rgba(255, 85, 85, 0.8)" }}
                         >
                             {session.maxBpm || 0}
                         </div>
                     </div>
                     <div 
                         className="rounded p-3"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                     >
                         <div 
                             className="text-[8px] tracking-wider mb-1"
@@ -428,14 +428,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.maxStress > 85 ? "#FF0000" : "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: session.maxStress > 85 ? "#FF5555" : "rgba(255, 85, 85, 0.8)" }}
                         >
                             {session.maxStress || 0}%
                         </div>
                     </div>
                     <div 
                         className="rounded p-3"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                     >
                         <div 
                             className="text-[8px] tracking-wider mb-1"
@@ -445,14 +445,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: "rgba(255, 0, 0, 0.6)" }}
+                            style={{ color: "rgba(255, 85, 85, 0.6)" }}
                         >
                             {session.avgBpm || session.maxBpm || 0}
                         </div>
                     </div>
                     <div 
                         className="rounded p-3"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.03)" }}
+                        style={{ backgroundColor: "rgba(255, 85, 85, 0.03)" }}
                     >
                         <div 
                             className="text-[8px] tracking-wider mb-1"
@@ -462,7 +462,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                         </div>
                         <div 
                             className="text-2xl font-bold"
-                            style={{ color: session.panicCount > 0 ? "#FF0000" : "rgba(176, 176, 176, 0.4)" }}
+                            style={{ color: session.panicCount > 0 ? "#FF5555" : "rgba(176, 176, 176, 0.4)" }}
                         >
                             {session.panicCount || 0}
                         </div>
@@ -475,7 +475,7 @@ const SessionDetail = ({ session, onClose, texts }) => {
                 className="rounded p-4"
                 style={{ 
                     backgroundColor: "#000000",
-                    border: "1px solid rgba(255, 0, 0, 0.1)",
+                    border: "1px solid rgba(255, 85, 85, 0.1)",
                 }}
             >
                 <div 
@@ -489,14 +489,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     <div 
                         className="flex items-center gap-2 py-2 px-3 rounded mb-2"
                         style={{ 
-                            backgroundColor: "rgba(255, 0, 0, 0.05)",
-                            borderLeft: "2px solid rgba(255, 0, 0, 0.5)",
+                            backgroundColor: "rgba(255, 85, 85, 0.05)",
+                            borderLeft: "2px solid rgba(255, 85, 85, 0.5)",
                         }}
                     >
-                        <TrendingUp className="w-3 h-3" style={{ color: "#FF0000" }} />
+                        <TrendingUp className="w-3 h-3" style={{ color: "#FF5555" }} />
                         <span 
                             className="text-[10px] tracking-wider"
-                            style={{ color: "rgba(255, 0, 0, 0.8)" }}
+                            style={{ color: "rgba(255, 85, 85, 0.8)" }}
                         >
                             PEAK FEAR EVENT DETECTED
                         </span>
@@ -507,14 +507,14 @@ const SessionDetail = ({ session, onClose, texts }) => {
                     <div 
                         className="flex items-center gap-2 py-2 px-3 rounded mb-2"
                         style={{ 
-                            backgroundColor: "rgba(255, 0, 0, 0.1)",
-                            borderLeft: "2px solid #FF0000",
+                            backgroundColor: "rgba(255, 85, 85, 0.1)",
+                            borderLeft: "2px solid #FF5555",
                         }}
                     >
-                        <AlertTriangle className="w-3 h-3" style={{ color: "#FF0000" }} />
+                        <AlertTriangle className="w-3 h-3" style={{ color: "#FF5555" }} />
                         <span 
                             className="text-[10px] tracking-wider"
-                            style={{ color: "#FF0000" }}
+                            style={{ color: "#FF5555" }}
                         >
                             CRITICAL STRESS DETECTED
                         </span>
@@ -571,13 +571,13 @@ const GraphView = ({ sessions }) => {
                 className="w-full max-w-sm rounded p-4"
                 style={{ 
                     backgroundColor: "#000000",
-                    border: "1px solid rgba(255, 0, 0, 0.15)"
+                    border: "1px solid rgba(255, 85, 85, 0.15)"
                 }}
             >
                 <svg 
                     viewBox="0 0 300 150" 
                     className="w-full h-auto"
-                    style={{ filter: "drop-shadow(0 0 4px rgba(255, 0, 0, 0.3))" }}
+                    style={{ filter: "drop-shadow(0 0 4px rgba(255, 85, 85, 0.3))" }}
                 >
                     {/* Grid */}
                     {[0, 1, 2, 3].map(i => (
@@ -587,7 +587,7 @@ const GraphView = ({ sessions }) => {
                             y1={10 + i * 43.33}
                             x2="290"
                             y2={10 + i * 43.33}
-                            stroke="rgba(255, 0, 0, 0.08)"
+                            stroke="rgba(255, 85, 85, 0.08)"
                             strokeWidth="1"
                         />
                     ))}
@@ -595,12 +595,12 @@ const GraphView = ({ sessions }) => {
                     {/* Data line */}
                     <path
                         d={generatePath()}
-                        stroke="#FF0000"
+                        stroke="#FF5555"
                         strokeWidth="2"
                         fill="none"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        style={{ filter: "drop-shadow(0 0 4px rgba(255, 0, 0, 0.5))" }}
+                        style={{ filter: "drop-shadow(0 0 4px rgba(255, 85, 85, 0.5))" }}
                     />
                     
                     {/* Data points */}
@@ -616,7 +616,7 @@ const GraphView = ({ sessions }) => {
                                 cx={x}
                                 cy={y}
                                 r="3"
-                                fill={session.hasPanicEvent ? "#FF0000" : "#FF0000"}
+                                fill={session.hasPanicEvent ? "#FF5555" : "#FF5555"}
                                 stroke="#000"
                                 strokeWidth="1.5"
                             />
@@ -635,7 +635,7 @@ const GraphView = ({ sessions }) => {
                 {sessions.some(s => s.hasPanicEvent) && (
                     <div 
                         className="text-[9px] mt-1 flex items-center justify-center gap-1"
-                        style={{ color: "#FF0000" }}
+                        style={{ color: "#FF5555" }}
                     >
                         <AlertTriangle className="w-3 h-3" />
                         {sessions.filter(s => s.hasPanicEvent).length} PANIC EVENT{sessions.filter(s => s.hasPanicEvent).length !== 1 ? 'S' : ''}

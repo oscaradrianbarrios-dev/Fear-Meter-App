@@ -317,7 +317,7 @@ export const FearMeterApp = () => {
 
             <footer 
                 className="py-4 text-center"
-                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.08)" }}
+                style={{ borderTop: "1px solid rgba(255, 85, 85, 0.08)" }}
             >
                 <p 
                     className="text-[10px] tracking-[0.25em]"
