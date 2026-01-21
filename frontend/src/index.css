@@ -10,12 +10,12 @@
         --background: 0 0% 0%;
         --foreground: 0 0% 100%;
         
-        /* Primary Red - #FF0000 */
-        --primary: 0 100% 50%;
+        /* Primary Red - ULTRA BRIGHT #FF3333 (más claro) */
+        --primary: 0 100% 60%;
         --primary-foreground: 0 0% 100%;
         
-        /* Dark Red - Panic/Alert - NOW PURE RED #FF0000 */
-        --destructive: 0 100% 50%;
+        /* Dark Red - Panic/Alert - BRIGHT #FF3333 */
+        --destructive: 0 100% 60%;
         --destructive-foreground: 0 0% 100%;
         
         /* Secondary Text - #B0B0B0 */
@@ -25,7 +25,7 @@
         --secondary: 0 0% 8%;
         --secondary-foreground: 0 0% 69%;
         
-        --accent: 0 100% 50%;
+        --accent: 0 100% 60%;
         --accent-foreground: 0 0% 100%;
         
         --card: 0 0% 5%;
@@ -36,20 +36,20 @@
         
         --border: 0 0% 15%;
         --input: 0 0% 15%;
-        --ring: 0 100% 50%;
+        --ring: 0 100% 60%;
         
         --radius: 0.25rem;
         
-        /* Custom Fear Meter tokens */
-        --fear-red: 0 100% 50%;
-        --fear-dark-red: 0 100% 50%;
+        /* Custom Fear Meter tokens - ULTRA BRIGHT */
+        --fear-red: 0 100% 60%;
+        --fear-dark-red: 0 100% 60%;
         --fear-black: 0 0% 0%;
         --fear-gray: 0 0% 69%;
         
-        /* Glow effects */
-        --glow-red: 0 0 20px hsla(0, 100%, 50%, 0.6);
-        --glow-red-intense: 0 0 40px hsla(0, 100%, 50%, 0.8), 0 0 80px hsla(0, 100%, 50%, 0.4);
-        --glow-dark-red: 0 0 30px hsla(0, 100%, 50%, 0.8);
+        /* Glow effects - ENHANCED */
+        --glow-red: 0 0 25px hsla(0, 100%, 60%, 0.8);
+        --glow-red-intense: 0 0 50px hsla(0, 100%, 60%, 1), 0 0 100px hsla(0, 100%, 60%, 0.6);
+        --glow-dark-red: 0 0 40px hsla(0, 100%, 60%, 1);
     }
 }
 
