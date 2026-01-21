@@ -40,25 +40,21 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
             className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between"
             style={{
                 backgroundColor: "#000000",
-                borderBottom: "1px solid rgba(255, 0, 0, 0.25)",
-                boxShadow: "0 2px 10px rgba(255, 0, 0, 0.1)",
+                borderBottom: "1px solid #333333",
             }}
         >
             {/* Menu button - LEFT side */}
             <button
                 onClick={onMenuOpen}
                 className="p-2 transition-all duration-200"
-                style={{ 
-                    color: "#FF0000",
-                    textShadow: "0 0 8px rgba(255, 0, 0, 0.4)",
-                }}
+                style={{ color: "#FFFFFF" }}
                 aria-label="Open menu"
                 data-testid="menu-button"
             >
                 <Menu className="w-5 h-5" />
             </button>
 
-            {/* Logo - Center, with long press detection */}
+            {/* Logo - Center */}
             <div 
                 className="flex items-center gap-2 select-none cursor-default"
                 onMouseDown={handleLogoTouchStart}
@@ -67,52 +63,29 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                 onTouchStart={handleLogoTouchStart}
                 onTouchEnd={handleLogoTouchEnd}
             >
-                <div 
-                    className="w-2 h-2 rounded-full animate-pulse"
-                    style={{ 
-                        backgroundColor: "#FF0000",
-                        boxShadow: "0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5)",
-                    }}
-                />
                 <h1 
                     className="font-bold text-sm tracking-[0.25em] uppercase"
-                    style={{ 
-                        color: "#FF0000",
-                        textShadow: "0 0 10px rgba(255, 0, 0, 0.5)",
-                    }}
+                    style={{ color: "#FFFFFF" }}
                 >
                     FEAR METER
                 </h1>
+                <span 
+                    className="text-[10px] tracking-[0.15em]"
+                    style={{ color: "#DC2F2F" }}
+                >
+                    v1.0
+                </span>
             </div>
 
-            {/* Audio control - RIGHT side */}
+            {/* Right side - REC indicator */}
             <div className="flex items-center gap-2">
-                {/* Watching indicator - appears randomly */}
                 <div 
-                    className="flex items-center transition-opacity duration-1000 mr-1"
-                    style={{ opacity: showWatching ? 1 : 0 }}
-                >
-                    <span 
-                        className="text-[8px] tracking-[0.15em]"
-                        style={{ 
-                            color: "#FF0000",
-                            textShadow: "0 0 5px rgba(255, 0, 0, 0.5)",
-                        }}
-                    >
-                        REC
-                    </span>
-                    <div 
-                        className="w-1.5 h-1.5 rounded-full ml-1"
-                        style={{ 
-                            backgroundColor: "#FF0000",
-                            boxShadow: "0 0 8px #FF0000",
-                            animation: showWatching ? "pulse 1s ease-in-out infinite" : "none",
-                        }}
-                    />
-                </div>
-                
-                {/* Audio control button */}
-                <AudioControl />
+                    className="w-3 h-3 rounded-full"
+                    style={{ 
+                        backgroundColor: "#FF0000",
+                        boxShadow: "0 0 10px #FF0000",
+                    }}
+                />
             </div>
         </header>
     );
