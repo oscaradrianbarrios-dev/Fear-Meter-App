@@ -1,122 +1,46 @@
-import { useSettings } from "@/contexts/SettingsContext";
+import { useState } from "react";
 
 export const Disclaimer = () => {
-    const { showDisclaimer, dismissDisclaimer } = useSettings();
+    const [dismissed, setDismissed] = useState(false);
     
-    if (!showDisclaimer) return null;
-    
-    const handleAccept = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dismissDisclaimer();
-    };
+    if (dismissed) return null;
     
     return (
         <div 
-            className="fixed inset-0 flex items-center justify-center p-4"
             style={{ 
+                position: "fixed",
+                top: 0, left: 0, right: 0, bottom: 0,
                 backgroundColor: "#000000",
-                zIndex: 99999,
-                pointerEvents: "auto",
+                zIndex: 999999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "16px",
             }}
-            onClick={(e) => e.stopPropagation()}
         >
-            <div 
-                className="max-w-md w-full p-6 text-center"
-                style={{ 
-                    border: "1px solid #444444",
-                    backgroundColor: "#000000",
-                }}
-            >
-                {/* Warning icon */}
-                <div 
-                    className="w-12 h-12 mx-auto mb-4 flex items-center justify-center"
-                    style={{ border: "1px solid #FF0000" }}
-                >
-                    <span 
-                        className="text-2xl font-mono"
-                        style={{ color: "#FF0000" }}
-                    >
-                        !
-                    </span>
+            <div style={{ maxWidth: "400px", textAlign: "center", border: "1px solid #FF0000", padding: "24px", backgroundColor: "#000000" }}>
+                <div style={{ width: "48px", height: "48px", margin: "0 auto 16px", border: "1px solid #FF0000", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#FF0000", fontSize: "24px" }}>!</span>
                 </div>
-                
-                {/* Title */}
-                <h2 
-                    className="text-sm tracking-[0.3em] mb-4"
-                    style={{ color: "#FF0000" }}
-                >
-                    IMPORTANT NOTICE
-                </h2>
-                
-                {/* Main disclaimer */}
-                <div className="space-y-4 mb-6">
-                    <p 
-                        className="text-[10px] tracking-[0.1em] leading-relaxed"
-                        style={{ color: "#CCCCCC" }}
-                    >
-                        FEAR METER is an <span style={{ color: "#FF0000" }}>experimental entertainment application</span> that simulates biometric monitoring. All data displayed is simulated and does not represent actual physiological measurements.
-                    </p>
-                    
-                    <p 
-                        className="text-[10px] tracking-[0.1em] leading-relaxed"
-                        style={{ color: "#CCCCCC" }}
-                    >
-                        This application is <span style={{ color: "#FF0000" }}>NOT a medical device</span> and should not be used for health monitoring, diagnosis, or treatment decisions.
-                    </p>
-                    
-                    <p 
-                        className="text-[10px] tracking-[0.1em] leading-relaxed"
-                        style={{ color: "#999999" }}
-                    >
-                        For entertainment and experimental analysis only.
+                <h2 style={{ color: "#FF0000", fontSize: "14px", letterSpacing: "0.3em", marginBottom: "16px" }}>IMPORTANT NOTICE</h2>
+                <p style={{ color: "#CCCCCC", fontSize: "10px", marginBottom: "12px", lineHeight: "1.6" }}>
+                    FEAR METER is an <span style={{ color: "#FF0000" }}>experimental entertainment application</span> that simulates biometric monitoring.
+                </p>
+                <p style={{ color: "#CCCCCC", fontSize: "10px", marginBottom: "16px", lineHeight: "1.6" }}>
+                    This application is <span style={{ color: "#FF0000" }}>NOT a medical device</span>.
+                </p>
+                <div style={{ backgroundColor: "rgba(255,0,0,0.1)", border: "1px solid rgba(255,0,0,0.3)", padding: "12px", marginBottom: "16px" }}>
+                    <p style={{ color: "#FF0000", fontSize: "8px", letterSpacing: "0.1em" }}>
+                        BY CONTINUING, YOU ACKNOWLEDGE THAT ALL BIOMETRIC DATA IS SIMULATED
                     </p>
                 </div>
-                
-                {/* Legal text */}
-                <div 
-                    className="py-3 px-4 mb-6"
-                    style={{ 
-                        backgroundColor: "rgba(255, 0, 0, 0.05)",
-                        border: "1px solid rgba(255, 0, 0, 0.5)",
-                    }}
-                >
-                    <p 
-                        className="text-[8px] tracking-[0.15em]"
-                        style={{ color: "#FF0000" }}
-                    >
-                        BY CONTINUING, YOU ACKNOWLEDGE THAT ALL BIOMETRIC DATA IS SIMULATED AND THIS APPLICATION HAS NO MEDICAL PURPOSE
-                    </p>
-                </div>
-                
-                {/* Accept button */}
                 <button
-                    onClick={handleAccept}
-                    className="px-8 py-3 text-[10px] tracking-[0.2em] cursor-pointer"
-                    style={{ 
-                        backgroundColor: "#FF0000",
-                        border: "none",
-                        color: "#FFFFFF",
-                        pointerEvents: "auto",
-                    }}
-                    data-testid="disclaimer-accept"
+                    onClick={() => setDismissed(true)}
+                    style={{ backgroundColor: "#FF0000", color: "#FFFFFF", border: "none", padding: "12px 32px", fontSize: "10px", letterSpacing: "0.2em", cursor: "pointer" }}
                 >
                     I UNDERSTAND
                 </button>
-                
-                {/* Legal footer */}
-                <p 
-                    className="mt-6 text-[8px] tracking-[0.2em]"
-                    style={{ color: "#888888" }}
-                >
-                    © 2026 FEAR METER — ALL RIGHTS RESERVED
-                </p>
-                <p 
-                    className="mt-1 text-[7px] tracking-[0.15em]"
-                    style={{ color: "#666666" }}
-                >
-                    Experimental Biometric Horror System
-                </p>
+                <p style={{ color: "#666666", fontSize: "8px", marginTop: "16px" }}>© 2026 FEAR METER — ALL RIGHTS RESERVED</p>
             </div>
         </div>
     );
