@@ -72,7 +72,7 @@ const getIntensityColor = (intensity) => {
     if (intensity >= 90) return "#FF0000";
     if (intensity >= 70) return "#FF0000";
     if (intensity >= 50) return "#FF0000";
-    return "rgba(255, 0, 0, 0.5)";
+    return "rgba(255, 0, 0, 0.9)";
 };
 
 // Get event type label
@@ -186,7 +186,7 @@ export const MovieSession = () => {
         <div className="flex-1 p-4">
             <h2 
                 className="text-xs tracking-[0.2em] mb-6 text-center"
-                style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                style={{ color: "rgba(255, 0, 0, 0.9)" }}
             >
                 SELECT MOVIE EXPERIENCE
             </h2>
@@ -198,8 +198,8 @@ export const MovieSession = () => {
                         onClick={() => startSession(key)}
                         className="w-full p-4 text-left transition-all duration-200"
                         style={{ 
-                            backgroundColor: "rgba(255, 0, 0, 0.03)",
-                            border: "1px solid rgba(255, 0, 0, 0.15)",
+                            backgroundColor: "rgba(255, 0, 0, 0.3)",
+                            border: "1px solid rgba(255, 0, 0, 0.4)",
                         }}
                     >
                         <div className="flex justify-between items-start">
@@ -212,7 +212,7 @@ export const MovieSession = () => {
                                 </h3>
                                 <p 
                                     className="text-[9px] tracking-[0.05em] mt-1"
-                                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                                    style={{ color: "#CCCCCC" }}
                                 >
                                     {movie.duration} MIN • {movie.timeline.length} FEAR EVENTS
                                 </p>
@@ -221,8 +221,8 @@ export const MovieSession = () => {
                                 className="text-[8px] tracking-[0.1em] px-2 py-1"
                                 style={{ 
                                     backgroundColor: movie.fearLevel === "EXTREME" 
-                                        ? "rgba(255, 0, 0, 0.15)" 
-                                        : "rgba(255, 0, 0, 0.1)",
+                                        ? "rgba(255, 0, 0, 0.4)" 
+                                        : "rgba(255, 0, 0, 0.3)",
                                     color: movie.fearLevel === "EXTREME" ? "#FF0000" : "#FF0000",
                                     border: `1px solid ${movie.fearLevel === "EXTREME" ? "rgba(255,0,0,0.3)" : "rgba(177,18,38,0.2)"}`,
                                 }}
@@ -234,7 +234,7 @@ export const MovieSession = () => {
                             <Play className="w-3 h-3" style={{ color: "#FF0000" }} />
                             <span 
                                 className="text-[8px] tracking-[0.1em]"
-                                style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                                style={{ color: "rgba(255, 0, 0, 0.9)" }}
                             >
                                 START EXPERIENCE
                             </span>
@@ -251,7 +251,7 @@ export const MovieSession = () => {
             {/* Movie title */}
             <div 
                 className="py-3 px-4 text-center"
-                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.3)" }}
             >
                 <h2 
                     className="text-xs tracking-[0.2em]"
@@ -267,7 +267,7 @@ export const MovieSession = () => {
                 {upcomingAlert && (
                     <div 
                         className="absolute top-20 left-0 right-0 py-2 px-4 text-center animate-pulse"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.3)" }}
                     >
                         <div className="flex items-center justify-center gap-2">
                             <AlertTriangle className="w-3 h-3" style={{ color: "#FF0000" }} />
@@ -286,7 +286,7 @@ export const MovieSession = () => {
                     className="text-6xl font-mono font-bold mb-2"
                     style={{ 
                         color: currentBpm > 120 ? "#FF0000" : currentBpm > 100 ? "#FF0000" : "#FF0000",
-                        textShadow: currentBpm > 120 ? "0 0 20px rgba(255, 0, 0, 0.5)" : "none",
+                        textShadow: currentBpm > 120 ? "0 0 20px rgba(255, 0, 0, 0.9)" : "none",
                         animation: currentEvent ? "pulse 0.5s ease-in-out infinite" : "none",
                     }}
                 >
@@ -294,7 +294,7 @@ export const MovieSession = () => {
                 </div>
                 <span 
                     className="text-[10px] tracking-[0.2em]"
-                    style={{ color: "rgba(176, 176, 176, 0.5)" }}
+                    style={{ color: "#CCCCCC" }}
                 >
                     BPM
                 </span>
@@ -333,7 +333,7 @@ export const MovieSession = () => {
                     </p>
                     <div 
                         className="w-48 h-2"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                        style={{ backgroundColor: "rgba(255, 0, 0, 0.3)" }}
                     >
                         <div 
                             className="h-full transition-all duration-300"
@@ -356,7 +356,7 @@ export const MovieSession = () => {
             <div className="px-4 pb-4">
                 <div 
                     className="h-1 w-full relative"
-                    style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                    style={{ backgroundColor: "rgba(255, 0, 0, 0.3)" }}
                 >
                     {/* Progress */}
                     <div 
@@ -397,13 +397,13 @@ export const MovieSession = () => {
             {/* Controls */}
             <div 
                 className="flex justify-center gap-4 py-4"
-                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }}
             >
                 <button
                     onClick={() => setIsPlaying(!isPlaying)}
                     className="p-3"
                     style={{ 
-                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        backgroundColor: "rgba(255, 0, 0, 0.3)",
                         border: "1px solid rgba(255, 0, 0, 0.2)",
                         color: "#FF0000",
                     }}
@@ -418,8 +418,8 @@ export const MovieSession = () => {
                     className="p-3"
                     style={{ 
                         backgroundColor: "rgba(255, 0, 0, 0.05)",
-                        border: "1px solid rgba(255, 0, 0, 0.1)",
-                        color: "rgba(255, 0, 0, 0.5)",
+                        border: "1px solid rgba(255, 0, 0, 0.3)",
+                        color: "rgba(255, 0, 0, 0.9)",
                     }}
                 >
                     <SkipForward className="w-5 h-5" />
@@ -492,7 +492,7 @@ export const MovieSession = () => {
                 }}
                 className="mt-8 px-6 py-3 text-[10px] tracking-[0.15em]"
                 style={{ 
-                    backgroundColor: "rgba(255, 0, 0, 0.1)",
+                    backgroundColor: "rgba(255, 0, 0, 0.3)",
                     border: "1px solid rgba(255, 0, 0, 0.3)",
                     color: "#FF0000",
                 }}
@@ -510,12 +510,12 @@ export const MovieSession = () => {
             {/* Header */}
             <div 
                 className="py-3 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.3)" }}
             >
                 <button
                     onClick={() => navigate("/library")}
                     className="p-1"
-                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.9)" }}
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
