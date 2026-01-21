@@ -85,10 +85,10 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
             // Inactive state - flat line with glow
             if (!isActive) {
                 const drift = Math.sin(now * 0.001) * 1;
-                ctx.strokeStyle = "#FF0000";
-                ctx.lineWidth = 2;
-                ctx.shadowColor = "#FF0000";
-                ctx.shadowBlur = 8;
+                ctx.strokeStyle = "#FF5555";
+                ctx.lineWidth = 3;
+                ctx.shadowColor = "#FF5555";
+                ctx.shadowBlur = 15;
                 ctx.beginPath();
                 ctx.moveTo(0, centerY + drift);
                 ctx.lineTo(width, centerY + drift);
