@@ -71,24 +71,24 @@ export const ResponseIndicator = ({
         
         switch (responseType) {
             case RESPONSE_TYPE.EXERCISE:
-                return "rgba(255, 85, 85, 0.5)"; // Dim red for exercise
+                return "rgba(255, 0, 0, 0.5)"; // Dim red for exercise
             case RESPONSE_TYPE.FEAR:
-                return "#FF5555"; // Bright red for fear
+                return "#FF0000"; // Bright red for fear
             case RESPONSE_TYPE.STRESS:
-                return "rgba(255, 85, 85, 0.7)"; // Medium red for stress
+                return "rgba(255, 0, 0, 0.7)"; // Medium red for stress
             case RESPONSE_TYPE.ANXIETY:
-                return "rgba(255, 85, 85, 0.6)"; // Slightly dimmer for anxiety
+                return "rgba(255, 0, 0, 0.6)"; // Slightly dimmer for anxiety
             default:
-                return "rgba(255, 85, 85, 0.3)";
+                return "rgba(255, 0, 0, 0.3)";
         }
     };
     
     // Get border style
     const getBorderColor = () => {
         if (responseType === RESPONSE_TYPE.FEAR) {
-            return "rgba(255, 85, 85, 0.5)";
+            return "rgba(255, 0, 0, 0.5)";
         }
-        return "rgba(255, 85, 85, 0.15)";
+        return "rgba(255, 0, 0, 0.15)";
     };
     
     // Check if this is a critical response
@@ -102,10 +102,10 @@ export const ResponseIndicator = ({
             className="w-full py-2 px-3 text-center transition-all duration-300"
             style={{ 
                 backgroundColor: isCritical 
-                    ? "rgba(255, 85, 85, 0.08)" 
+                    ? "rgba(255, 0, 0, 0.08)" 
                     : isExercise
-                        ? "rgba(255, 85, 85, 0.03)"
-                        : "rgba(255, 85, 85, 0.02)",
+                        ? "rgba(255, 0, 0, 0.03)"
+                        : "rgba(255, 0, 0, 0.02)",
                 borderTop: `1px solid ${getBorderColor()}`,
                 borderBottom: `1px solid ${getBorderColor()}`,
             }}
@@ -138,9 +138,9 @@ export const ResponseIndicator = ({
                     <div 
                         className="ml-1 px-1.5 py-0.5 text-[7px] tracking-[0.15em]"
                         style={{ 
-                            backgroundColor: "rgba(255, 85, 85, 0.2)",
-                            color: "#FF5555",
-                            border: "1px solid rgba(255, 85, 85, 0.3)",
+                            backgroundColor: "rgba(255, 0, 0, 0.2)",
+                            color: "#FF0000",
+                            border: "1px solid rgba(255, 0, 0, 0.3)",
                         }}
                     >
                         CRITICAL
@@ -152,9 +152,9 @@ export const ResponseIndicator = ({
                     <div 
                         className="ml-1 px-1.5 py-0.5 text-[7px] tracking-[0.1em]"
                         style={{ 
-                            backgroundColor: "rgba(255, 85, 85, 0.05)",
-                            color: "rgba(255, 85, 85, 0.4)",
-                            border: "1px solid rgba(255, 85, 85, 0.1)",
+                            backgroundColor: "rgba(255, 0, 0, 0.05)",
+                            color: "rgba(255, 0, 0, 0.4)",
+                            border: "1px solid rgba(255, 0, 0, 0.1)",
                         }}
                     >
                         SAFE

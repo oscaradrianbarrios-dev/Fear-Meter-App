@@ -120,13 +120,13 @@ export const CalibrationProtocol = ({
             <div className="mb-8">
                 <h1 
                     className="text-lg tracking-[0.4em] font-bold mb-2"
-                    style={{ color: "#FF5555" }}
+                    style={{ color: "#FF0000" }}
                 >
                     {t.title}
                 </h1>
                 <p 
                     className="text-[10px] tracking-[0.3em]"
-                    style={{ color: "rgba(255, 85, 85, 0.5)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.5)" }}
                 >
                     {t.subtitle}
                 </p>
@@ -136,13 +136,13 @@ export const CalibrationProtocol = ({
             <div 
                 className="mb-8 py-3 px-6 border"
                 style={{ 
-                    borderColor: "rgba(255, 85, 85, 0.3)",
-                    backgroundColor: "rgba(255, 85, 85, 0.03)"
+                    borderColor: "rgba(255, 0, 0, 0.3)",
+                    backgroundColor: "rgba(255, 0, 0, 0.03)"
                 }}
             >
                 <p 
                     className="text-[11px] tracking-[0.25em]"
-                    style={{ color: "#FF5555" }}
+                    style={{ color: "#FF0000" }}
                 >
                     {t.warning}
                 </p>
@@ -155,7 +155,7 @@ export const CalibrationProtocol = ({
                         key={i}
                         className="text-[10px] tracking-[0.2em]"
                         style={{ 
-                            color: "rgba(255, 85, 85, 0.6)",
+                            color: "rgba(255, 0, 0, 0.6)",
                             animationDelay: `${i * 150}ms`,
                         }}
                     >
@@ -178,13 +178,13 @@ export const CalibrationProtocol = ({
                     onClick={handleInitiate}
                     className="py-3 px-6 border text-[10px] tracking-[0.25em] transition-all duration-300"
                     style={{ 
-                        borderColor: "#FF5555",
-                        color: "#FF5555",
+                        borderColor: "#FF0000",
+                        color: "#FF0000",
                         backgroundColor: "transparent",
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "rgba(255, 85, 85, 0.1)";
-                        e.currentTarget.style.boxShadow = "0 0 20px rgba(255, 85, 85, 0.2)";
+                        e.currentTarget.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+                        e.currentTarget.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.2)";
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "transparent";
@@ -198,7 +198,7 @@ export const CalibrationProtocol = ({
                     onClick={onCancel}
                     className="py-2 text-[9px] tracking-[0.2em] transition-colors duration-200"
                     style={{ color: "rgba(176, 176, 176, 0.4)" }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 85, 85, 0.5)"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.5)"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.4)"}
                 >
                     {t.cancel}
@@ -218,7 +218,7 @@ export const CalibrationProtocol = ({
                         cy="80"
                         r="70"
                         fill="none"
-                        stroke="rgba(255, 85, 85, 0.1)"
+                        stroke="rgba(255, 0, 0, 0.1)"
                         strokeWidth="2"
                     />
                     {/* Progress circle */}
@@ -227,7 +227,7 @@ export const CalibrationProtocol = ({
                         cy="80"
                         r="70"
                         fill="none"
-                        stroke="#FF5555"
+                        stroke="#FF0000"
                         strokeWidth="2"
                         strokeLinecap="square"
                         strokeDasharray={`${2 * Math.PI * 70}`}
@@ -241,7 +241,7 @@ export const CalibrationProtocol = ({
                     <span 
                         className="text-2xl tracking-[0.1em] font-mono"
                         style={{ 
-                            color: "#FF5555",
+                            color: "#FF0000",
                             textShadow: glitchText ? "2px 0 #00FFFF, -2px 0 #FF00FF" : "none",
                         }}
                     >
@@ -255,7 +255,7 @@ export const CalibrationProtocol = ({
                 <p 
                     className="text-[11px] tracking-[0.25em]"
                     style={{ 
-                        color: "#FF5555",
+                        color: "#FF0000",
                         opacity: glitchText ? 0.5 : 1,
                     }}
                 >
@@ -266,7 +266,7 @@ export const CalibrationProtocol = ({
                 <div 
                     className="h-[1px] w-32 mx-auto"
                     style={{ 
-                        background: "linear-gradient(90deg, transparent, #FF5555, transparent)",
+                        background: "linear-gradient(90deg, transparent, #FF0000, transparent)",
                         animation: "scan 1.5s ease-in-out infinite",
                     }}
                 />
@@ -276,13 +276,13 @@ export const CalibrationProtocol = ({
             <div 
                 className="mt-10 py-2 px-4"
                 style={{ 
-                    backgroundColor: "rgba(255, 85, 85, 0.05)",
+                    backgroundColor: "rgba(255, 0, 0, 0.05)",
                     animation: "pulse 2s ease-in-out infinite",
                 }}
             >
                 <p 
                     className="text-[9px] tracking-[0.2em]"
-                    style={{ color: "rgba(255, 85, 85, 0.7)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.7)" }}
                 >
                     {t.warning}
                 </p>
@@ -296,13 +296,13 @@ export const CalibrationProtocol = ({
             <div 
                 className="w-20 h-20 border-2 rounded-full flex items-center justify-center mb-6"
                 style={{ 
-                    borderColor: "#FF5555",
-                    boxShadow: "0 0 30px rgba(255, 85, 85, 0.2), inset 0 0 20px rgba(255, 85, 85, 0.05)",
+                    borderColor: "#FF0000",
+                    boxShadow: "0 0 30px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(255, 0, 0, 0.05)",
                 }}
             >
                 <span 
                     className="text-2xl"
-                    style={{ color: "#FF5555" }}
+                    style={{ color: "#FF0000" }}
                 >
                     ✓
                 </span>
@@ -311,13 +311,13 @@ export const CalibrationProtocol = ({
             {/* Title */}
             <h2 
                 className="text-sm tracking-[0.3em] mb-2"
-                style={{ color: "#FF5555" }}
+                style={{ color: "#FF0000" }}
             >
                 {t.complete}
             </h2>
             <p 
                 className="text-[10px] tracking-[0.2em] mb-8"
-                style={{ color: "rgba(255, 85, 85, 0.5)" }}
+                style={{ color: "rgba(255, 0, 0, 0.5)" }}
             >
                 {t.baselineEstablished}
             </p>
@@ -327,20 +327,20 @@ export const CalibrationProtocol = ({
                 <div 
                     className="grid grid-cols-2 gap-6 mb-8 py-4 px-8 border"
                     style={{ 
-                        borderColor: "rgba(255, 85, 85, 0.2)",
-                        backgroundColor: "rgba(255, 85, 85, 0.02)",
+                        borderColor: "rgba(255, 0, 0, 0.2)",
+                        backgroundColor: "rgba(255, 0, 0, 0.02)",
                     }}
                 >
                     <div>
                         <p 
                             className="text-[9px] tracking-[0.2em] mb-1"
-                            style={{ color: "rgba(255, 85, 85, 0.5)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.5)" }}
                         >
                             {t.baseBpm}
                         </p>
                         <p 
                             className="text-xl font-mono"
-                            style={{ color: "#FF5555" }}
+                            style={{ color: "#FF0000" }}
                         >
                             {baselineBpm || "--"}
                         </p>
@@ -348,13 +348,13 @@ export const CalibrationProtocol = ({
                     <div>
                         <p 
                             className="text-[9px] tracking-[0.2em] mb-1"
-                            style={{ color: "rgba(255, 85, 85, 0.5)" }}
+                            style={{ color: "rgba(255, 0, 0, 0.5)" }}
                         >
                             {t.baseStress}
                         </p>
                         <p 
                             className="text-xl font-mono"
-                            style={{ color: "#FF5555" }}
+                            style={{ color: "#FF0000" }}
                         >
                             {baselineStress || "--"}%
                         </p>
@@ -373,7 +373,7 @@ export const CalibrationProtocol = ({
             {/* Validity notice */}
             <p 
                 className="text-[8px] tracking-[0.15em] mb-8"
-                style={{ color: "rgba(255, 85, 85, 0.3)" }}
+                style={{ color: "rgba(255, 0, 0, 0.3)" }}
             >
                 {t.validFor}
             </p>
@@ -384,12 +384,12 @@ export const CalibrationProtocol = ({
                     onClick={onComplete}
                     className="py-3 px-6 border text-[10px] tracking-[0.25em] transition-all duration-300"
                     style={{ 
-                        borderColor: "#FF5555",
+                        borderColor: "#FF0000",
                         color: "#000000",
-                        backgroundColor: "#FF5555",
+                        backgroundColor: "#FF0000",
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.boxShadow = "0 0 25px rgba(255, 85, 85, 0.4)";
+                        e.currentTarget.style.boxShadow = "0 0 25px rgba(255, 0, 0, 0.4)";
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.boxShadow = "none";
@@ -402,7 +402,7 @@ export const CalibrationProtocol = ({
                     onClick={onStartCalibration}
                     className="py-2 text-[9px] tracking-[0.2em] transition-colors duration-200"
                     style={{ color: "rgba(176, 176, 176, 0.4)" }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 85, 85, 0.5)"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255, 0, 0, 0.5)"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(176, 176, 176, 0.4)"}
                 >
                     {t.recalibrate}
@@ -419,11 +419,11 @@ export const CalibrationProtocol = ({
             {/* Header */}
             <div 
                 className="py-4 px-4 flex items-center justify-between"
-                style={{ borderBottom: "1px solid rgba(255, 85, 85, 0.1)" }}
+                style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
             >
                 <span 
                     className="text-[9px] tracking-[0.3em]"
-                    style={{ color: "rgba(255, 85, 85, 0.4)" }}
+                    style={{ color: "rgba(255, 0, 0, 0.4)" }}
                 >
                     PROTOCOL_CAL_01
                 </span>
@@ -445,7 +445,7 @@ export const CalibrationProtocol = ({
             {/* Footer */}
             <div 
                 className="py-3 text-center"
-                style={{ borderTop: "1px solid rgba(255, 85, 85, 0.05)" }}
+                style={{ borderTop: "1px solid rgba(255, 0, 0, 0.05)" }}
             >
                 <p 
                     className="text-[8px] tracking-[0.2em]"

@@ -62,7 +62,7 @@ const BiometricRing = ({ bpm, isActive, status }) => {
         // Background ring (dark)
         ctx.beginPath();
         ctx.arc(center, center, ringRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(255, 85, 85, 0.08)";
+        ctx.strokeStyle = "rgba(255, 0, 0, 0.08)";
         ctx.lineWidth = ringWidth;
         ctx.stroke();
         
@@ -74,7 +74,7 @@ const BiometricRing = ({ bpm, isActive, status }) => {
         
         // Glow effect - only on peaks
         if (isElevated) {
-            ctx.shadowColor = "#FF5555";
+            ctx.shadowColor = "#FF0000";
             ctx.shadowBlur = isCritical ? 25 : 12;
         }
         
@@ -84,7 +84,7 @@ const BiometricRing = ({ bpm, isActive, status }) => {
         
         ctx.beginPath();
         ctx.arc(center, center, ringRadius, startAngle, endAngle);
-        ctx.strokeStyle = "#FF5555";
+        ctx.strokeStyle = "#FF0000";
         ctx.lineWidth = ringWidth;
         ctx.lineCap = "round";
         ctx.stroke();
@@ -139,11 +139,11 @@ const BpmDisplay = ({ bpm, isActive, status }) => {
                 style={{ 
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: "72px",
-                    color: "#FF5555",
+                    color: "#FF0000",
                     textShadow: isCritical 
-                        ? "0 0 30px rgba(255, 85, 85, 0.6)" 
+                        ? "0 0 30px rgba(255, 0, 0, 0.6)" 
                         : isActive 
-                            ? "0 0 15px rgba(255, 85, 85, 0.3)"
+                            ? "0 0 15px rgba(255, 0, 0, 0.3)"
                             : "none",
                     lineHeight: 1,
                 }}
@@ -158,14 +158,14 @@ const BpmDisplay = ({ bpm, isActive, status }) => {
 const StatusText = ({ status }) => {
     const colors = {
         STABLE: "rgba(176, 176, 176, 0.6)",
-        ELEVATED: "#FF5555",
-        CRITICAL: "#FF5555",
+        ELEVATED: "#FF0000",
+        CRITICAL: "#FF0000",
     };
     
     const glows = {
         STABLE: "none",
-        ELEVATED: "0 0 10px rgba(255, 85, 85, 0.3)",
-        CRITICAL: "0 0 20px rgba(255, 85, 85, 0.5)",
+        ELEVATED: "0 0 10px rgba(255, 0, 0, 0.3)",
+        CRITICAL: "0 0 20px rgba(255, 0, 0, 0.5)",
     };
     
     return (
@@ -215,7 +215,7 @@ export const WatchMode = ({ bpm, stress, isActive, isPanic }) => {
             <div 
                 className="fixed inset-0 pointer-events-none transition-opacity duration-150"
                 style={{ 
-                    backgroundColor: "rgba(255, 85, 85, 0.08)",
+                    backgroundColor: "rgba(255, 0, 0, 0.08)",
                     opacity: flashActive ? 1 : 0,
                 }}
             />
