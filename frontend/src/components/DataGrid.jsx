@@ -50,32 +50,21 @@ export const DataGrid = ({
             <div 
                 className="p-4"
                 style={{ 
-                    backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
-                    boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                    backgroundColor: "#1A1A1A",
+                    border: "1px solid #333333",
+                    borderRadius: "8px",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
-                    style={{ 
-                        color: "#CCCCCC",
-                        textShadow: "none",
-                    }}
+                    style={{ color: "#CCCCCC" }}
                 >
                     {texts.bpm}
                 </div>
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 2 ? "#FFFFFF" : "rgba(255, 255, 255, 0.3)",
-                        textShadow: isActive && revealPhase >= 2 
-                            ? isPanic 
-                                ? "0 0 10px rgba(255, 255, 255, 0.5)"
-                                : "none"
-                            : "none",
-                        opacity: revealPhase >= 2 ? 1 : 0.4,
+                        color: isActive && revealPhase >= 2 ? "#FFFFFF" : "#666666",
                         transition: 'all 0.3s ease-out',
                     }}
                 >
@@ -87,32 +76,21 @@ export const DataGrid = ({
             <div 
                 className="p-4"
                 style={{ 
-                    backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
-                    boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                    backgroundColor: "#1A1A1A",
+                    border: "1px solid #333333",
+                    borderRadius: "8px",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
-                    style={{ 
-                        color: "#CCCCCC",
-                        textShadow: "none",
-                    }}
+                    style={{ color: "#CCCCCC" }}
                 >
                     {texts.stress}
                 </div>
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 3 ? "#FFFFFF" : "rgba(255, 255, 255, 0.3)",
-                        textShadow: isActive && revealPhase >= 3 
-                            ? isPanic 
-                                ? "0 0 10px rgba(255, 255, 255, 0.5)"
-                                : "none"
-                            : "none",
-                        opacity: revealPhase >= 3 ? 1 : 0.4,
+                        color: isActive && revealPhase >= 3 ? "#FFFFFF" : "#666666",
                         transition: 'all 0.3s ease-out',
                     }}
                 >
@@ -124,32 +102,21 @@ export const DataGrid = ({
             <div 
                 className="p-4"
                 style={{ 
-                    backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
-                    boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                    backgroundColor: "#1A1A1A",
+                    border: "1px solid #333333",
+                    borderRadius: "8px",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
-                    style={{ 
-                        color: "#CCCCCC",
-                        textShadow: "none",
-                    }}
+                    style={{ color: "#CCCCCC" }}
                 >
                     {texts.signal}
                 </div>
                 <div 
                     className="text-sm font-bold tracking-wider"
                     style={{ 
-                        color: isActive && revealPhase >= 4 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
-                        textShadow: isActive && revealPhase >= 4 
-                            ? signal === "CRITICAL"
-                                ? "0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.7)"
-                                : "0 0 8px rgba(255, 0, 0, 0.5)"
-                            : "none",
-                        opacity: revealPhase >= 4 ? 1 : 0.4,
+                        color: isActive && revealPhase >= 4 ? "#DC2F2F" : "#666666",
                         transition: 'all 0.3s ease-out',
                     }}
                 >
