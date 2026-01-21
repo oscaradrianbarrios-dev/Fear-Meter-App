@@ -61,7 +61,7 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
 
             // Draw grid lines - brighter red
             const gridOpacity = isPanic ? 0.08 : 0.12;
-            ctx.strokeStyle = `rgba(255, 0, 0, ${gridOpacity})`;
+            ctx.strokeStyle = `rgba(255, 85, 85, ${gridOpacity})`;
             ctx.lineWidth = 1;
             
             // Horizontal grid lines
@@ -202,9 +202,9 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
             if (isPanic) {
                 const scanSpeed = 2000;
                 const scanY = (now % scanSpeed) / scanSpeed * height;
-                ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
+                ctx.strokeStyle = "rgba(255, 85, 85, 0.4)";
                 ctx.lineWidth = 2;
-                ctx.shadowColor = "#FF0000";
+                ctx.shadowColor = "#FF5555";
                 ctx.shadowBlur = 10;
                 ctx.beginPath();
                 ctx.moveTo(0, scanY);
@@ -228,11 +228,11 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
         <div 
             className="relative w-full h-40 overflow-hidden border-glow"
             style={{
-                border: `1px solid rgba(255, 0, 0, ${isPanic ? 0.6 : 0.4})`,
+                border: `1px solid rgba(255, 85, 85, ${isPanic ? 0.6 : 0.4})`,
                 backgroundColor: "#000000",
                 boxShadow: isPanic 
-                    ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(255, 0, 0, 0.1)"
-                    : "0 0 8px rgba(255, 0, 0, 0.2), inset 0 0 10px rgba(255, 0, 0, 0.05)",
+                    ? "0 0 15px rgba(255, 85, 85, 0.3), inset 0 0 20px rgba(255, 85, 85, 0.1)"
+                    : "0 0 8px rgba(255, 85, 85, 0.2), inset 0 0 10px rgba(255, 85, 85, 0.05)",
             }}
         >
             <canvas
@@ -246,15 +246,15 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 <div 
                     className={`w-1.5 h-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
                     style={{ 
-                        backgroundColor: "#FF0000",
-                        boxShadow: isActive ? "0 0 8px #FF0000" : "none",
+                        backgroundColor: "#FF5555",
+                        boxShadow: isActive ? "0 0 8px #FF5555" : "none",
                     }}
                 />
                 <span 
                     className="text-[8px] tracking-[0.15em]"
                     style={{ 
-                        color: isActive ? "#FF0000" : "rgba(255, 0, 0, 0.4)",
-                        textShadow: isActive ? "0 0 5px rgba(255, 0, 0, 0.5)" : "none",
+                        color: isActive ? "#FF5555" : "rgba(255, 85, 85, 0.4)",
+                        textShadow: isActive ? "0 0 5px rgba(255, 85, 85, 0.5)" : "none",
                     }}
                 >
                     ECG
@@ -267,8 +267,8 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                     <span 
                         className="text-[8px] tracking-[0.2em]"
                         style={{ 
-                            color: "#FF0000",
-                            textShadow: "0 0 10px rgba(255, 0, 0, 0.6)",
+                            color: "#FF5555",
+                            textShadow: "0 0 10px rgba(255, 85, 85, 0.6)",
                         }}
                     >
                         CRITICAL
