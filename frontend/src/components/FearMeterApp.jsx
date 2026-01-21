@@ -1,352 +1,55 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Monitor from "./Monitor";
 import WatchMode from "./WatchMode";
 import History from "./History";
 import SideMenu from "./SideMenu";
-import CriticalAlert from "./CriticalAlert";
-import PanicOverlay from "./PanicOverlay";
-import CalibrationProtocol from "./CalibrationProtocol";
-import AdvancedCalibration from "./AdvancedCalibration";
-import ResponseIndicator from "./ResponseIndicator";
-import ExpirationWarning from "./ExpirationWarning";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
-import { useCalibration, CALIBRATION_STATE } from "@/hooks/useCalibration";
-import { useClinicalAudio } from "@/hooks/useClinicalAudio";
-import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useSettings } from "@/contexts/SettingsContext";
 
 export const FearMeterApp = () => {
     const navigate = useNavigate();
     const { language, setLanguage, texts } = useLanguage();
-    const { soundEnabled, hapticEnabled } = useSettings();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
-    const [showCriticalMessage, setShowCriticalMessage] = useState(false);
-    const [panicActive, setPanicActive] = useState(false);
-    const [isBlocked, setIsBlocked] = useState(false);
-    const [showDemoOption, setShowDemoOption] = useState(false);
-    const [showCalibration, setShowCalibration] = useState(false);
-    const [showAdvancedCalibration, setShowAdvancedCalibration] = useState(false);
-    const [advancedCalibrationData, setAdvancedCalibrationData] = useState(null);
-    const panicTimeoutRef = useRef(null);
-    const containerRef = useRef(null);
-    const touchStartRef = useRef({ x: 0, y: 0 });
 
-    // Haptic feedback hook
-    const haptic = useHapticFeedback(hapticEnabled);
-
-    // Calibration hook
-    const {
-        calibrationState,
-        progress: calibrationProgress,
-        baselineBpm,
-        baselineStress,
-        responseType,
-        isCalibrated,
-        movementIntensity,
-        expirationWarning,
-        hoursUntilExpiration,
-        startCalibration,
-        addBpmSample,
-        classifyResponse,
-        shouldTriggerPanic,
-        resetCalibration,
-    } = useCalibration();
-
-    const {
-        bpm,
-        stress,
-        signal,
-        isActive,
-        isPanic,
-        isRecovering,
-        startSimulation,
-        stopSimulation,
-        triggerTap,
-    } = useBiometricSimulation({
-        onPanicStart: () => {
-            setIsBlocked(true);
-            setPanicActive(true);
-            
-            // Trigger intense haptic feedback on panic
-            haptic.triggerPattern("PANIC_ALERT");
-            
-            panicTimeoutRef.current = setTimeout(() => {
-                setShowCriticalMessage(true);
-            }, 520);
-        },
-        onPanicEnd: () => {},
-        // Use calibration-aware panic check
-        shouldTriggerPanic: isCalibrated ? shouldTriggerPanic : null,
-        // Feed BPM samples to calibration during calibration phase
-        onBpmUpdate: (newBpm) => {
-            if (calibrationState === CALIBRATION_STATE.IN_PROGRESS) {
-                addBpmSample(newBpm);
-            }
-            // Classify response when active
-            if (isCalibrated && isActive) {
-                const currentStress = Math.round(((newBpm - 60) / 80) * 100);
-                classifyResponse(newBpm, Math.max(0, Math.min(100, currentStress)));
-            }
-            // Sync haptic with BPM when active
-            if (isActive && hapticEnabled) {
-                haptic.syncWithBpm(newBpm);
-            }
-        },
-    });
-
-    // Clinical audio hook - beeps based on BPM state
-    useClinicalAudio({ bpm, isActive, soundEnabled });
-
-    const handlePanicSequenceComplete = useCallback(() => {
-        setTimeout(() => {
-            setPanicActive(false);
-            setShowCriticalMessage(false);
-            setIsBlocked(false);
-        }, 300);
-    }, []);
-
-    const {
-        sessions,
-        isRecording,
-        startSession,
-        endSession,
-        recordDataPoint,
-        clearHistory,
-    } = useSessionManager();
-
-    // Record data points during active session
-    useEffect(() => {
-        if (isActive && isRecording) {
-            recordDataPoint(bpm, stress);
-        }
-    }, [bpm, stress, isActive, isRecording, recordDataPoint]);
+    const { bpm, stress, signal, isActive, isPanic, isRecovering, startSimulation, stopSimulation, triggerTap } = useBiometricSimulation({});
+    const { sessions, startSession, endSession, clearHistory } = useSessionManager();
 
     const handleStartStop = useCallback(() => {
-        if (isActive) {
-            stopSimulation();
-            endSession();
-        } else {
-            startSimulation();
-            startSession();
-        }
+        if (isActive) { stopSimulation(); endSession(); }
+        else { startSimulation(); startSession(); }
     }, [isActive, stopSimulation, startSimulation, endSession, startSession]);
-
-    const handleViewChange = useCallback((view) => {
-        setCurrentView(view);
-        setMenuOpen(false);
-    }, []);
-
-    // Long press on logo activates demo option visibility
-    const handleDemoActivate = useCallback(() => {
-        setShowDemoOption(true);
-        setMenuOpen(true);
-    }, []);
-
-    // Navigate to demo mode
-    const handleGoToDemo = useCallback(() => {
-        navigate("/demo");
-    }, [navigate]);
-
-    // Open calibration protocol
-    const handleOpenCalibration = useCallback(() => {
-        setMenuOpen(false);
-        setShowCalibration(true);
-        haptic.tap();
-    }, [haptic]);
-
-    // Open advanced calibration
-    const handleOpenAdvancedCalibration = useCallback(() => {
-        setMenuOpen(false);
-        setShowAdvancedCalibration(true);
-        haptic.tap();
-    }, [haptic]);
-
-    // Complete calibration and return to monitor
-    const handleCalibrationComplete = useCallback(() => {
-        setShowCalibration(false);
-        setCurrentView("monitor");
-        haptic.success();
-    }, [haptic]);
-
-    // Complete advanced calibration
-    const handleAdvancedCalibrationComplete = useCallback((data) => {
-        setAdvancedCalibrationData(data);
-        setShowAdvancedCalibration(false);
-        haptic.success();
-    }, [haptic]);
-
-    // Cancel calibration
-    const handleCalibrationCancel = useCallback(() => {
-        resetCalibration();
-        setShowCalibration(false);
-        haptic.tap();
-    }, [resetCalibration, haptic]);
-
-    // Swipe detection for menu
-    const handleTouchStart = useCallback((e) => {
-        touchStartRef.current = {
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY,
-        };
-    }, []);
-
-    const handleTouchEnd = useCallback((e) => {
-        const touchEnd = {
-            x: e.changedTouches[0].clientX,
-            y: e.changedTouches[0].clientY,
-        };
-        
-        const deltaX = touchEnd.x - touchStartRef.current.x;
-        const deltaY = Math.abs(touchEnd.y - touchStartRef.current.y);
-        
-        // Swipe from left edge to open menu
-        if (touchStartRef.current.x < 30 && deltaX > 50 && deltaY < 50 && !isBlocked) {
-            setMenuOpen(true);
-        }
-    }, [isBlocked]);
 
     return (
         <div 
-            ref={containerRef}
-            className="min-h-screen bg-fear-black font-fear flex flex-col relative overflow-hidden"
-            onClick={isActive && !isBlocked ? triggerTap : undefined}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            style={{
-                transition: isRecovering ? "filter 300ms ease-out" : "none",
-                filter: "none", // No brightness reduction - PURE CONTRAST
-            }}
+            style={{ minHeight: "100vh", backgroundColor: "#000000", display: "flex", flexDirection: "column" }}
+            onClick={isActive ? triggerTap : undefined}
         >
-            {/* Calibration Protocol Overlay */}
-            {showCalibration && (
-                <CalibrationProtocol
-                    calibrationState={calibrationState}
-                    progress={calibrationProgress}
-                    baselineBpm={baselineBpm}
-                    baselineStress={baselineStress}
-                    onStartCalibration={startCalibration}
-                    onComplete={handleCalibrationComplete}
-                    onCancel={handleCalibrationCancel}
-                    language={language}
-                />
-            )}
-
-            {/* Advanced Calibration Overlay */}
-            <AdvancedCalibration
-                isOpen={showAdvancedCalibration}
-                onClose={() => setShowAdvancedCalibration(false)}
-                onCalibrationComplete={handleAdvancedCalibrationComplete}
-                currentCalibrationData={advancedCalibrationData}
-                language={language}
-            />
+            <Header onMenuOpen={() => setMenuOpen(true)} />
             
-            <PanicOverlay 
-                active={panicActive} 
-                onSequenceComplete={handlePanicSequenceComplete}
-            />
-            
-            <CriticalAlert 
-                visible={showCriticalMessage} 
-                language={language}
-            />
-            
-            <Header 
-                onMenuOpen={() => !isBlocked && setMenuOpen(true)}
-                onDemoActivate={handleDemoActivate}
-                isCalibrated={isCalibrated}
-            />
-
-            {/* Expiration Warning */}
-            <ExpirationWarning
-                visible={expirationWarning && !showCalibration}
-                hoursLeft={hoursUntilExpiration}
-                onRecalibrate={handleOpenCalibration}
-                language={language}
-            />
-
-            {/* Response Type Indicator */}
-            {isActive && (
-                <ResponseIndicator
-                    responseType={responseType}
-                    isCalibrated={isCalibrated}
-                    isActive={isActive}
-                    language={language}
-                    movementIntensity={movementIntensity}
-                />
-            )}
-
-            <main className="flex-1 flex flex-col px-4 pb-4">
+            <main style={{ flex: 1, padding: "16px" }}>
                 {currentView === "monitor" && (
-                    <Monitor
-                        bpm={bpm}
-                        stress={stress}
-                        signal={signal}
-                        isActive={isActive}
-                        isPanic={isPanic}
-                        isRecovering={isRecovering}
-                        onStartStop={handleStartStop}
-                        texts={texts}
-                        isBlocked={isBlocked}
-                        isCalibrated={isCalibrated}
-                        responseType={responseType}
-                    />
+                    <Monitor bpm={bpm} stress={stress} signal={signal} isActive={isActive} isPanic={isPanic} isRecovering={isRecovering} onStartStop={handleStartStop} texts={texts} />
                 )}
-
-                {currentView === "watch" && (
-                    <WatchMode
-                        bpm={bpm}
-                        stress={stress}
-                        isActive={isActive}
-                        isPanic={isPanic}
-                    />
-                )}
-
-                {currentView === "history" && (
-                    <History
-                        sessions={sessions}
-                        texts={texts}
-                        onClear={clearHistory}
-                    />
-                )}
+                {currentView === "watch" && <WatchMode bpm={bpm} stress={stress} isActive={isActive} isPanic={isPanic} />}
+                {currentView === "history" && <History sessions={sessions} texts={texts} onClear={clearHistory} />}
             </main>
 
-            <footer 
-                className="py-4 text-center"
-                style={{ borderTop: "1px solid #444444" }}
-            >
-                <p 
-                    className="text-[10px] tracking-[0.25em]"
-                    style={{ color: "#888888" }}
-                >
-                    © 2026 FEAR METER
-                </p>
-                <p 
-                    className="text-[8px] mt-1 tracking-[0.15em]"
-                    style={{ color: "#666666" }}
-                >
-                    Experimental Biometric Horror System
-                </p>
+            <footer style={{ padding: "16px", textAlign: "center", borderTop: "1px solid #333" }}>
+                <p style={{ color: "#666", fontSize: "10px" }}>© 2026 FEAR METER — ALL RIGHTS RESERVED</p>
             </footer>
 
             <SideMenu
                 isOpen={menuOpen}
                 onClose={() => setMenuOpen(false)}
                 currentView={currentView}
-                onViewChange={handleViewChange}
+                onViewChange={(v) => { setCurrentView(v); setMenuOpen(false); }}
                 language={language}
                 onLanguageChange={setLanguage}
                 texts={texts}
-                showDemoOption={showDemoOption}
-                onDemoActivate={handleGoToDemo}
-                isCalibrated={isCalibrated}
-                onCalibrationOpen={handleOpenCalibration}
-                onAdvancedCalibrationOpen={handleOpenAdvancedCalibration}
-                advancedCalibrationData={advancedCalibrationData}
             />
         </div>
     );
