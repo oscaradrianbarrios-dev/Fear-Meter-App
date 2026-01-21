@@ -25,7 +25,7 @@ export const MainButton = ({
                 const shadowIntensity = intensity ? 0.8 : 0.4;
                 
                 buttonRef.current.style.transform = `scale(${scale})`;
-                buttonRef.current.style.boxShadow = `0 0 ${30 + intensity * 20}px rgba(255, 85, 85, ${shadowIntensity}), inset 0 0 ${20 + intensity * 15}px rgba(255, 85, 85, ${shadowIntensity * 0.5})`;
+                buttonRef.current.style.boxShadow = `0 0 ${30 + intensity * 20}px rgba(255, 0, 0, ${shadowIntensity}), inset 0 0 ${20 + intensity * 15}px rgba(255, 0, 0, ${shadowIntensity * 0.5})`;
                 
                 pulseIntervalRef.current = setTimeout(violentPulse, nextDelay);
             };
@@ -56,21 +56,21 @@ export const MainButton = ({
             `}
             style={{
                 border: isPanic 
-                    ? "2px solid #FF5555"
+                    ? "2px solid #FF0000"
                     : isActive 
-                        ? "2px solid rgba(255, 85, 85, 0.7)"
-                        : "2px solid rgba(255, 85, 85, 0.4)",
+                        ? "2px solid rgba(255, 0, 0, 0.7)"
+                        : "2px solid rgba(255, 0, 0, 0.4)",
                 backgroundColor: isPanic 
-                    ? "rgba(255, 85, 85, 0.15)"
+                    ? "rgba(255, 0, 0, 0.15)"
                     : isActive 
-                        ? "rgba(255, 85, 85, 0.08)"
+                        ? "rgba(255, 0, 0, 0.08)"
                         : "transparent",
-                color: "#FF5555",
+                color: "#FF0000",
                 boxShadow: isPanic 
-                    ? "0 0 40px rgba(255, 85, 85, 0.6), 0 0 80px rgba(255, 85, 85, 0.3), inset 0 0 30px rgba(255, 85, 85, 0.2)"
+                    ? "0 0 40px rgba(255, 0, 0, 0.6), 0 0 80px rgba(255, 0, 0, 0.3), inset 0 0 30px rgba(255, 0, 0, 0.2)"
                     : isActive 
-                        ? "0 0 20px rgba(255, 85, 85, 0.4), inset 0 0 15px rgba(255, 85, 85, 0.1)"
-                        : "0 0 10px rgba(255, 85, 85, 0.2)",
+                        ? "0 0 20px rgba(255, 0, 0, 0.4), inset 0 0 15px rgba(255, 0, 0, 0.1)"
+                        : "0 0 10px rgba(255, 0, 0, 0.2)",
                 transition: isPanic ? "none" : "all 0.3s ease",
             }}
             data-testid="main-button"
@@ -79,10 +79,10 @@ export const MainButton = ({
                 className="text-center leading-tight px-2"
                 style={{
                     textShadow: isPanic 
-                        ? "0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.8)"
+                        ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8)"
                         : isActive 
-                            ? "0 0 15px rgba(255, 85, 85, 0.6)"
-                            : "0 0 8px rgba(255, 85, 85, 0.4)"
+                            ? "0 0 15px rgba(255, 0, 0, 0.6)"
+                            : "0 0 8px rgba(255, 0, 0, 0.4)"
                 }}
             >
                 {isActive ? texts.stopSession : texts.startSession}

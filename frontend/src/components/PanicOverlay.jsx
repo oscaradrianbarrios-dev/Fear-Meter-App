@@ -75,7 +75,7 @@ export const PanicOverlay = ({ active, onSequenceComplete }) => {
             case "blackout":
                 return "#000000";
             case "flash":
-                return "#FF5555";
+                return "#FF0000";
             case "message":
             case "recovery":
                 return "transparent";
