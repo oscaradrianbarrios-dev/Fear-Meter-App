@@ -24,7 +24,7 @@ export const Disclaimer = () => {
             <div 
                 className="max-w-md w-full p-6 text-center"
                 style={{ 
-                    border: "1px solid #333333",
+                    border: "1px solid #444444",
                     backgroundColor: "#000000",
                 }}
             >
@@ -107,13 +107,13 @@ export const Disclaimer = () => {
                 {/* Legal footer */}
                 <p 
                     className="mt-6 text-[8px] tracking-[0.2em]"
-                    style={{ color: "#666666" }}
+                    style={{ color: "#888888" }}
                 >
                     © 2026 FEAR METER — ALL RIGHTS RESERVED
                 </p>
                 <p 
                     className="mt-1 text-[7px] tracking-[0.15em]"
-                    style={{ color: "#444444" }}
+                    style={{ color: "#666666" }}
                 >
                     Experimental Biometric Horror System
                 </p>

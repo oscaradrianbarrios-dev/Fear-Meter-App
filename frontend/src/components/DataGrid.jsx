@@ -51,7 +51,7 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "#1A1A1A",
-                    border: "1px solid #333333",
+                    border: "1px solid #444444",
                     borderRadius: "8px",
                 }}
             >
@@ -64,7 +64,7 @@ export const DataGrid = ({
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 2 ? "#FFFFFF" : "#666666",
+                        color: isActive && revealPhase >= 2 ? "#FFFFFF" : "#888888",
                         transition: 'all 0.3s ease-out',
                     }}
                 >
@@ -77,7 +77,7 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "#1A1A1A",
-                    border: "1px solid #333333",
+                    border: "1px solid #444444",
                     borderRadius: "8px",
                 }}
             >
@@ -90,7 +90,7 @@ export const DataGrid = ({
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 3 ? "#FFFFFF" : "#666666",
+                        color: isActive && revealPhase >= 3 ? "#FFFFFF" : "#888888",
                         transition: 'all 0.3s ease-out',
                     }}
                 >
@@ -103,7 +103,7 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "#1A1A1A",
-                    border: "1px solid #333333",
+                    border: "1px solid #444444",
                     borderRadius: "8px",
                 }}
             >
@@ -116,7 +116,7 @@ export const DataGrid = ({
                 <div 
                     className="text-sm font-bold tracking-wider"
                     style={{ 
-                        color: isActive && revealPhase >= 4 ? "#DC2F2F" : "#666666",
+                        color: isActive && revealPhase >= 4 ? "#FF0000" : "#888888",
                         transition: 'all 0.3s ease-out',
                     }}
                 >

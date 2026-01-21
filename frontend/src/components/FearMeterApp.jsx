@@ -317,17 +317,17 @@ export const FearMeterApp = () => {
 
             <footer 
                 className="py-4 text-center"
-                style={{ borderTop: "1px solid #333333" }}
+                style={{ borderTop: "1px solid #444444" }}
             >
                 <p 
                     className="text-[10px] tracking-[0.25em]"
-                    style={{ color: "#666666" }}
+                    style={{ color: "#888888" }}
                 >
                     © 2026 FEAR METER
                 </p>
                 <p 
                     className="text-[8px] mt-1 tracking-[0.15em]"
-                    style={{ color: "#444444" }}
+                    style={{ color: "#666666" }}
                 >
                     Experimental Biometric Horror System
                 </p>

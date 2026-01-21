@@ -40,7 +40,7 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
             className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between"
             style={{
                 backgroundColor: "#000000",
-                borderBottom: "1px solid #333333",
+                borderBottom: "1px solid #444444",
             }}
         >
             {/* Menu button - LEFT side */}
@@ -71,7 +71,7 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                 </h1>
                 <span 
                     className="text-[10px] tracking-[0.15em]"
-                    style={{ color: "#DC2F2F" }}
+                    style={{ color: "#FF0000" }}
                 >
                     v1.0
                 </span>
