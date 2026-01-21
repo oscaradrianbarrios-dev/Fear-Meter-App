@@ -75,9 +75,9 @@
         color: #FFFFFF;
     }
     
-    /* Global brightness reduction - clinical, contained feel */
+    /* Global brightness - REMOVED for maximum contrast */
     #root {
-        filter: brightness(0.85);
+        filter: none;
     }
 }
 
