@@ -14,8 +14,8 @@
         --primary: 0 100% 50%;
         --primary-foreground: 0 0% 100%;
         
-        /* Dark Red - Panic/Alert - #8B0000 */
-        --destructive: 0 100% 27%;
+        /* Dark Red - Panic/Alert - NOW PURE RED #FF0000 */
+        --destructive: 0 100% 50%;
         --destructive-foreground: 0 0% 100%;
         
         /* Secondary Text - #B0B0B0 */
@@ -42,14 +42,14 @@
         
         /* Custom Fear Meter tokens */
         --fear-red: 0 100% 50%;
-        --fear-dark-red: 0 100% 27%;
+        --fear-dark-red: 0 100% 50%;
         --fear-black: 0 0% 0%;
         --fear-gray: 0 0% 69%;
         
         /* Glow effects */
         --glow-red: 0 0 20px hsla(0, 100%, 50%, 0.6);
         --glow-red-intense: 0 0 40px hsla(0, 100%, 50%, 0.8), 0 0 80px hsla(0, 100%, 50%, 0.4);
-        --glow-dark-red: 0 0 30px hsla(0, 100%, 27%, 0.8);
+        --glow-dark-red: 0 0 30px hsla(0, 100%, 50%, 0.8);
     }
 }
 
