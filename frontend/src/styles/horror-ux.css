@@ -1,39 +1,39 @@
 /* Fear Meter - Horror UX Styles */
-/* HIGH CONTRAST CLINICAL HORROR - RED PURE #FF5555 */
+/* HIGH CONTRAST CLINICAL HORROR - RED PURE #FF0000 */
 
 /* ===== VIBRANT COLOR PALETTE ===== */
 :root {
     --fear-black: #000000;
-    --fear-red: #FF5555;
-    --fear-red-glow: 0 0 10px #FF5555, 0 0 20px rgba(255, 85, 85, 0.5);
-    --fear-red-glow-intense: 0 0 15px #FF5555, 0 0 30px rgba(255, 85, 85, 0.7), 0 0 45px rgba(255, 85, 85, 0.4);
-    --fear-red-border: rgba(255, 85, 85, 0.4);
-    --fear-red-border-bright: rgba(255, 85, 85, 0.6);
+    --fear-red: #FF0000;
+    --fear-red-glow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+    --fear-red-glow-intense: 0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.7), 0 0 45px rgba(255, 0, 0, 0.4);
+    --fear-red-border: rgba(255, 0, 0, 0.4);
+    --fear-red-border-bright: rgba(255, 0, 0, 0.6);
     --fear-gray: #B0B0B0;
     --fear-gray-bright: #CCCCCC;
 }
 
 /* ===== GLOW TEXT CLASSES ===== */
 .text-glow {
-    text-shadow: 0 0 10px #FF5555, 0 0 20px rgba(255, 85, 85, 0.5);
+    text-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
 }
 
 .text-glow-intense {
-    text-shadow: 0 0 15px #FF5555, 0 0 30px rgba(255, 85, 85, 0.7), 0 0 45px rgba(255, 85, 85, 0.4);
+    text-shadow: 0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.7), 0 0 45px rgba(255, 0, 0, 0.4);
 }
 
 .text-glow-critical {
-    text-shadow: 0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.8), 0 0 60px rgba(255, 85, 85, 0.5);
+    text-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.5);
     animation: critical-pulse 0.5s ease-in-out infinite;
 }
 
 /* ===== BORDER GLOW ===== */
 .border-glow {
-    box-shadow: 0 0 5px rgba(255, 85, 85, 0.3), inset 0 0 5px rgba(255, 85, 85, 0.1);
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3), inset 0 0 5px rgba(255, 0, 0, 0.1);
 }
 
 .border-glow-intense {
-    box-shadow: 0 0 10px rgba(255, 85, 85, 0.5), inset 0 0 10px rgba(255, 85, 85, 0.2);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.2);
 }
 
 /* ===== HEARTBEAT SYNC EFFECT ===== */
@@ -75,11 +75,11 @@
 @keyframes bpm-pulse {
     0%, 100% { 
         transform: scale(1);
-        text-shadow: 0 0 10px #FF5555, 0 0 20px rgba(255, 85, 85, 0.5);
+        text-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
     }
     50% { 
         transform: scale(1.02);
-        text-shadow: 0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.7);
+        text-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7);
     }
 }
 
@@ -91,22 +91,22 @@
 @keyframes data-breathe {
     0%, 100% { 
         opacity: 0.9;
-        text-shadow: 0 0 5px rgba(255, 85, 85, 0.3);
+        text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
     }
     50% { 
         opacity: 1;
-        text-shadow: 0 0 15px rgba(255, 85, 85, 0.6);
+        text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
     }
 }
 
 @keyframes data-breathe-fast {
     0%, 100% { 
         opacity: 0.75;
-        text-shadow: 0 0 2px rgba(255, 85, 85, 0.2);
+        text-shadow: 0 0 2px rgba(255, 0, 0, 0.2);
     }
     50% { 
         opacity: 1;
-        text-shadow: 0 0 12px rgba(255, 85, 85, 0.3);
+        text-shadow: 0 0 12px rgba(255, 0, 0, 0.3);
     }
 }
 
@@ -156,10 +156,10 @@
 /* ===== ECG GLOW PULSE ===== */
 @keyframes ecg-glow {
     0%, 100% { 
-        filter: drop-shadow(0 0 1px rgba(255, 85, 85, 0.3));
+        filter: drop-shadow(0 0 1px rgba(255, 0, 0, 0.3));
     }
     50% { 
-        filter: drop-shadow(0 0 4px rgba(255, 85, 85, 0.5));
+        filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.5));
     }
 }
 
@@ -208,7 +208,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255, 85, 85, 1);
+    background: rgba(255, 0, 0, 1);
     pointer-events: none;
     animation: red-flicker 8s ease-in-out infinite;
     z-index: 1;
@@ -254,7 +254,7 @@
 .fear-bg-unease {
     background: radial-gradient(
         ellipse at 50% 50%,
-        rgba(255, 85, 85, 0.02) 0%,
+        rgba(255, 0, 0, 0.02) 0%,
         transparent 70%
     );
     background-size: 200% 200%;
@@ -266,14 +266,14 @@
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background-color: rgba(255, 85, 85, 0.4);
+    background-color: rgba(255, 0, 0, 0.4);
     animation: watching-pulse 2s ease-in-out infinite;
 }
 
 /* ===== BORDER FLICKER ===== */
 @keyframes border-flicker {
-    0%, 100% { border-color: rgba(255, 85, 85, 0.1); }
-    50% { border-color: rgba(255, 85, 85, 0.2); }
+    0%, 100% { border-color: rgba(255, 0, 0, 0.1); }
+    50% { border-color: rgba(255, 0, 0, 0.2); }
 }
 
 .fear-border-flicker {
