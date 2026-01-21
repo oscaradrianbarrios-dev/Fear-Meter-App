@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Monitor from "./Monitor";
@@ -7,16 +7,22 @@ import History from "./History";
 import SideMenu from "./SideMenu";
 import { useBiometricSimulation } from "@/hooks/useBiometricSimulation";
 import { useSessionManager } from "@/hooks/useSessionManager";
+import { useClinicalAudio } from "@/hooks/useClinicalAudio";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSettings } from "@/contexts/SettingsContext";
 
 export const FearMeterApp = () => {
     const navigate = useNavigate();
     const { language, setLanguage, texts } = useLanguage();
+    const { soundEnabled } = useSettings();
     const [currentView, setCurrentView] = useState("monitor");
     const [menuOpen, setMenuOpen] = useState(false);
 
     const { bpm, stress, signal, isActive, isPanic, isRecovering, startSimulation, stopSimulation, triggerTap } = useBiometricSimulation({});
     const { sessions, startSession, endSession, clearHistory } = useSessionManager();
+    
+    // Audio hook - beeps sincronizados con BPM
+    useClinicalAudio({ bpm, isActive, soundEnabled });
 
     const handleStartStop = useCallback(() => {
         if (isActive) { stopSimulation(); endSession(); }
