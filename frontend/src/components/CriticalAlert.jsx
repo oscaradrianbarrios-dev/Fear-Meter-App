@@ -70,8 +70,8 @@ export const CriticalAlert = ({ visible, language = "EN" }) => {
                     className="font-bold text-sm tracking-[0.25em] uppercase leading-relaxed fear-text-reveal"
                     style={{ 
                         fontFamily: "'JetBrains Mono', monospace",
-                        color: "#FF0000",
-                        textShadow: "0 0 30px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.4)",
+                        color: "#FF5555",
+                        textShadow: "0 0 30px rgba(255, 85, 85, 0.8), 0 0 60px rgba(255, 85, 85, 0.4)",
                     }}
                 >
                     {currentText}
@@ -84,11 +84,11 @@ export const CriticalAlert = ({ visible, language = "EN" }) => {
                 >
                     <div 
                         className="w-1 h-1 rounded-full"
-                        style={{ backgroundColor: "rgba(255, 0, 0, 0.6)" }}
+                        style={{ backgroundColor: "rgba(255, 85, 85, 0.6)" }}
                     />
                     <span 
                         className="text-[8px] tracking-[0.2em]"
-                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
+                        style={{ color: "rgba(255, 85, 85, 0.4)" }}
                     >
                         RECORDING
                     </span>

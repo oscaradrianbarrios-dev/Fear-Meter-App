@@ -51,17 +51,17 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 85, 85, 0.6)" : "rgba(255, 85, 85, 0.3)"}`,
                     boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                        ? "0 0 15px rgba(255, 85, 85, 0.3), inset 0 0 10px rgba(255, 85, 85, 0.1)"
+                        : "0 0 8px rgba(255, 85, 85, 0.15)",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
                     style={{ 
-                        color: "#FF0000",
-                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                        color: "#FF5555",
+                        textShadow: "0 0 5px rgba(255, 85, 85, 0.3)",
                     }}
                 >
                     {texts.bpm}
@@ -69,11 +69,11 @@ export const DataGrid = ({
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 2 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        color: isActive && revealPhase >= 2 ? "#FF5555" : "rgba(255, 85, 85, 0.3)",
                         textShadow: isActive && revealPhase >= 2 
                             ? isPanic 
-                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
-                                : "0 0 15px rgba(255, 0, 0, 0.6)"
+                                ? "0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.7)"
+                                : "0 0 15px rgba(255, 85, 85, 0.6)"
                             : "none",
                         opacity: revealPhase >= 2 ? 1 : 0.4,
                         transition: 'all 0.3s ease-out',
@@ -88,17 +88,17 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 85, 85, 0.6)" : "rgba(255, 85, 85, 0.3)"}`,
                     boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                        ? "0 0 15px rgba(255, 85, 85, 0.3), inset 0 0 10px rgba(255, 85, 85, 0.1)"
+                        : "0 0 8px rgba(255, 85, 85, 0.15)",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
                     style={{ 
-                        color: "#FF0000",
-                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                        color: "#FF5555",
+                        textShadow: "0 0 5px rgba(255, 85, 85, 0.3)",
                     }}
                 >
                     {texts.stress}
@@ -106,11 +106,11 @@ export const DataGrid = ({
                 <div 
                     className="text-3xl font-bold font-mono"
                     style={{ 
-                        color: isActive && revealPhase >= 3 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        color: isActive && revealPhase >= 3 ? "#FF5555" : "rgba(255, 85, 85, 0.3)",
                         textShadow: isActive && revealPhase >= 3 
                             ? isPanic 
-                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
-                                : "0 0 15px rgba(255, 0, 0, 0.6)"
+                                ? "0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.7)"
+                                : "0 0 15px rgba(255, 85, 85, 0.6)"
                             : "none",
                         opacity: revealPhase >= 3 ? 1 : 0.4,
                         transition: 'all 0.3s ease-out',
@@ -125,17 +125,17 @@ export const DataGrid = ({
                 className="p-4"
                 style={{ 
                     backgroundColor: "rgba(0, 0, 0, 0.9)",
-                    border: `1px solid ${isPanic && showData ? "rgba(255, 0, 0, 0.6)" : "rgba(255, 0, 0, 0.3)"}`,
+                    border: `1px solid ${isPanic && showData ? "rgba(255, 85, 85, 0.6)" : "rgba(255, 85, 85, 0.3)"}`,
                     boxShadow: isPanic && showData 
-                        ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1)"
-                        : "0 0 8px rgba(255, 0, 0, 0.15)",
+                        ? "0 0 15px rgba(255, 85, 85, 0.3), inset 0 0 10px rgba(255, 85, 85, 0.1)"
+                        : "0 0 8px rgba(255, 85, 85, 0.15)",
                 }}
             >
                 <div 
                     className="text-[10px] tracking-[0.2em] uppercase mb-2"
                     style={{ 
-                        color: "#FF0000",
-                        textShadow: "0 0 5px rgba(255, 0, 0, 0.3)",
+                        color: "#FF5555",
+                        textShadow: "0 0 5px rgba(255, 85, 85, 0.3)",
                     }}
                 >
                     {texts.signal}
@@ -143,11 +143,11 @@ export const DataGrid = ({
                 <div 
                     className="text-sm font-bold tracking-wider"
                     style={{ 
-                        color: isActive && revealPhase >= 4 ? "#FF0000" : "rgba(255, 0, 0, 0.3)",
+                        color: isActive && revealPhase >= 4 ? "#FF5555" : "rgba(255, 85, 85, 0.3)",
                         textShadow: isActive && revealPhase >= 4 
                             ? signal === "CRITICAL"
-                                ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.7)"
-                                : "0 0 10px rgba(255, 0, 0, 0.5)"
+                                ? "0 0 20px #FF5555, 0 0 40px rgba(255, 85, 85, 0.7)"
+                                : "0 0 10px rgba(255, 85, 85, 0.5)"
                             : "none",
                         opacity: revealPhase >= 4 ? 1 : 0.4,
                         transition: 'all 0.3s ease-out',

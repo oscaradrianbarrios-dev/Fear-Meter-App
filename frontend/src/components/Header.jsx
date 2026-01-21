@@ -40,8 +40,8 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
             className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between"
             style={{
                 backgroundColor: "#000000",
-                borderBottom: "1px solid rgba(255, 0, 0, 0.25)",
-                boxShadow: "0 2px 10px rgba(255, 0, 0, 0.1)",
+                borderBottom: "1px solid rgba(255, 85, 85, 0.25)",
+                boxShadow: "0 2px 10px rgba(255, 85, 85, 0.1)",
             }}
         >
             {/* Menu button - LEFT side */}
@@ -49,8 +49,8 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                 onClick={onMenuOpen}
                 className="p-2 transition-all duration-200"
                 style={{ 
-                    color: "#FF0000",
-                    textShadow: "0 0 8px rgba(255, 0, 0, 0.4)",
+                    color: "#FF5555",
+                    textShadow: "0 0 8px rgba(255, 85, 85, 0.4)",
                 }}
                 aria-label="Open menu"
                 data-testid="menu-button"
@@ -70,15 +70,15 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                 <div 
                     className="w-2 h-2 rounded-full animate-pulse"
                     style={{ 
-                        backgroundColor: "#FF0000",
-                        boxShadow: "0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5)",
+                        backgroundColor: "#FF5555",
+                        boxShadow: "0 0 10px #FF5555, 0 0 20px rgba(255, 85, 85, 0.5)",
                     }}
                 />
                 <h1 
                     className="font-bold text-sm tracking-[0.25em] uppercase"
                     style={{ 
-                        color: "#FF0000",
-                        textShadow: "0 0 10px rgba(255, 0, 0, 0.5)",
+                        color: "#FF5555",
+                        textShadow: "0 0 10px rgba(255, 85, 85, 0.5)",
                     }}
                 >
                     FEAR METER
@@ -95,8 +95,8 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                     <span 
                         className="text-[8px] tracking-[0.15em]"
                         style={{ 
-                            color: "#FF0000",
-                            textShadow: "0 0 5px rgba(255, 0, 0, 0.5)",
+                            color: "#FF5555",
+                            textShadow: "0 0 5px rgba(255, 85, 85, 0.5)",
                         }}
                     >
                         REC
@@ -104,8 +104,8 @@ export const Header = ({ onMenuOpen, onDemoActivate, isCalibrated = false }) => 
                     <div 
                         className="w-1.5 h-1.5 rounded-full ml-1"
                         style={{ 
-                            backgroundColor: "#FF0000",
-                            boxShadow: "0 0 8px #FF0000",
+                            backgroundColor: "#FF5555",
+                            boxShadow: "0 0 8px #FF5555",
                             animation: showWatching ? "pulse 1s ease-in-out infinite" : "none",
                         }}
                     />
