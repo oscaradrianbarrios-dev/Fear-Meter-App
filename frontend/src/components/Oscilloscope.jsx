@@ -138,11 +138,12 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
             const glowColor = "#FF0000";
             
             ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = 3; // Thicker line like a laser
+            ctx.lineWidth = 4; // THICK LASER LINE for maximum visibility
             ctx.shadowColor = glowColor;
-            ctx.shadowBlur = isPanic ? 25 : 15; // Intense glow
+            ctx.shadowBlur = isPanic ? 30 : 20; // Enhanced intense glow
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
+            ctx.globalAlpha = 1.0; // 100% opacity
             ctx.beginPath();
 
             for (let x = 0; x < width; x++) {
