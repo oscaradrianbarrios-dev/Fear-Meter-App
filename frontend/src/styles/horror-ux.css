@@ -254,7 +254,7 @@
 .fear-bg-unease {
     background: radial-gradient(
         ellipse at 50% 50%,
-        rgba(139, 0, 0, 0.02) 0%,
+        rgba(255, 0, 0, 0.02) 0%,
         transparent 70%
     );
     background-size: 200% 200%;
