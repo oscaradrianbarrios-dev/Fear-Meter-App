@@ -129,7 +129,7 @@
     }
     
     .glow-dark-red {
-        box-shadow: 0 0 12px hsla(0, 100%, 27%, 0.4);
+        box-shadow: 0 0 12px hsla(0, 100%, 50%, 0.4);
     }
     
     .text-glow-red {
