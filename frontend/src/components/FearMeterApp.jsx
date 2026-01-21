@@ -219,7 +219,7 @@ export const FearMeterApp = () => {
             onTouchEnd={handleTouchEnd}
             style={{
                 transition: isRecovering ? "filter 300ms ease-out" : "none",
-                filter: isRecovering ? "brightness(0.9)" : "brightness(0.85)",
+                filter: "none", // No brightness reduction - PURE CONTRAST
             }}
         >
             {/* Calibration Protocol Overlay */}
