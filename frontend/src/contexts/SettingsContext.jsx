@@ -8,7 +8,7 @@ const STORAGE_KEY = "fear_meter_settings";
 const DEFAULT_SETTINGS = {
     soundEnabled: false, // Sound OFF by default
     hapticEnabled: true, // Haptic feedback ON by default
-    showDisclaimer: true,
+    showDisclaimer: false, // BYPASS - Skip disclaimer on startup
 };
 
 // Load settings from localStorage
