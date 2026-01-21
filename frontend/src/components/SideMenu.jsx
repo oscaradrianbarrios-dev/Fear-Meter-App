@@ -96,8 +96,8 @@ export const SideMenu = ({
                 className="fixed top-0 left-0 h-full w-64 z-50"
                 style={{ 
                     backgroundColor: "#000000",
-                    borderRight: "1px solid rgba(255, 0, 0, 0.15)",
-                    boxShadow: "2px 0 20px rgba(255, 0, 0, 0.1)",
+                    borderRight: "1px solid rgba(255, 0, 0, 0.4)",
+                    boxShadow: "2px 0 20px rgba(255, 0, 0, 0.3)",
                     transform: `translateX(${translateX}%)`,
                     transition: "transform 300ms cubic-bezier(0.25, 0.1, 0.25, 1)",
                 }}
@@ -105,13 +105,13 @@ export const SideMenu = ({
                 {/* Header - minimal */}
                 <div 
                     className="flex items-center justify-between p-4"
-                    style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.1)" }}
+                    style={{ borderBottom: "1px solid rgba(255, 0, 0, 0.3)" }}
                 >
                     <span 
                         className="text-[9px] tracking-[0.3em] uppercase"
                         style={{ 
-                            color: "rgba(255, 0, 0, 0.4)",
-                            textShadow: "0 0 5px rgba(255, 0, 0, 0.2)",
+                            color: "rgba(255, 0, 0, 0.8)",
+                            textShadow: "0 0 5px rgba(255, 0, 0, 0.5)",
                             opacity: itemsReady ? 1 : 0,
                             transition: "opacity 200ms ease-out",
                         }}
@@ -123,7 +123,7 @@ export const SideMenu = ({
                         className="p-1"
                         style={{ 
                             color: "#FF0000",
-                            textShadow: "0 0 8px rgba(255, 0, 0, 0.4)",
+                            textShadow: "0 0 8px rgba(255, 0, 0, 0.8)",
                         }}
                     >
                         <X className="w-4 h-4" />
@@ -138,10 +138,10 @@ export const SideMenu = ({
                             onClick={() => onViewChange(item.id)}
                             className="w-full flex items-center gap-3 px-4 py-3 text-left"
                             style={{ 
-                                color: currentView === item.id ? "#FF0000" : "rgba(255, 0, 0, 0.5)",
-                                backgroundColor: currentView === item.id ? "rgba(255, 0, 0, 0.05)" : "transparent",
-                                borderLeft: currentView === item.id ? "1px solid rgba(255, 0, 0, 0.6)" : "1px solid transparent",
-                                textShadow: currentView === item.id ? "0 0 8px rgba(255, 0, 0, 0.4)" : "none",
+                                color: currentView === item.id ? "#FF0000" : "rgba(255, 0, 0, 0.9)",
+                                backgroundColor: currentView === item.id ? "rgba(255, 0, 0, 0.15)" : "transparent",
+                                borderLeft: currentView === item.id ? "1px solid rgba(255, 0, 0, 1)" : "1px solid transparent",
+                                textShadow: currentView === item.id ? "0 0 8px rgba(255, 0, 0, 0.8)" : "none",
                                 opacity: itemsReady ? 1 : 0,
                                 transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                                 transition: `all 250ms ease-out ${index * 60}ms`,
@@ -154,14 +154,14 @@ export const SideMenu = ({
                 </nav>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* Language Selection */}
                 <button
                     onClick={handleLanguageSelectorOpen}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 200ms",
@@ -172,21 +172,21 @@ export const SideMenu = ({
                     <span className="text-[11px] tracking-[0.15em]">{texts.language}</span>
                     <span 
                         className="ml-auto text-[9px] tracking-wider"
-                        style={{ color: "rgba(255, 0, 0, 0.4)" }}
+                        style={{ color: "rgba(255, 0, 0, 0.8)" }}
                     >
                         {currentLangInfo.nativeName}
                     </span>
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* Calibration Option */}
                 <button
                     onClick={() => { triggerHaptic(); onCalibrationOpen(); }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: isCalibrated ? "rgba(255, 0, 0, 0.4)" : "rgba(255, 0, 0, 0.5)",
+                        color: isCalibrated ? "rgba(255, 0, 0, 0.8)" : "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 240ms",
@@ -198,10 +198,10 @@ export const SideMenu = ({
                         <span 
                             className="ml-auto text-[7px] tracking-[0.1em] px-1.5 py-0.5"
                             style={{ 
-                                backgroundColor: "rgba(255, 0, 0, 0.1)",
+                                backgroundColor: "rgba(255, 0, 0, 0.3)",
                                 color: "#FF0000",
                                 border: "1px solid rgba(255, 0, 0, 0.3)",
-                                boxShadow: "0 0 8px rgba(255, 0, 0, 0.2)",
+                                boxShadow: "0 0 8px rgba(255, 0, 0, 0.5)",
                             }}
                         >
                             ACTIVE
@@ -214,7 +214,7 @@ export const SideMenu = ({
                     onClick={() => { triggerHaptic(); onAdvancedCalibrationOpen && onAdvancedCalibrationOpen(); }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: advancedCalibrationData ? "rgba(255, 0, 0, 0.4)" : "rgba(255, 0, 0, 0.5)",
+                        color: advancedCalibrationData ? "rgba(255, 0, 0, 0.8)" : "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 260ms",
@@ -228,10 +228,10 @@ export const SideMenu = ({
                         <span 
                             className="ml-auto text-[7px] tracking-[0.1em] px-1.5 py-0.5"
                             style={{ 
-                                backgroundColor: "rgba(255, 0, 0, 0.1)",
+                                backgroundColor: "rgba(255, 0, 0, 0.3)",
                                 color: "#FF0000",
                                 border: "1px solid rgba(255, 0, 0, 0.3)",
-                                boxShadow: "0 0 8px rgba(255, 0, 0, 0.2)",
+                                boxShadow: "0 0 8px rgba(255, 0, 0, 0.5)",
                             }}
                         >
                             {Object.keys(advancedCalibrationData.modes || {}).length}/4
@@ -240,7 +240,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* Nightmare Protocol */}
                 <button
@@ -250,7 +250,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 280ms",
@@ -268,7 +268,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 320ms",
@@ -286,7 +286,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 340ms",
@@ -304,7 +304,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 360ms",
@@ -322,7 +322,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 380ms",
@@ -333,7 +333,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* Biometric Profile */}
                 <button
@@ -343,7 +343,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 400ms",
@@ -361,7 +361,7 @@ export const SideMenu = ({
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.5)",
+                        color: "rgba(255, 0, 0, 0.9)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 420ms",
@@ -372,7 +372,7 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* Sound Toggle */}
                 <div
@@ -390,7 +390,7 @@ export const SideMenu = ({
                     onClick={() => { triggerHaptic(); toggleHaptic(); }}
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: hapticEnabled ? "#FF0000" : "rgba(255, 0, 0, 0.4)",
+                        color: hapticEnabled ? "#FF0000" : "rgba(255, 0, 0, 0.8)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 460ms",
@@ -407,7 +407,7 @@ export const SideMenu = ({
                                 ? "#FF0000"
                                 : "rgba(176, 176, 176, 0.4)",
                             textShadow: hapticEnabled 
-                                ? "0 0 8px rgba(255, 0, 0, 0.4)"
+                                ? "0 0 8px rgba(255, 0, 0, 0.8)"
                                 : "none",
                         }}
                     >
@@ -416,13 +416,13 @@ export const SideMenu = ({
                 </button>
 
                 {/* Divider */}
-                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
 
                 {/* About */}
                 <button
                     className="w-full flex items-center gap-3 px-4 py-3"
                     style={{ 
-                        color: "rgba(255, 0, 0, 0.4)",
+                        color: "rgba(255, 0, 0, 0.8)",
                         opacity: itemsReady ? 1 : 0,
                         transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                         transition: "all 250ms ease-out 460ms",
@@ -435,12 +435,12 @@ export const SideMenu = ({
                 {/* Demo Mode Option - Hidden by default */}
                 {showDemoOption && (
                     <>
-                        <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.1)" }} />
+                        <div className="mx-4 my-2" style={{ borderTop: "1px solid rgba(255, 0, 0, 0.3)" }} />
                         <button
                             onClick={onDemoActivate}
                             className="w-full flex items-center gap-3 px-4 py-3"
                             style={{ 
-                                color: "rgba(255, 0, 0, 0.4)",
+                                color: "rgba(255, 0, 0, 0.8)",
                                 opacity: itemsReady ? 1 : 0,
                                 transform: itemsReady ? "translateX(0)" : "translateX(-10px)",
                                 transition: "all 250ms ease-out 360ms",
@@ -466,7 +466,7 @@ export const SideMenu = ({
                             className="text-[8px] tracking-[0.2em]" 
                             style={{ 
                                 color: "rgba(255, 0, 0, 0.3)",
-                                textShadow: "0 0 5px rgba(255, 0, 0, 0.15)",
+                                textShadow: "0 0 5px rgba(255, 0, 0, 0.4)",
                             }}
                         >
                             FEAR METER v1.0

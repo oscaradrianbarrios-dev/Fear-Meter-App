@@ -231,8 +231,8 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
                 border: `1px solid rgba(255, 0, 0, ${isPanic ? 0.6 : 0.4})`,
                 backgroundColor: "#000000",
                 boxShadow: isPanic 
-                    ? "0 0 15px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(255, 0, 0, 0.1)"
-                    : "0 0 8px rgba(255, 0, 0, 0.2), inset 0 0 10px rgba(255, 0, 0, 0.05)",
+                    ? "0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 20px rgba(255, 0, 0, 0.3)"
+                    : "0 0 8px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.05)",
             }}
         >
             <canvas

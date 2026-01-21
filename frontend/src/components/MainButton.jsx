@@ -62,7 +62,7 @@ export const MainButton = ({
                 color: "#FFFFFF",
                 boxShadow: isActive 
                     ? "0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.4)"
-                    : "0 0 20px rgba(255, 0, 0, 0.3)",
+                    : "0 0 20px rgba(255, 0, 0, 0.6)",
                 transition: isPanic ? "none" : "all 0.3s ease",
             }}
             data-testid="main-button"

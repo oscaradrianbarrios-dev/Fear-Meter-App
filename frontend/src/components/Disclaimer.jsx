@@ -78,7 +78,7 @@ export const Disclaimer = () => {
                     className="py-3 px-4 mb-6"
                     style={{ 
                         backgroundColor: "rgba(255, 0, 0, 0.05)",
-                        border: "1px solid rgba(255, 0, 0, 0.2)",
+                        border: "1px solid rgba(255, 0, 0, 0.5)",
                     }}
                 >
                     <p 
