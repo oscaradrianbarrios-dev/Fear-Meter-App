@@ -133,14 +133,14 @@ export const Oscilloscope = ({ bpm, isActive, isPanic, isRecovering }) => {
 
             phaseRef.current += speed * 0.02;
 
-            // Color based on state - PURE RED #FF0000 with LASER GLOW
-            const strokeColor = "#FF0000";
-            const glowColor = "#FF0000";
+            // Color based on state - ULTRA BRIGHT RED #FF5555 with LASER GLOW
+            const strokeColor = "#FF5555";
+            const glowColor = "#FF5555";
             
             ctx.strokeStyle = strokeColor;
             ctx.lineWidth = 4; // THICK LASER LINE for maximum visibility
             ctx.shadowColor = glowColor;
-            ctx.shadowBlur = isPanic ? 30 : 20; // Enhanced intense glow
+            ctx.shadowBlur = isPanic ? 35 : 25; // Enhanced intense glow
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.globalAlpha = 1.0; // 100% opacity
