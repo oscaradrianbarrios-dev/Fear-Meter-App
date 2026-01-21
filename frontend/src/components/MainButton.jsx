@@ -49,42 +49,25 @@ export const MainButton = ({
             onClick={onClick}
             disabled={disabled}
             className={`
-                w-32 h-32 rounded-full
+                w-36 h-36 rounded-full
                 font-bold text-[11px] tracking-[0.2em] uppercase
                 flex items-center justify-center
                 ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
             `}
             style={{
-                border: isPanic 
-                    ? "2px solid #FF0000"
-                    : isActive 
-                        ? "2px solid rgba(255, 0, 0, 0.7)"
-                        : "2px solid rgba(255, 0, 0, 0.4)",
-                backgroundColor: isPanic 
-                    ? "rgba(255, 0, 0, 0.15)"
-                    : isActive 
-                        ? "rgba(255, 0, 0, 0.08)"
-                        : "transparent",
-                color: "#FF0000",
-                boxShadow: isPanic 
-                    ? "0 0 40px rgba(255, 0, 0, 0.6), 0 0 80px rgba(255, 0, 0, 0.3), inset 0 0 30px rgba(255, 0, 0, 0.2)"
-                    : isActive 
-                        ? "0 0 20px rgba(255, 0, 0, 0.4), inset 0 0 15px rgba(255, 0, 0, 0.1)"
-                        : "0 0 10px rgba(255, 0, 0, 0.2)",
+                backgroundColor: isActive ? "#FF0000" : "transparent",
+                border: isActive 
+                    ? "none"
+                    : "2px solid #FF0000",
+                color: "#FFFFFF",
+                boxShadow: isActive 
+                    ? "0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.4)"
+                    : "0 0 20px rgba(255, 0, 0, 0.3)",
                 transition: isPanic ? "none" : "all 0.3s ease",
             }}
             data-testid="main-button"
         >
-            <span 
-                className="text-center leading-tight px-2"
-                style={{
-                    textShadow: isPanic 
-                        ? "0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8)"
-                        : isActive 
-                            ? "0 0 15px rgba(255, 0, 0, 0.6)"
-                            : "0 0 8px rgba(255, 0, 0, 0.4)"
-                }}
-            >
+            <span className="text-center leading-tight px-2">
                 {isActive ? texts.stopSession : texts.startSession}
             </span>
         </button>
