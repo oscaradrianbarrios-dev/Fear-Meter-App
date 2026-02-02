@@ -1,23 +1,22 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FEAR METER | Protocolo de Vinculación</title>
+    <title>FEAR METER</title>
     <style>
         body { background-color: black; color: red; font-family: monospace; text-align: center; padding-top: 100px; margin: 0; }
         .box { border: 2px solid red; display: inline-block; padding: 30px; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
         h1 { letter-spacing: 5px; margin: 0; }
-        #status { color: white; font-size: 0.9rem; margin-top: 20px; min-height: 1.2em; }
+        #status { color: white; font-size: 0.9rem; margin-top: 20px; }
     </style>
 </head>
 <body>
-   
     <div class="box">
         <h1>FEAR METER</h1>
         <p id="status">INICIALIZANDO SISTEMA...</p>
     </div>
-
     <script>
         const statusText = document.getElementById('status');
         const frases = [
@@ -25,23 +24,15 @@
             "VINCULANDO ANCLA BIOLÓGICA...",
             "SINCRONIZANDO FRECUENCIA...",
             "ADRENALINA DETECTADA",
-            "MONITOREO ACTIVO",
             "ESTADO: PÁNICO DETECTADO"
         ];
         let i = 0;
         setInterval(() => {
             statusText.innerText = frases[i % frases.length];
             i++;
-        }, 2500);
+        }, 2000);
     </script>
 </body>
-</html> 
-<script>
-    const statusText = document.getElementById('status');
-    const frases = ["VINCULANDO ANCLA...", "SINCRONIZANDO...", "ADRENALINA ALTA", "MONITOREO ACTIVO"];
-    let i = 0;
-    setInterval(() => {
-        statusText.innerText = frases[i % frases.length];
-        i++;
-    }, 2000);
-</script>
+</html>
+
+ 
