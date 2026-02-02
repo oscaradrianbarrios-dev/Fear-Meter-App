@@ -42,3 +42,56 @@ function App() {
 }
 
 export default App;
+                        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEAR METER | PROTOTYPE</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .app-container { border: 1px solid #ff0000; background: #050000; padding: 40px; max-width: 400px; text-align: center; box-shadow: 0 0 40px rgba(255,0,0,0.2); border-radius: 4px; }
+        .warning-icon { color: #ff0000; font-size: 48px; margin-bottom: 20px; font-weight: bold; }
+        h1 { color: #ff0000; font-weight: 300; letter-spacing: 4px; margin-bottom: 20px; }
+        p { color: #aaa; font-size: 0.85rem; line-height: 1.6; margin-bottom: 30px; }
+        .btn { background: transparent; color: #ff0000; border: 1px solid #ff0000; padding: 12px 40px; cursor: pointer; font-weight: bold; letter-spacing: 2px; transition: 0.3s; }
+        .btn:hover { background: #ff0000; color: #000; }
+        #app-screen { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="notice-screen" class="app-container">
+        <div class="warning-icon">!</div>
+        <h1>IMPORTANT NOTICE</h1>
+        <p>FEAR METER is an experimental application that simulates biometric monitoring. This application is <strong>NOT</strong> a medical device.</p>
+        <button class="btn" onclick="startApp()">I UNDERSTAND</button>
+    </div>
+
+    <div id="app-screen" class="app-container">
+        <h1>FEAR METER</h1>
+        <div style="height: 2px; background: #ff0000; width: 100%; margin-bottom: 20px; box-shadow: 0 0 10px #ff0000;"></div>
+        <p id="status">WAITING FOR PULSE...</p>
+    </div>
+
+    <script>
+        function startApp() {
+            document.getElementById('notice-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+            runApp();
+        }
+        function runApp() {
+            const s = document.getElementById('status');
+            const m = ["SYNCING ANCHOR...", "ADRENALINE: 12%", "SCANNING...", "PANIC DETECTED"];
+            let i = 0;
+            setInterval(() => {
+                s.innerText = m[i % m.length];
+                i++;
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
+
+ 
+
