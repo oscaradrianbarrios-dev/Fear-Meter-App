@@ -1,38 +1,44 @@
 
- <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FEAR METER</title>
-    <style>
-        body { background-color: black; color: red; font-family: monospace; text-align: center; padding-top: 100px; margin: 0; }
-        .box { border: 2px solid red; display: inline-block; padding: 30px; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
-        h1 { letter-spacing: 5px; margin: 0; }
-        #status { color: white; font-size: 0.9rem; margin-top: 20px; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>FEAR METER</h1>
-        <p id="status">INICIALIZANDO SISTEMA...</p>
-    </div>
-    <script>
-        const statusText = document.getElementById('status');
-        const frases = [
-            "BUSCANDO PULSO...",
-            "VINCULANDO ANCLA BIOLÓGICA...",
-            "SINCRONIZANDO FRECUENCIA...",
-            "ADRENALINA DETECTADA",
-            "ESTADO: PÁNICO DETECTADO"
-        ];
-        let i = 0;
-        setInterval(() => {
-            statusText.innerText = frases[i % frases.length];
-            i++;
-        }, 2000);
-    </script>
-</body>
-</html>
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
+import FearMeterApp from "@/components/FearMeterApp";
+import DemoMode from "@/components/DemoMode";
+import NightmareProtocol from "@/components/NightmareProtocol";
+import InvestorDemo from "@/components/InvestorDemo";
+import FearLibrary from "@/components/FearLibrary";
+import MovieSession from "@/components/MovieSession";
+import VRExperience from "@/components/VRExperience";
+import FearChallenge from "@/components/FearChallenge";
+import BiometricProfile from "@/components/BiometricProfile";
+import FearSharing from "@/components/FearSharing";
+import Disclaimer from "@/components/Disclaimer";
 
- 
+function App() {
+    return (
+        <SettingsProvider>
+            <LanguageProvider>
+                <div className="App bg-fear-black min-h-screen">
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<FearMeterApp />} />
+                            <Route path="/demo" element={<DemoMode />} />
+                            <Route path="/nightmare" element={<NightmareProtocol />} />
+                            <Route path="/investor" element={<InvestorDemo />} />
+                            <Route path="/investor-demo" element={<InvestorDemo />} />
+                            <Route path="/library" element={<FearLibrary />} />
+                            <Route path="/movie-session" element={<MovieSession />} />
+                            <Route path="/vr" element={<VRExperience />} />
+                            <Route path="/challenge" element={<FearChallenge />} />
+                            <Route path="/profile" element={<BiometricProfile />} />
+                            <Route path="/share" element={<FearSharing />} />
+                        </Routes>
+                    </BrowserRouter>
+                    <Disclaimer />
+                </div>
+            </LanguageProvider>
+        </SettingsProvider>
+    );
+}
+
+export default App;
