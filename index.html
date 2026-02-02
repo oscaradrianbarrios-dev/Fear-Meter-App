@@ -116,5 +116,69 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEAR METER | PROTOTYPE</title>
+    <style>
+        :root { --red: #ff3333; --bg: #050505; --card-bg: rgba(255, 255, 255, 0.05); }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+       
+        .ambient-glow { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, transparent 70%); filter: blur(60px); z-index: -1; }
 
+        .app-shell { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px); padding: 30px; border-radius: 32px; width: 85%; max-width: 360px; min-height: 400px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.6); position: relative; }
+
+        /* Navegación */
+        .view { display: none; opacity: 0; flex-direction: column; }
+        .view.active { display: flex; opacity: 1; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        h1 { font-size: 1.4rem; letter-spacing: 3px; color: var(--red); margin: 0 0 20px 0; text-transform: uppercase; }
+        p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 25px; }
+
+        .btn { background: var(--red); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.2s; margin-bottom: 10px; }
+        .btn:active { transform: scale(0.96); }
+        .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; }
+
+        /* Animación Escáner */
+        .ring { width: 120px; height: 120px; border: 3px solid rgba(255,51,51,0.1); border-top: 3px solid var(--red); border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite; display: flex; align-items: center; justify-content: center; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .ring span { animation: anti-spin 1s linear infinite; font-weight: bold; }
+        @keyframes anti-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+    <div class="app-shell">
+       
+        <div class="view active" id="notice">
+            <h1 style="font-size: 3rem;">⚠️</h1>
+            <h1>Notice</h1>
+            <p>FEAR METER es un simulador experimental. No es un dispositivo médico.</p>
+            <button class="btn" onclick="goTo('dashboard')">ENTRAR</button>
+        </div>
+
+        <div class="view" id="dashboard">
+            <h1>Dashboard</h1>
+            <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                <small style="opacity: 0.5;">STATUS</small>
+                <div style="color: #00ff00; font-weight: bold;">SISTEMA LISTO</div>
+            </div>
+            <button class="btn" onclick="goTo('scanner')">INICIAR ESCÁNER</button>
+        </div>
+
+        <div class="view" id="scanner">
+            <h1>Escaneando</h1>
+            <div class="ring"><span id="val">0%</span></div>
+            <p id="msg">Buscando señales biométricas...</p>
+            <button class="btn btn-ghost" onclick="goTo('dashboard')">CANCELAR</button>
+        </div>
+
+
+       
+ 
  
