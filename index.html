@@ -36,3 +36,12 @@
     </script>
 </body>
 </html> 
+<script>
+    const statusText = document.getElementById('status');
+    const frases = ["VINCULANDO ANCLA...", "SINCRONIZANDO...", "ADRENALINA ALTA", "MONITOREO ACTIVO"];
+    let i = 0;
+    setInterval(() => {
+        statusText.innerText = frases[i % frases.length];
+        i++;
+    }, 2000);
+</script>
