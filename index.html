@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medidor de Miedo</title>
-    <link rel="stylesheet" href="/public/medidor/style.css">
-    <link rel="stylesheet" href="/public/medidor/styles.css">
-    <link rel="manifest" href="/public/medidor/manifest.json">
-    <meta name="theme-color" content="#1a1a2e">
-    <link rel="icon" type="image/png" sizes="192x192" href="/public/medidor/icons/icon-192.png">
-    <link rel="apple-touch-icon" href="/public/medidor/icons/icon-192.png">
+    <title>FEAR METER | Protocolo de Vinculación</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div id="root"></div>
-    <script src="/public/medidor/app.js"></script>
-    <script src="/public/medidor/script.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/public/medidor/sw.js');
-        }
-    </script>
+<body style="background-color: black; color: red; font-family: monospace; text-align: center; padding-top: 100px; margin: 0;">
+   
+    <div style="border: 2px solid red; display: inline-block; padding: 30px; box-shadow: 0 0 20px rgba(255,0,0,0.2);">
+        <h1 style="letter-spacing: 5px; margin: 0;">FEAR METER</h1>
+        <p id="status" style="color: white; font-size: 0.8rem; margin-top: 20px;">SISTEMA ONLINE - BUSCANDO PULSO...</p>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
